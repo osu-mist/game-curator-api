@@ -3,6 +3,13 @@ info:
   title: 'Game Curator API'
   description: 'Learning project API to retrieve and manipulate game review data.'
   version: 'v1'
+  license:
+    name: GNU Affero General Public License Version 3
+    url: http://www.gnu.org/licenses/agpl-3.0.en.html
+  contact:
+    name: IS Data Architecture Team
+    url: https://is.oregonstate.edu/data-architecture
+    email: isdataarchitecture@oregonstate.edu
 #host: 'test.swagger.io'
 paths:
   /game:
