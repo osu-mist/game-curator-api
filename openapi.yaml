@@ -1,5 +1,27 @@
 swagger: '2.0'
 info:
-  description: 'This is a test of the pacer test.'
-  version: '1.0.0'
   title: 'Game Curator API'
+  description: 'Learning project API to retrieve and manipulate game review data.'
+  version: 'v1'
+#host: 'test.swagger.io'
+paths:
+  /game:
+    get:
+      summary: 'Find game by ID'
+      responses:
+        200:
+          description: 'Successful response'
+    post:
+      summary: 'Add a new game'
+      responses:
+        201:
+          description: 'Successfully added a game'
+        405:
+          description: 'Invalid input'
+definitions:
+  Game:
+    type: "object"
+    properties:
+      id:
+        type: 'integer'
+        format: 'int64'
