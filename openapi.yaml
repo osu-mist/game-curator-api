@@ -1,0 +1,5 @@
+swagger: '2.0'
+info:
+  description: 'This is a test of the pacer test.'
+  version: '1.0.0'
+  title: 'Game Curator API'
