@@ -33,8 +33,19 @@ paths:
           description: 'Invalid input'
 definitions:
   Game:
-    type: "object"
     properties:
       id:
         type: 'integer'
         format: 'int64'
+      name:
+        type: 'string'
+        description: 'Name of the game.'
+        example: 'Eternal Death Slayer 3'
+      links:
+        $ref: '#/definitions/SelfLink'
+  SelfLink:
+    properties:
+      self:
+        type: string
+        format: url
+        description: Self-link of current resource
