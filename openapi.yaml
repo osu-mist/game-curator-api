@@ -68,7 +68,14 @@ definitions:
         $ref: '#/definitions/Game'
       reviewer:
         type: string
-        description: 'Person who wrote the review'
+        description: 'Person who wrote the review.'
+      score:
+        type: number
+        format: float
+        description: 'Score for this review out of 5.'
+      reviewText:
+        type: string
+        description: 'Text containing the review for the referenced game.'
   SelfLink:
     properties:
       self:
