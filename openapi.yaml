@@ -127,7 +127,7 @@ paths:
         - Games
       responses:
         200:
-          description: Game deleted Successfully
+          description: Game deleted successfully
         400:
           description: Invalid Id supplied
         404:
