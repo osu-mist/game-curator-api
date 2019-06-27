@@ -260,6 +260,28 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/Errors'
+  /developers:
+    parameters:
+      - $ref: '#/parameters/authorization'
+    get:
+      summary: Get complete or filtered list of developers
+      description: Retrieve complete list of developers or pass in query parameters to filter results
+      tags:
+        - Developers
+      parameters:
+        - name: name
+          in: query
+          type: string
+          description: Name of the developer
+        - name: developerId
+          in: query
+          type: integer
+          description: Id of the developer
+      responses:
+        200:
+          description: Completed successfully
+          schema:
+            $ref: '#/definitions/DeveloperResults'
 parameters:
   authorization:
     name: Authorization
