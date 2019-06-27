@@ -134,8 +134,8 @@ paths:
           description: Successfully created new review
           schema:
             $ref: '#/definitions/ReviewResult'
-        404:
-          description: Game not found
+        400:
+          description: Invalid review object
           schema:
             $ref: '#/definitions/Errors'
         500:
