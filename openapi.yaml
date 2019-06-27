@@ -47,6 +47,25 @@ paths:
   /game:
     parameters:
       - $ref: '#/parameters/authorization'
+    get:
+      summary: List all games
+      description: Get all games
+      parameters:
+        - $ref: '#/parameters/pageNumber'
+        - $ref: '#/parameters/pageSize'
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/GameResults'
+        400:
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Errors'
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
     post:
       summary: Add a new game
       responses:
