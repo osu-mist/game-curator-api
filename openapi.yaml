@@ -58,6 +58,12 @@ paths:
       summary: Add a new game
       tags:
         - Games
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/GameResource'
       responses:
         201:
           description: Successfully added a game
