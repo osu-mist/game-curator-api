@@ -316,6 +316,32 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/Errors'
+  /developers/{developerId}:
+    parameters:
+      - $ref: '#/parameters/authorization'
+    get:
+      summary: Get developer by its Id
+      tags:
+        - Developers
+      parameters:
+        - name: developerId
+          in: path
+          type: integer
+          required: true
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/DeveloperResult'
+        404:
+          description: Developer not found
+          schema:
+            $ref: '#/definitions/Errors'
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+
 parameters:
   authorization:
     name: Authorization
