@@ -300,6 +300,7 @@ paths:
       parameters:
         - in: body
           name: body
+          required: true
           schema:
             $ref: '#/definitions/DeveloperResource'
       responses:
