@@ -131,12 +131,12 @@ definitions:
         $ref: '#/definitions/Developer'
       name:
         type: string
-        description: Name of the game.
+        description: Name of the game
         example: Eternal Death Slayer 3
       score:
         type: number
         format: float
-        description: Composite review score of this game out of 5.
+        description: Composite review score of this game out of 5
         example: 4.5
       links:
         $ref: '#/definitions/SelfLink'
@@ -180,10 +180,10 @@ definitions:
       score:
         type: number
         format: float
-        description: Score for this review out of 5.
+        description: Score for this review out of 5
       reviewText:
         type: string
-        description: Text containing the review for the referenced game.
+        description: Text containing the review for the referenced game
   SelfLink:
     properties:
       self:
