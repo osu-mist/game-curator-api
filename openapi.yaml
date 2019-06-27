@@ -216,13 +216,16 @@ definitions:
       reviewer:
         type: string
         description: Person who wrote the review.
+        example: Commander Shepard
       score:
         type: number
         format: float
         description: Score for this review out of 5
+        example: 4.5
       reviewText:
         type: string
         description: Text containing the review for the referenced game
+        example: My name is Commander Shepard and this is my favorite game on the citadel.
   ReviewResult:
     properties:
       links:
