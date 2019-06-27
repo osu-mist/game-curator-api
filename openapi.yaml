@@ -363,6 +363,18 @@ definitions:
         $ref: '#/definitions/SelfLink'
       data:
         $ref: '#/definitions/DeveloperResource'
+  DeveloperResults:
+    properties: 
+      links:
+        allOf:
+          - $ref: '#/definitions/SelfLink'
+          - $ref: '#/definitions/PaginationLinks'
+      meta:
+        $ref: '#/definitions/Meta'
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/DeveloperResource'
   ReviewResource:
     properties:
       id:
