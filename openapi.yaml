@@ -37,6 +37,8 @@ definitions:
       id:
         type: integer
         format: int64
+      developer:
+        $ref: '#/definitions/Developer'
       name:
         type: string
         description: 'Name of the game.'
