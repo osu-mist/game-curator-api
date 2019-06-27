@@ -288,10 +288,6 @@ paths:
           description: Completed successfully
           schema:
             $ref: '#/definitions/DeveloperResults'
-        400:
-          description: Invalid developer object
-          schema:
-            $ref: '#/definitions/Errors'
         500:
           description: Internal server error
           schema:
