@@ -228,7 +228,23 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/Errors'
-    # delete
+    delete:
+      summary: Delete review
+      description: Delete the review with the passed in reviewId
+      tags:
+        - Reviews
+      responses:
+        404:
+          description: Review not found
+          schema:
+            $ref: '#/definitions/Errors'
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+        
+    
+      deprecated: false
 parameters:
   authorization:
     name: Authorization
