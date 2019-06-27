@@ -22,20 +22,20 @@ produces:
 paths:
   /game/{gameId}:
     get:
-      summary: 'Find game by ID'
-      description: 'Returns a single game'
+      summary: Find game by ID
+      description: Returns a single game
       parameters:
-      - name: 'gameId'
-        in: 'path'
-        description: 'Id of game to return'
+      - name: gameId
+        in: path
+        description: Id of game to return
         required: true
-        type: 'integer'
-        format: 'int64'
+        type: integer
+        format: int64
       responses:
         200:
-          description: 'Successful response'
+          description: Successful response
         404:
-          description: 'Game not found'
+          description: Game not found
           schema:
             $ref: '#/definitions/Errors'
         500:
@@ -46,7 +46,7 @@ paths:
     parameters:
       - $ref: '#/parameters/authorization'
     post:
-      summary: 'Add a new game'
+      summary: Add a new game
       responses:
         201:
           description: Successfully added a game
@@ -75,12 +75,12 @@ definitions:
         $ref: '#/definitions/Developer'
       name:
         type: string
-        description: 'Name of the game.'
-        example: 'Eternal Death Slayer 3'
+        description: Name of the game.
+        example: Eternal Death Slayer 3
       score:
         type: number
         format: float
-        description: 'Composite review score of this game out of 5.'
+        description: Composite review score of this game out of 5.
         example: 4.5
       links:
         $ref: '#/definitions/SelfLink'
@@ -91,8 +91,8 @@ definitions:
         format: int64
       name:
         type: string
-        description: 'Name of the developer'
-        example: 'Terminal Reality'
+        description: Name of the developer
+        example: Terminal Reality
   Review:
     properties:
       id:
@@ -102,14 +102,14 @@ definitions:
         $ref: '#/definitions/Game'
       reviewer:
         type: string
-        description: 'Person who wrote the review.'
+        description: Person who wrote the review.
       score:
         type: number
         format: float
-        description: 'Score for this review out of 5.'
+        description: Score for this review out of 5.
       reviewText:
         type: string
-        description: 'Text containing the review for the referenced game.'
+        description: Text containing the review for the referenced game.
   SelfLink:
     properties:
       self:
