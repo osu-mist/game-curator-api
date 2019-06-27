@@ -70,18 +70,21 @@ paths:
           schema:
             $ref: '#/definitions/Errors'
   /games/{gameId}:
+    parameters:
+    - $ref: '#/parameters/authorization'
+    - name: gameId
+      in: path
+      description: Id of game to return
+      required: true
+      type: integer
+      format: int64
     get:
       summary: Find game by ID
       description: Returns a single game
       tags:
         - Games
       parameters:
-      - name: gameId
-        in: path
-        description: Id of game to return
         required: true
-        type: integer
-        format: int64
       responses:
         200:
           description: Successful response
