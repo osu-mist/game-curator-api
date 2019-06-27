@@ -34,6 +34,8 @@ paths:
       responses:
         200:
           description: Successful response
+          schema:
+            $ref: '#/definitions/GameResult'
         404:
           description: Game not found
           schema:
@@ -119,6 +121,12 @@ definitions:
         example: 4.5
       links:
         $ref: '#/definitions/SelfLink'
+  GameResult:
+    properties:
+      links:
+        $ref: '#/definitions/SelfLink'
+      data:
+        $ref: '#/definitions/GameResource'
   Developer:
     properties:
       id:
