@@ -260,9 +260,6 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/Errors'
-        
-    
-      deprecated: false
 parameters:
   authorization:
     name: Authorization
