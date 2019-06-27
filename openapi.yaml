@@ -197,13 +197,37 @@ paths:
           schema:
             $ref: '#/definitions/ReviewResult'
         404:
-          description: Game not found
+          description: Review not found
           schema:
             $ref: '#/definitions/Errors'
         500:
           description: Internal server error
           schema:
             $ref: '#/definitions/Errors'
+    patch:
+      summary: Update a review
+      description: Update a review by passing in the reviewId and the parameters to update
+      tags:
+        - Reviews
+      parameters:
+        - name: body
+          in: body
+          schema:
+            $ref: '#/definitions/ReviewResource'
+      responses:
+        200:
+          description: Game update successful
+          schema:
+            $ref: '#/definitions/GameResult'
+        404:
+          description: Review not found
+          schema:
+            $ref: '#/definitions/Errors'
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+    # delete
 parameters:
   authorization:
     name: Authorization
