@@ -244,6 +244,18 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/ReviewResource'
+  ReviewPostBody:
+    properties: 
+      data:
+        type: object
+        properties:
+          reviewText:
+            $ref: '#/definitions/ReviewResource/properties/reviewText'
+          score:
+            $ref: '#/definitions/ReviewResource/properties/score'
+        required:
+        - reviewText
+        - score
   SelfLink:
     properties:
       self:
