@@ -49,21 +49,21 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/Errors'
-    #post:
-    #  summary: Add a new game
-    #  tags:
-    #    - Games
-    #  responses:
-    #    201:
-    #      description: Successfully added a game
-    #    405:
-    #      description: Invalid input
-    #      schema:
-    #        $ref: '#/definitions/Errors'
-    #    500:
-    #      description: Internal server error
-    #      schema:
-    #        $ref: '#/definitions/Errors'
+    post:
+      summary: Add a new game
+      tags:
+        - Games
+      responses:
+        201:
+          description: Successfully added a game
+        400:
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Errors'
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
   /games/{gameId}:
     get:
       summary: Find game by ID
