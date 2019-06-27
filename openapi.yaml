@@ -363,7 +363,7 @@ paths:
           schema:
             $ref: '#/definitions/DeveloperResult'
         400:
-          description: Invalid developer object
+          description: Bad request
           schema:
             $ref: '#/definitions/Errors'
         404:
