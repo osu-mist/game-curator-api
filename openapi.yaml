@@ -282,6 +282,14 @@ paths:
           description: Completed successfully
           schema:
             $ref: '#/definitions/DeveloperResults'
+        400:
+          description: Invalid developer object
+          schema:
+            $ref: '#/definitions/Errors'
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
     post:
       summary: Create a new developer record
       description: Pass JSON containing the required parameters to create a new developer record
