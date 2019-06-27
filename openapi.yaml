@@ -167,7 +167,7 @@ definitions:
         type: string
         description: Name of the developer
         example: Terminal Reality
-  Review:
+  ReviewResource:
     properties:
       id:
         type: integer
@@ -184,6 +184,24 @@ definitions:
       reviewText:
         type: string
         description: Text containing the review for the referenced game
+  ReviewResult:
+    properties:
+      links:
+        $ref: '#/definitions/SelfLink'
+      data:
+        $ref: '#/definitions/ReviewResource'
+  ReviewResults:
+    properties: 
+      links:
+        allOf:
+          - $ref: '#/definitions/SelfLink'
+          - $ref: '#/definitions/PaginationLinks'
+      meta:
+        $ref: '#/definitions/Meta'
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/ReviewResource'
   SelfLink:
     properties:
       self:
