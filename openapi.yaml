@@ -282,6 +282,21 @@ paths:
           description: Completed successfully
           schema:
             $ref: '#/definitions/DeveloperResults'
+    post:
+      summary: Create a new developer record
+      description: Pass JSON containing the required parameters to create a new developer record
+      tags:
+        - Developers
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/DeveloperResource'
+      responses:
+        200:
+          description: Developer created successfully
+          schema:
+            $ref: '#/definitions/DeveloperResult'
 parameters:
   authorization:
     name: Authorization
