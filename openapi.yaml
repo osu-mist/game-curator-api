@@ -41,6 +41,11 @@ definitions:
         type: string
         description: 'Name of the game.'
         example: 'Eternal Death Slayer 3'
+      score:
+        type: number
+        format: float
+        description: 'Composite review score of this game out of 5.'
+        example: 4.5
       links:
         $ref: '#/definitions/SelfLink'
   SelfLink:
