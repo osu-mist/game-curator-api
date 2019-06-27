@@ -366,6 +366,21 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/Errors'
+    delete:
+      summary: Delete a developer record
+      tags:
+        - Developers
+      responses:
+        200:
+          description: Developer deleted successfully
+        404:
+          description: Developer not found
+          schema:
+            $ref: '#/definitions/Errors'
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
 parameters:
   authorization:
     name: Authorization
