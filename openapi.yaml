@@ -17,6 +17,8 @@ basePath: /v1
 externalDocs:
   description: GitHub Repository
   url: https://github.com/osu-mist/game-curator-api
+produces:
+  - application/json
 paths:
   /game:
     get:
