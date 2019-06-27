@@ -127,6 +127,18 @@ definitions:
         $ref: '#/definitions/SelfLink'
       data:
         $ref: '#/definitions/GameResource'
+  GameResults:
+    properties: 
+      links:
+        allOf:
+          - $ref: '#/definitions/SelfLink'
+          - $ref: '#/definitions/PaginationLinks'
+      meta:
+        $ref: '#/definitions/Meta'
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/GameResource'
   Developer:
     properties:
       id:
