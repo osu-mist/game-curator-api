@@ -120,6 +120,20 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/Errors'
+    delete:
+      summary: Delete a game
+      description: Delete a game by passing in a gameId
+      tags:
+        - Games
+      responses:
+        200:
+          description: Game deleted Successfully
+        400:
+          description: Invalid Id supplied
+        404:
+          description: Game not found
+    
+      deprecated: false
   /reviews:
     parameters:
     - $ref: '#/parameters/authorization'
