@@ -192,6 +192,12 @@ definitions:
         type: string
         description: Name of the developer
         example: Terminal Reality
+  DeveloperResult:
+    properties: 
+      links:
+        $ref: '#/definitions/SelfLink'
+      data:
+        $ref: '#/definitions/DeveloperResource'
   ReviewResource:
     properties:
       id:
