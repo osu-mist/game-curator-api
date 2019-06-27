@@ -20,7 +20,7 @@ externalDocs:
 produces:
   - application/json
 paths:
-  /game:
+  /games:
     parameters:
       - $ref: '#/parameters/authorization'
     get:
@@ -64,7 +64,7 @@ paths:
     #      description: Internal server error
     #      schema:
     #        $ref: '#/definitions/Errors'
-  /game/{gameId}:
+  /games/{gameId}:
     get:
       summary: Find game by ID
       description: Returns a single game
@@ -90,7 +90,7 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/Errors'
-  /review/{gameId}:
+  /reviews/{reviewId}:
     get:
       summary: Find reviews by game Id
       description: Returns all reviews that belong to a particular game
@@ -116,7 +116,7 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/Errors'
-  /review:
+  /reviews:
     parameters:
     - $ref: '#/parameters/authorization'
     post:
