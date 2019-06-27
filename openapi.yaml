@@ -34,6 +34,14 @@ paths:
       responses:
         200:
           description: 'Successful response'
+        404:
+          description: 'Game not found'
+          schema:
+            $ref: '#/definitions/Errors'
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
   /game:
     parameters:
       - $ref: '#/parameters/authorization'
@@ -44,6 +52,12 @@ paths:
           description: Successfully added a game
         405:
           description: Invalid input
+          schema:
+            $ref: '#/definitions/Errors'
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
 parameters:
   authorization:
     name: Authorization
