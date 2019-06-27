@@ -31,6 +31,11 @@ paths:
       parameters:
         - $ref: '#/parameters/pageNumber'
         - $ref: '#/parameters/pageSize'
+        - name: developerId
+          in: query
+          type: integer
+          required: false
+          description: id of developer to return games from
       responses:
         200:
           description: Successful response
