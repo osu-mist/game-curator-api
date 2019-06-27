@@ -83,8 +83,30 @@ paths:
       description: Returns a single game
       tags:
         - Games
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/GameResult'
+        404:
+          description: Game not found
+          schema:
+            $ref: '#/definitions/Errors'
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+    patch:
+      summary: Update information on a game
+      description: Pass in parameters to update fields on game resources
+      tags:
+        - Games
       parameters:
+      - name: body
+        in: body
         required: true
+        schema:
+          $ref: '#/definitions/GameResource'
       responses:
         200:
           description: Successful response
