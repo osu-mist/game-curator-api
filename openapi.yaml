@@ -63,7 +63,7 @@ paths:
           name: body
           required: true
           schema:
-            $ref: '#/definitions/GameResource'
+            $ref: '#/definitions/GamePostBody'
       responses:
         201:
           description: Successfully added a game
@@ -473,6 +473,18 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/GameResource'
+  GamePostBody:
+    properties:
+      data:
+        type: object
+        properties:
+          name:
+            $ref: '#/definitions/GameResource/properties/name'
+          releaseDate:
+            $ref: '#/definitions/GameResource/properties/releaseDate'
+        required:
+          - name
+        additionalProperties: false
   DeveloperResource:
     properties:
       id:
