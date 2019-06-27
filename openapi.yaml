@@ -249,6 +249,11 @@ definitions:
         format: float
         description: Composite review score of this game out of 5
         example: 4.5
+      releaseDate:
+        type: string
+        format: date
+        description: Date of the games release
+        example: 12/5/1994
       links:
         $ref: '#/definitions/SelfLink'
   GameResult:
@@ -278,6 +283,10 @@ definitions:
         type: string
         description: Name of the developer
         example: Terminal Reality
+      website:
+        type: string
+        description: Url to homepage of developer
+        example: https://bethesda.net/
   DeveloperResult:
     properties: 
       links:
@@ -304,6 +313,11 @@ definitions:
         type: string
         description: Text containing the review for the referenced game
         example: My name is Commander Shepard and this is my favorite game on the citadel.
+      reviewDate:
+        type: string
+        format: date
+        description: Date the review was finalized
+        example: 10/15/2006
   ReviewResult:
     properties:
       links:
