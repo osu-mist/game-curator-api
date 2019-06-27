@@ -59,6 +59,16 @@ definitions:
         type: string
         description: 'Name of the developer'
         example: 'Terminal Reality'
+  Review:
+    properties:
+      id:
+        type: integer
+        format: int64
+      game:
+        $ref: '#/definitions/Game'
+      reviewer:
+        type: string
+        description: 'Person who wrote the review'
   SelfLink:
     properties:
       self:
