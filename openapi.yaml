@@ -90,6 +90,50 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/Errors'
+  /reviews:
+    parameters:
+    - $ref: '#/parameters/authorization'
+    get:
+      summary: List all reviews
+      description: Get a list of all reviews or filter by query parameters
+      tags:
+        - Reviews
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/ReviewResults'
+        400:
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Errors'
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+    post:
+      summary: Create a review
+      description: Post score and review text to create a review
+      tags:
+        - Reviews
+      parameters:
+      - in: body
+        name: requestBody
+        schema:
+          $ref: '#/definitions/ReviewPostBody'
+      responses:
+        201:
+          description: Successfully created new review
+          schema:
+            $ref: '#/definitions/ReviewResult'
+        400:
+          description: Invalid review object
+          schema:
+            $ref: '#/definitions/Errors'
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
   /reviews/{reviewId}:
     get:
       summary: Find review by Id
@@ -110,32 +154,6 @@ paths:
             $ref: '#/definitions/ReviewResult'
         404:
           description: Game not found
-          schema:
-            $ref: '#/definitions/Errors'
-        500:
-          description: Internal server error
-          schema:
-            $ref: '#/definitions/Errors'
-  /reviews:
-    parameters:
-    - $ref: '#/parameters/authorization'
-    post:
-      summary: Create a review
-      description: Post score and review text to create a review
-      tags:
-        - Reviews
-      parameters:
-      - in: body
-        name: requestBody
-        schema:
-          $ref: '#/definitions/ReviewPostBody'
-      responses:
-        201:
-          description: Successfully created new review
-          schema:
-            $ref: '#/definitions/ReviewResult'
-        400:
-          description: Invalid review object
           schema:
             $ref: '#/definitions/Errors'
         500:
