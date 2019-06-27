@@ -180,6 +180,7 @@ paths:
             $ref: '#/definitions/Errors'
   /reviews/{reviewId}:
     parameters:
+    - $ref: '#/parameters/authorization'
     - name: reviewId
       in: path
       description: Id of review to return
