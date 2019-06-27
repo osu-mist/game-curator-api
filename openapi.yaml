@@ -179,18 +179,18 @@ paths:
           schema:
             $ref: '#/definitions/Errors'
   /reviews/{reviewId}:
+    parameters:
+    - name: reviewId
+      in: path
+      description: Id of review to return
+      required: true
+      type: integer
+      format: int64
     get:
       summary: Find review by Id
       description: Returns all reviews that belong to a particular game
       tags:
         - Reviews
-      parameters:
-      - name: reviewId
-        in: path
-        description: Id of review to return
-        required: true
-        type: integer
-        format: int64
       responses:
         200:
           description: Successful response
