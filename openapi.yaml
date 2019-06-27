@@ -340,7 +340,32 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/Errors'
-
+    patch:
+      summary: Update developer by its Id
+      tags:
+      - Developers
+      parameters:
+        - name: body
+          in: body
+          schema:
+            $ref: '#/definitions/DeveloperResource'
+      responses:
+        200:
+          description: Developer created successfully
+          schema:
+            $ref: '#/definitions/DeveloperResult'
+        400:
+          description: Invalid developer object
+          schema:
+            $ref: '#/definitions/Errors'
+        404:
+          description: Developer not found
+          schema:
+            $ref: '#/definitions/Errors'
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
 parameters:
   authorization:
     name: Authorization
