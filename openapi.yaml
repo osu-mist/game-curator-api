@@ -35,6 +35,8 @@ paths:
         200:
           description: 'Successful response'
   /game:
+    parameters:
+      - $ref: '#/parameters/authorization'
     post:
       summary: 'Add a new game'
       responses:
