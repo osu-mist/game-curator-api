@@ -92,14 +92,14 @@ paths:
             $ref: '#/definitions/Errors'
   /reviews/{reviewId}:
     get:
-      summary: Find reviews by game Id
+      summary: Find review by Id
       description: Returns all reviews that belong to a particular game
       tags:
         - Reviews
       parameters:
-      - name: gameId
+      - name: reviewId
         in: path
-        description: Id of game to return reviews for
+        description: Id of review to return
         required: true
         type: integer
         format: int64
@@ -107,7 +107,7 @@ paths:
         200:
           description: Successful response
           schema:
-            $ref: '#/definitions/ReviewResults'
+            $ref: '#/definitions/ReviewResult'
         404:
           description: Game not found
           schema:
