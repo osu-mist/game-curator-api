@@ -20,30 +20,6 @@ externalDocs:
 produces:
   - application/json
 paths:
-  /game/{gameId}:
-    get:
-      summary: Find game by ID
-      description: Returns a single game
-      parameters:
-      - name: gameId
-        in: path
-        description: Id of game to return
-        required: true
-        type: integer
-        format: int64
-      responses:
-        200:
-          description: Successful response
-          schema:
-            $ref: '#/definitions/GameResult'
-        404:
-          description: Game not found
-          schema:
-            $ref: '#/definitions/Errors'
-        500:
-          description: Internal server error
-          schema:
-            $ref: '#/definitions/Errors'
   /game:
     parameters:
       - $ref: '#/parameters/authorization'
@@ -73,6 +49,30 @@ paths:
           description: Successfully added a game
         405:
           description: Invalid input
+          schema:
+            $ref: '#/definitions/Errors'
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+  /game/{gameId}:
+    get:
+      summary: Find game by ID
+      description: Returns a single game
+      parameters:
+      - name: gameId
+        in: path
+        description: Id of game to return
+        required: true
+        type: integer
+        format: int64
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/GameResult'
+        404:
+          description: Game not found
           schema:
             $ref: '#/definitions/Errors'
         500:
