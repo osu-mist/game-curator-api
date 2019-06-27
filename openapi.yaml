@@ -48,6 +48,15 @@ definitions:
         example: 4.5
       links:
         $ref: '#/definitions/SelfLink'
+  Developer:
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+        description: 'Name of the developer'
+        example: 'Terminal Reality'
   SelfLink:
     properties:
       self:
