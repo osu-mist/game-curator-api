@@ -308,6 +308,14 @@ paths:
           description: Developer created successfully
           schema:
             $ref: '#/definitions/DeveloperResult'
+        400:
+          description: Invalid developer object
+          schema:
+            $ref: '#/definitions/Errors'
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
 parameters:
   authorization:
     name: Authorization
