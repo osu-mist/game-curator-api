@@ -118,6 +118,10 @@ paths:
           description: Successful response
           schema:
             $ref: '#/definitions/GameResult'
+        400:
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Errors'
         404:
           description: Game not found
           schema:
@@ -244,6 +248,10 @@ paths:
           description: Game update successful
           schema:
             $ref: '#/definitions/GameResult'
+        400:
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Errors'
         404:
           description: Review not found
           schema:
