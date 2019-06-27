@@ -190,8 +190,8 @@ definitions:
       id:
         type: integer
         format: int64
-      developer:
-        $ref: '#/definitions/DeveloperResource'
+      developerId:
+        $ref: '#/definitions/DeveloperResource/properties/id'
       name:
         type: string
         description: Name of the game
@@ -241,8 +241,8 @@ definitions:
       id:
         type: integer
         format: int64
-      game:
-        $ref: '#/definitions/GameResource'
+      gameId:
+        $ref: '#/definitions/GameResource/properties/id'
       reviewer:
         type: string
         description: Person who wrote the review.
