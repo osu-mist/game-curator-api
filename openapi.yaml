@@ -79,6 +79,31 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/Errors'
+  /review/{gameId}:
+    get:
+      summary: Find reviews by game Id
+      description: Returns all reviews that belong to a particular game
+      parameters:
+      - name: gameId
+        in: path
+        description: Id of game to return reviews for
+        required: true
+        type: integer
+        format: int64
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/ReviewResults'
+        404:
+          description: Game not found
+          schema:
+            $ref: '#/definitions/Errors'
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+
 parameters:
   authorization:
     name: Authorization
