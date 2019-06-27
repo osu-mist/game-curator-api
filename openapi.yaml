@@ -319,15 +319,14 @@ paths:
   /developers/{developerId}:
     parameters:
       - $ref: '#/parameters/authorization'
+      - name: developerId
+        in: path
+        type: integer
+        required: true
     get:
       summary: Get developer by its Id
       tags:
         - Developers
-      parameters:
-        - name: developerId
-          in: path
-          type: integer
-          required: true
       responses:
         200:
           description: Successful response
