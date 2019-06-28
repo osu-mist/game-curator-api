@@ -42,15 +42,15 @@ paths:
           required: false
           description: name of game to return
       responses:
-        200:
+        '200':
           description: Successful response
           schema:
             $ref: '#/definitions/GameResults'
-        400:
+        '400':
           description: Bad request
           schema:
             $ref: '#/definitions/Errors'
-        500:
+        '500':
           description: Internal server error
           schema:
             $ref: '#/definitions/Errors'
@@ -65,13 +65,13 @@ paths:
           schema:
             $ref: '#/definitions/GamePostBody'
       responses:
-        201:
+        '201':
           description: Successfully added a game
-        400:
+        '400':
           description: Bad request
           schema:
             $ref: '#/definitions/Errors'
-        500:
+        '500':
           description: Internal server error
           schema:
             $ref: '#/definitions/Errors'
@@ -90,15 +90,15 @@ paths:
       tags:
         - Games
       responses:
-        200:
+        '200':
           description: Successful response
           schema:
             $ref: '#/definitions/GameResult'
-        404:
+        '404':
           description: Game not found
           schema:
             $ref: '#/definitions/Errors'
-        500:
+        '500':
           description: Internal server error
           schema:
             $ref: '#/definitions/Errors'
@@ -114,19 +114,19 @@ paths:
         schema:
           $ref: '#/definitions/GameResource'
       responses:
-        200:
+        '200':
           description: Successful response
           schema:
             $ref: '#/definitions/GameResult'
-        400:
+        '400':
           description: Bad request
           schema:
             $ref: '#/definitions/Errors'
-        404:
+        '404':
           description: Game not found
           schema:
             $ref: '#/definitions/Errors'
-        500:
+        '500':
           description: Internal server error
           schema:
             $ref: '#/definitions/Errors'
@@ -136,11 +136,11 @@ paths:
       tags:
         - Games
       responses:
-        200:
+        '200':
           description: Game deleted successfully
-        400:
+        '400':
           description: Invalid Id supplied
-        404:
+        '404':
           description: Game not found
     
       deprecated: false
@@ -171,15 +171,15 @@ paths:
           required: false
           description: Filter results by posting date
       responses:
-        200:
+        '200':
           description: Successful response
           schema:
             $ref: '#/definitions/ReviewResults'
-        400:
+        '400':
           description: Bad request
           schema:
             $ref: '#/definitions/Errors'
-        500:
+        '500':
           description: Internal server error
           schema:
             $ref: '#/definitions/Errors'
@@ -194,15 +194,15 @@ paths:
         schema:
           $ref: '#/definitions/ReviewPostBody'
       responses:
-        201:
+        '201':
           description: Successfully created new review
           schema:
             $ref: '#/definitions/ReviewResult'
-        400:
+        '400':
           description: Invalid review object
           schema:
             $ref: '#/definitions/Errors'
-        500:
+        '500':
           description: Internal server error
           schema:
             $ref: '#/definitions/Errors'
@@ -221,15 +221,15 @@ paths:
       tags:
         - Reviews
       responses:
-        200:
+        '200':
           description: Successful response
           schema:
             $ref: '#/definitions/ReviewResult'
-        404:
+        '404':
           description: Review not found
           schema:
             $ref: '#/definitions/Errors'
-        500:
+        '500':
           description: Internal server error
           schema:
             $ref: '#/definitions/Errors'
@@ -244,19 +244,19 @@ paths:
           schema:
             $ref: '#/definitions/ReviewResource'
       responses:
-        200:
+        '200':
           description: Game update successful
           schema:
             $ref: '#/definitions/GameResult'
-        400:
+        '400':
           description: Bad request
           schema:
             $ref: '#/definitions/Errors'
-        404:
+        '404':
           description: Review not found
           schema:
             $ref: '#/definitions/Errors'
-        500:
+        '500':
           description: Internal server error
           schema:
             $ref: '#/definitions/Errors'
@@ -266,11 +266,13 @@ paths:
       tags:
         - Reviews
       responses:
-        404:
+        '200':
+          description: Review deleted successfully
+        '404':
           description: Review not found
           schema:
             $ref: '#/definitions/Errors'
-        500:
+        '500':
           description: Internal server error
           schema:
             $ref: '#/definitions/Errors'
@@ -292,11 +294,11 @@ paths:
           type: integer
           description: Id of the developer
       responses:
-        200:
+        '200':
           description: Completed successfully
           schema:
             $ref: '#/definitions/DeveloperResults'
-        500:
+        '500':
           description: Internal server error
           schema:
             $ref: '#/definitions/Errors'
@@ -312,15 +314,15 @@ paths:
           schema:
             $ref: '#/definitions/DeveloperPostBody'
       responses:
-        200:
+        '200':
           description: Developer created successfully
           schema:
             $ref: '#/definitions/DeveloperResult'
-        400:
+        '400':
           description: Invalid developer object
           schema:
             $ref: '#/definitions/Errors'
-        500:
+        '500':
           description: Internal server error
           schema:
             $ref: '#/definitions/Errors'
@@ -336,15 +338,15 @@ paths:
       tags:
         - Developers
       responses:
-        200:
+        '200':
           description: Successful response
           schema:
             $ref: '#/definitions/DeveloperResult'
-        404:
+        '404':
           description: Developer not found
           schema:
             $ref: '#/definitions/Errors'
-        500:
+        '500':
           description: Internal server error
           schema:
             $ref: '#/definitions/Errors'
@@ -358,19 +360,19 @@ paths:
           schema:
             $ref: '#/definitions/DeveloperResource'
       responses:
-        200:
+        '200':
           description: Developer updated successfully
           schema:
             $ref: '#/definitions/DeveloperResult'
-        400:
+        '400':
           description: Bad request
           schema:
             $ref: '#/definitions/Errors'
-        404:
+        '404':
           description: Developer not found
           schema:
             $ref: '#/definitions/Errors'
-        500:
+        '500':
           description: Internal server error
           schema:
             $ref: '#/definitions/Errors'
@@ -379,13 +381,13 @@ paths:
       tags:
         - Developers
       responses:
-        200:
+        '200':
           description: Developer deleted successfully
-        404:
+        '404':
           description: Developer not found
           schema:
             $ref: '#/definitions/Errors'
-        500:
+        '500':
           description: Internal server error
           schema:
             $ref: '#/definitions/Errors'
