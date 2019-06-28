@@ -525,6 +525,9 @@ definitions:
             $ref: '#/definitions/DeveloperResource/properties/name'
           website:
             $ref: '#/definitions/DeveloperResource/properties/website'
+        required:
+          - name
+          - website
   ReviewResource:
     properties:
       id:
@@ -573,13 +576,19 @@ definitions:
       data:
         type: object
         properties:
+          gameId:
+            $ref: '#/definitions/ReviewResource/properties/gameId'
           reviewText:
             $ref: '#/definitions/ReviewResource/properties/reviewText'
           score:
             $ref: '#/definitions/ReviewResource/properties/score'
+          reviewer:
+            $ref: '#/definitions/ReviewResource/properties/reviewer'
         required:
+        - gameId
         - reviewText
         - score
+        - reviewer
   SelfLink:
     properties:
       self:
