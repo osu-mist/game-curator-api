@@ -142,8 +142,121 @@ paths:
           description: Invalid Id supplied
         '404':
           description: Game not found
-    
-      deprecated: false
+  /developers:
+    parameters:
+      - $ref: '#/parameters/authorization'
+    get:
+      summary: Get complete or filtered list of developers
+      description: Retrieve complete list of developers or pass in query parameters to filter results
+      tags:
+        - Developers
+      parameters:
+        - name: name
+          in: query
+          type: string
+          description: Name of the developer
+        - name: developerId
+          in: query
+          type: integer
+          description: Id of the developer
+      responses:
+        '200':
+          description: Completed successfully
+          schema:
+            $ref: '#/definitions/DeveloperResults'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+    post:
+      summary: Create a new developer record
+      description: Pass JSON containing the required parameters to create a new developer record
+      tags:
+        - Developers
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/DeveloperPostBody'
+      responses:
+        '200':
+          description: Developer created successfully
+          schema:
+            $ref: '#/definitions/DeveloperResult'
+        '400':
+          description: Invalid developer object
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+  /developers/{developerId}:
+    parameters:
+      - $ref: '#/parameters/authorization'
+      - name: developerId
+        in: path
+        type: integer
+        required: true
+    get:
+      summary: Get developer by its Id
+      tags:
+        - Developers
+      responses:
+        '200':
+          description: Successful response
+          schema:
+            $ref: '#/definitions/DeveloperResult'
+        '404':
+          description: Developer not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+    patch:
+      summary: Update developer by its Id
+      tags:
+      - Developers
+      parameters:
+        - name: body
+          in: body
+          schema:
+            $ref: '#/definitions/DeveloperResource'
+      responses:
+        '200':
+          description: Developer updated successfully
+          schema:
+            $ref: '#/definitions/DeveloperResult'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: Developer not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+    delete:
+      summary: Delete a developer record
+      tags:
+        - Developers
+      responses:
+        '200':
+          description: Developer deleted successfully
+        '404':
+          description: Developer not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
   /reviews:
     parameters:
     - $ref: '#/parameters/authorization'
@@ -270,121 +383,6 @@ paths:
           description: Review deleted successfully
         '404':
           description: Review not found
-          schema:
-            $ref: '#/definitions/Errors'
-        '500':
-          description: Internal server error
-          schema:
-            $ref: '#/definitions/Errors'
-  /developers:
-    parameters:
-      - $ref: '#/parameters/authorization'
-    get:
-      summary: Get complete or filtered list of developers
-      description: Retrieve complete list of developers or pass in query parameters to filter results
-      tags:
-        - Developers
-      parameters:
-        - name: name
-          in: query
-          type: string
-          description: Name of the developer
-        - name: developerId
-          in: query
-          type: integer
-          description: Id of the developer
-      responses:
-        '200':
-          description: Completed successfully
-          schema:
-            $ref: '#/definitions/DeveloperResults'
-        '500':
-          description: Internal server error
-          schema:
-            $ref: '#/definitions/Errors'
-    post:
-      summary: Create a new developer record
-      description: Pass JSON containing the required parameters to create a new developer record
-      tags:
-        - Developers
-      parameters:
-        - in: body
-          name: body
-          required: true
-          schema:
-            $ref: '#/definitions/DeveloperPostBody'
-      responses:
-        '200':
-          description: Developer created successfully
-          schema:
-            $ref: '#/definitions/DeveloperResult'
-        '400':
-          description: Invalid developer object
-          schema:
-            $ref: '#/definitions/Errors'
-        '500':
-          description: Internal server error
-          schema:
-            $ref: '#/definitions/Errors'
-  /developers/{developerId}:
-    parameters:
-      - $ref: '#/parameters/authorization'
-      - name: developerId
-        in: path
-        type: integer
-        required: true
-    get:
-      summary: Get developer by its Id
-      tags:
-        - Developers
-      responses:
-        '200':
-          description: Successful response
-          schema:
-            $ref: '#/definitions/DeveloperResult'
-        '404':
-          description: Developer not found
-          schema:
-            $ref: '#/definitions/Errors'
-        '500':
-          description: Internal server error
-          schema:
-            $ref: '#/definitions/Errors'
-    patch:
-      summary: Update developer by its Id
-      tags:
-      - Developers
-      parameters:
-        - name: body
-          in: body
-          schema:
-            $ref: '#/definitions/DeveloperResource'
-      responses:
-        '200':
-          description: Developer updated successfully
-          schema:
-            $ref: '#/definitions/DeveloperResult'
-        '400':
-          description: Bad request
-          schema:
-            $ref: '#/definitions/Errors'
-        '404':
-          description: Developer not found
-          schema:
-            $ref: '#/definitions/Errors'
-        '500':
-          description: Internal server error
-          schema:
-            $ref: '#/definitions/Errors'
-    delete:
-      summary: Delete a developer record
-      tags:
-        - Developers
-      responses:
-        '200':
-          description: Developer deleted successfully
-        '404':
-          description: Developer not found
           schema:
             $ref: '#/definitions/Errors'
         '500':
