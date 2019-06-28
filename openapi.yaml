@@ -310,7 +310,7 @@ paths:
           name: body
           required: true
           schema:
-            $ref: '#/definitions/DeveloperResource'
+            $ref: '#/definitions/DeveloperPostBody'
       responses:
         200:
           description: Developer created successfully
@@ -516,6 +516,15 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/DeveloperResource'
+  DeveloperPostBody:
+    properties:
+      data:
+        type: object
+        properties:
+          name:
+            $ref: '#/definitions/DeveloperResource/properties/name'
+          website:
+            $ref: '#/definitions/DeveloperResource/properties/website'
   ReviewResource:
     properties:
       id:
