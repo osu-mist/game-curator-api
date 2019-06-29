@@ -224,7 +224,7 @@ paths:
         - name: body
           in: body
           schema:
-            $ref: '#/definitions/DeveloperResource'
+            $ref: '#/definitions/DeveloperPatchBody'
       responses:
         '200':
           description: Developer updated successfully
@@ -528,6 +528,15 @@ definitions:
         required:
           - name
           - website
+  DeveloperPatchBody:
+    properties:
+      data:
+        type: object
+        properties:
+          name:
+            $ref: '#/definitions/DeveloperResource/properties/name'
+          website:
+            $ref: '#/definitions/DeveloperResource/properties/website'
   ReviewResource:
     properties:
       id:
