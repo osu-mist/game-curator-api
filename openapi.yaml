@@ -35,12 +35,12 @@ paths:
           in: query
           type: string
           required: false
-          description: id of developer to return games from
+          description: Id of developer to return games from
         - name: name
           in: query
           type: string
           required: false
-          description: name of game to return
+          description: Name of game to return
         - name: score_min
           in: query
           type: string
