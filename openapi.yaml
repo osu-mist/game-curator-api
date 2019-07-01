@@ -597,22 +597,34 @@ definitions:
       data:
         type: object
         properties:
-          name:
-            $ref: '#/definitions/DeveloperResource/properties/name'
-          website:
-            $ref: '#/definitions/DeveloperResource/properties/website'
-        required:
-          - name
-          - website
+          type:
+            $ref: '#/definitions/DeveloperType'
+          attributes:
+            type: object
+            properties:
+              name:
+                $ref: '#/definitions/DeveloperResource/properties/name'
+              website:
+                $ref: '#/definitions/DeveloperResource/properties/website'
+            required:
+              - name
+              - website
   DeveloperPatchBody:
     properties:
       data:
         type: object
         properties:
-          name:
-            $ref: '#/definitions/DeveloperResource/properties/name'
-          website:
-            $ref: '#/definitions/DeveloperResource/properties/website'
+          type:
+            $ref: '#/definitions/DeveloperType'
+          id:
+            $ref: '#/definitions/DeveloperResource/properties/id'
+          attributes:
+            type: object
+            properties:
+              name:
+                $ref: '#/definitions/DeveloperResource/properties/name'
+              website:
+                $ref: '#/definitions/DeveloperResource/properties/website'
   ReviewResource:
     properties:
       id:
