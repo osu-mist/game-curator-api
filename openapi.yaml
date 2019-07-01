@@ -184,10 +184,6 @@ paths:
           in: query
           type: string
           description: Name of the developer
-        - name: developerId
-          in: query
-          type: string
-          description: Id of the developer
       responses:
         '200':
           description: Completed successfully
