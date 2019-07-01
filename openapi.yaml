@@ -371,7 +371,7 @@ paths:
         - name: body
           in: body
           schema:
-            $ref: '#/definitions/ReviewResource'
+            $ref: '#/definitions/ReviewPatchBody'
       responses:
         '200':
           description: Game update successful
@@ -614,6 +614,19 @@ definitions:
         - reviewText
         - score
         - reviewer
+  ReviewPatchBody:
+    properties: 
+      data:
+        type: object
+        properties:
+          gameId:
+            $ref: '#/definitions/ReviewResource/properties/gameId'
+          reviewText:
+            $ref: '#/definitions/ReviewResource/properties/reviewText'
+          score:
+            $ref: '#/definitions/ReviewResource/properties/score'
+          reviewer:
+            $ref: '#/definitions/ReviewResource/properties/reviewer'
   SelfLink:
     properties:
       self:
