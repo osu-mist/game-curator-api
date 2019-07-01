@@ -41,6 +41,16 @@ paths:
           type: string
           required: false
           description: name of game to return
+        - name: score_min
+          in: query
+          type: string
+          required: false
+          description: Filter results by minimum review score
+        - name: score_max
+          in: query
+          type: string
+          required: false
+          description: Filter results by maximum review score
       responses:
         '200':
           description: Successful response
