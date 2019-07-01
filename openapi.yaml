@@ -285,6 +285,7 @@ paths:
           type: array
           items:
             type: string
+            collectionFormat: csv
           required: false
           description: Filter by the Id of the game
         - name: reviewer
