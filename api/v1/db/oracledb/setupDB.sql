@@ -30,8 +30,8 @@ COMMENT ON TABLE VIDEO_GAMES IS 'Contains data on video games including aggregat
 COMMENT ON COLUMN VIDEO_GAMES.ID IS 'Unique ID of video game';
 COMMENT ON COLUMN VIDEO_GAMES.DEVELOPER_ID 'Foreign key to DEVELOPERS. Points to the developer that created this game';
 COMMENT ON COLUMN VIDEO_GAMES.NAME IS 'The name of this video game';
-COMMENT ON COLUMN VIDEO_GAMES.SCORE IS 'Aggregate score based on reviews submitted for this game'
-COMMENT ON COLUMN VIDEO_GAMES.RELEASE_DATE IS 'Original date this game was released'
+COMMENT ON COLUMN VIDEO_GAMES.SCORE IS 'Aggregate score based on reviews submitted for this game';
+COMMENT ON COLUMN VIDEO_GAMES.RELEASE_DATE IS 'Original date this game was released';
 
 INSERT INTO VIDEO_GAMES (DEVELOPER_ID, NAME, RELEASE_DATE) VALUES (1, 'FALLOUT 3', TO_DATE('2008/10/15', 'YYYY/MM/DD'));
 
