@@ -27,7 +27,7 @@ paths:
       summary: List all games
       description: Get all games
       tags:
-        - Games
+        - games
       parameters:
         - $ref: '#/parameters/pageNumber'
         - $ref: '#/parameters/pageSize'
@@ -67,7 +67,7 @@ paths:
     post:
       summary: Add a new game
       tags:
-        - Games
+        - games
       parameters:
         - in: body
           name: body
@@ -98,7 +98,7 @@ paths:
       summary: Find game by ID
       description: Returns a single game
       tags:
-        - Games
+        - games
       responses:
         '200':
           description: Successful response
@@ -116,7 +116,7 @@ paths:
       summary: Update information on a game
       description: Pass in parameters to update fields on game resources
       tags:
-        - Games
+        - games
       parameters:
       - name: body
         in: body
@@ -144,7 +144,7 @@ paths:
       summary: Delete a game
       description: Delete a game by passing in a gameId
       tags:
-        - Games
+        - games
       responses:
         '200':
           description: Game deleted successfully
@@ -159,7 +159,7 @@ paths:
       summary: Get complete or filtered list of developers
       description: Retrieve complete list of developers or pass in query parameters to filter results
       tags:
-        - Developers
+        - developers
       parameters:
         - name: name
           in: query
@@ -182,7 +182,7 @@ paths:
       summary: Create a new developer record
       description: Pass JSON containing the required parameters to create a new developer record
       tags:
-        - Developers
+        - developers
       parameters:
         - in: body
           name: body
@@ -212,7 +212,7 @@ paths:
     get:
       summary: Get developer by its Id
       tags:
-        - Developers
+        - developers
       responses:
         '200':
           description: Successful response
@@ -229,7 +229,7 @@ paths:
     patch:
       summary: Update developer by its Id
       tags:
-      - Developers
+      - developers
       parameters:
         - name: body
           in: body
@@ -255,7 +255,7 @@ paths:
     delete:
       summary: Delete a developer record
       tags:
-        - Developers
+        - developers
       responses:
         '200':
           description: Developer deleted successfully
@@ -274,7 +274,7 @@ paths:
       summary: List all reviews
       description: Get a list of all reviews or filter by query parameters
       tags:
-        - Reviews
+        - reviews
       parameters:
         - name: reviewer
           in: query
@@ -316,7 +316,7 @@ paths:
       summary: Create a review
       description: Post score and review text to create a review
       tags:
-        - Reviews
+        - reviews
       parameters:
       - in: body
         name: requestBody
@@ -348,7 +348,7 @@ paths:
       summary: Find review by Id
       description: Returns all reviews that belong to a particular game
       tags:
-        - Reviews
+        - reviews
       responses:
         '200':
           description: Successful response
@@ -366,7 +366,7 @@ paths:
       summary: Update a review
       description: Update a review by passing in the reviewId and the parameters to update
       tags:
-        - Reviews
+        - reviews
       parameters:
         - name: body
           in: body
@@ -393,7 +393,7 @@ paths:
       summary: Delete review
       description: Delete the review with the passed in reviewId
       tags:
-        - Reviews
+        - reviews
       responses:
         '200':
           description: Review deleted successfully
