@@ -289,6 +289,11 @@ paths:
       tags:
         - reviews
       parameters:
+        - name: gameId
+          in: query
+          type: string
+          required: false
+          description: Filter by the Id of the game
         - name: reviewer
           in: query
           type: string
