@@ -122,7 +122,7 @@ paths:
         in: body
         required: true
         schema:
-          $ref: '#/definitions/GameResource'
+          $ref: '#/definitions/GamePatchBody'
       responses:
         '200':
           description: Successful response
@@ -503,6 +503,18 @@ definitions:
         required:
           - name
           - developerId
+        additionalProperties: false
+  GamePatchBody:
+    properties:
+      data:
+        type: object
+        properties:
+          name:
+            $ref: '#/definitions/GameResource/properties/name'
+          releaseDate:
+            $ref: '#/definitions/GameResource/properties/releaseDate'
+          developerId:
+            $ref: '#/definitions/DeveloperResource/properties/id'
         additionalProperties: false
   DeveloperResource:
     properties:
