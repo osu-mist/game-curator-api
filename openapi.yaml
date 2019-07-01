@@ -155,12 +155,16 @@ paths:
       tags:
         - games
       responses:
-        '200':
+        '204':
           description: Game deleted successfully
-        '400':
-          description: Invalid Id supplied
         '404':
           description: Game not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
   /developers:
     parameters:
       - $ref: '#/parameters/authorization'
@@ -266,7 +270,7 @@ paths:
       tags:
         - developers
       responses:
-        '200':
+        '204':
           description: Developer deleted successfully
         '404':
           description: Developer not found
@@ -409,7 +413,7 @@ paths:
       tags:
         - reviews
       responses:
-        '200':
+        '204':
           description: Review deleted successfully
         '404':
           description: Review not found
