@@ -528,28 +528,40 @@ definitions:
       data:
         type: object
         properties:
-          name:
-            $ref: '#/definitions/GameResource/properties/name'
-          releaseDate:
-            $ref: '#/definitions/GameResource/properties/releaseDate'
-          developerId:
-            $ref: '#/definitions/DeveloperResource/properties/id'
-        required:
-          - name
-          - developerId
-        additionalProperties: false
+          type:
+            $ref: '#/definitions/GameType'
+          attributes:
+            type: object
+            properties:
+              name:
+                $ref: '#/definitions/GameResource/properties/name'
+              releaseDate:
+                $ref: '#/definitions/GameResource/properties/releaseDate'
+              developerId:
+                $ref: '#/definitions/DeveloperResource/properties/id'
+            required:
+              - name
+              - developerId
+            additionalProperties: false
   GamePatchBody:
     properties:
       data:
         type: object
         properties:
-          name:
-            $ref: '#/definitions/GameResource/properties/name'
-          releaseDate:
-            $ref: '#/definitions/GameResource/properties/releaseDate'
-          developerId:
-            $ref: '#/definitions/DeveloperResource/properties/id'
-        additionalProperties: false
+          id:
+            $ref: '#/definitions/GameResource/properties/id'
+          type:
+            $ref: '#/definitions/GameType'
+          attributes:
+            type: object
+            properties:
+              name:
+                $ref: '#/definitions/GameResource/properties/name'
+              releaseDate:
+                $ref: '#/definitions/GameResource/properties/releaseDate'
+              developerId:
+                $ref: '#/definitions/DeveloperResource/properties/id'
+            additionalProperties: false
   DeveloperResource:
     properties:
       id:
