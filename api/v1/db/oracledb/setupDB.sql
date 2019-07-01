@@ -46,4 +46,12 @@ CREATE TABLE REVIEWS (
   FOREIGN KEY(GAME_ID) REFERENCES VIDEO_GAMES(ID)
 );
 
+COMMENT ON TABLE REVIEWS IS 'Contains data on reviews and a reference to the game the review is for';
+COMMENT ON COLUMN REVIEWS.ID IS 'Unique ID of this review';
+COMMENT ON COLUMN REVIEWS.GAME_ID IS 'Foreign key to VIDEO_GAMES. ID of the video game this review is for';
+COMMENT ON COLUMN REVIEWS.REVIEW_TEXT IS 'Text of the review written by the reviewer';
+COMMENT ON COLUMN REVIEWS.SCORE IS 'Score out of 5 given by the reviewer';
+COMMENT ON COLUMN REVIEWS.REVIEWER IS 'The author of this review';
+COMMENT ON COLUMN REVIEWS.REVIEW_DATE IS 'Auto-filled date the review was submitted to the database';
+
 INSERT INTO REVIEWS (GAME_ID, REVIEW_TEXT, SCORE, REVIEWER) VALUES (1, 'BEST GAME EVER', '5', 'BIG BRAIN');
