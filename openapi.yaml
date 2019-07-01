@@ -47,6 +47,8 @@ paths:
           format: float
           required: false
           default: 1
+          minimum: 1
+          maximum: 5
           description: Filter results by minimum review score
         - name: scoreMax
           in: query
@@ -54,6 +56,8 @@ paths:
           format: float
           required: false
           default: 5
+          minimum: 1
+          maximum: 5
           description: Filter results by maximum review score
       responses:
         '200':
@@ -290,6 +294,8 @@ paths:
           format: float
           required: false
           default: 1
+          minimum: 1
+          maximum: 5
           description: Filter results by minimum review score
         - name: scoreMax
           in: query
@@ -297,6 +303,8 @@ paths:
           format: float
           required: false
           default: 5
+          minimum: 1
+          maximum: 5
           description: Filter results by maximum review score
         - name: reviewDate
           in: query
