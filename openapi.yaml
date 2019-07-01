@@ -399,7 +399,7 @@ paths:
         '200':
           description: Game update successful
           schema:
-            $ref: '#/definitions/GameResult'
+            $ref: '#/definitions/ReviewResult'
         '400':
           description: Bad request
           schema:
