@@ -8,11 +8,11 @@ const { openapi } = appRoot.require('utils/load-openapi');
 const { paginate } = appRoot.require('utils/paginator');
 const { apiBaseUrl, resourcePathLink, paramsLink } = appRoot.require('utils/uri-builder');
 
-const petResourceProp = openapi.definitions.PetResource.properties;
-const petResourceType = petResourceProp.type.enum[0];
-const petResourceKeys = _.keys(petResourceProp.attributes.properties);
-const petResourcePath = 'pets';
-const petResourceUrl = resourcePathLink(apiBaseUrl, petResourcePath);
+const developerResourceProp = openapi.definitions.DeveloperResource.properties;
+const developerResourceType = developerResourceProp.type.enum[0];
+const developerResourceKeys = _.keys(developerResourceProp.attributes.properties);
+const developerResourcePath = 'developers';
+const developerResourceUrl = resourcePathLink(apiBaseUrl, developerResourcePath);
 
 /**
  * The column name getting from database is usually UPPER_CASE.
@@ -20,18 +20,18 @@ const petResourceUrl = resourcePathLink(apiBaseUrl, petResourcePath);
  * UPPER_CASE so that the serializer can correctly match the corresponding columns
  * from the raw data rows.
  */
-_.forEach(petResourceKeys, (key, index) => {
-  petResourceKeys[index] = decamelize(key).toUpperCase();
+_.forEach(developerResourceKeys, (key, index) => {
+  developerResourceKeys[index] = decamelize(key).toUpperCase();
 });
 
 /**
- * @summary Serialize petResources to JSON API
+ * @summary Serialize developerResources to JSON API
  * @function
- * @param {[Object]} rawPets Raw data rows from data source
+ * @param {[Object]} rawdevelopers Raw data rows from data source
  * @param {Object} query Query parameters
- * @returns {Object} Serialized petResources object
+ * @returns {Object} Serialized developerResources object
  */
-const serializePets = (rawPets, query) => {
+const serializedevelopers = (rawDevelopers, query) => {
   /**
    * Add pagination links and meta information to options if pagination is enabled
    */
@@ -40,46 +40,46 @@ const serializePets = (rawPets, query) => {
     number: query['page[number]'],
   };
 
-  const pagination = paginate(rawPets, pageQuery);
-  pagination.totalResults = rawPets.length;
-  rawPets = pagination.paginatedRows;
+  const pagination = paginate(rawDevelopers, pageQuery);
+  pagination.totalResults = rawDevelopers.length;
+  rawDevelopers = pagination.paginatedRows;
 
-  const topLevelSelfLink = paramsLink(petResourceUrl, query);
+  const topLevelSelfLink = paramsLink(developerResourceUrl, query);
   const serializerArgs = {
     identifierField: 'ID',
-    resourceKeys: petResourceKeys,
+    resourceKeys: developerResourceKeys,
     pagination,
-    resourcePath: petResourcePath,
+    resourcePath: developerResourcePath,
     topLevelSelfLink,
     query: _.omit(query, 'page[size]', 'page[number]'),
     enableDataLinks: true,
   };
 
   return new JsonApiSerializer(
-    petResourceType,
+    developerResourceType,
     serializerOptions(serializerArgs),
-  ).serialize(rawPets);
+  ).serialize(rawDevelopers);
 };
 
 /**
- * @summary Serialize petResource to JSON API
+ * @summary Serialize developerResource to JSON API
  * @function
- * @param {Object} rawPet Raw data row from data source
- * @returns {Object} Serialized petResource object
+ * @param {Object} rawDeveloper Raw data row from data source
+ * @returns {Object} Serialized developerResource object
  */
-const serializePet = (rawPet) => {
-  const topLevelSelfLink = resourcePathLink(petResourceUrl, rawPet.ID);
+const serializeDeveloper = (rawDeveloper) => {
+  const topLevelSelfLink = resourcePathLink(developerResourceUrl, rawDeveloper.ID);
   const serializerArgs = {
     identifierField: 'ID',
-    resourceKeys: petResourceKeys,
-    resourcePath: petResourcePath,
+    resourceKeys: developerResourceKeys,
+    resourcePath: developerResourcePath,
     topLevelSelfLink,
     enableDataLinks: true,
   };
 
   return new JsonApiSerializer(
-    petResourceType,
+    developerResourceType,
     serializerOptions(serializerArgs),
-  ).serialize(rawPet);
+  ).serialize(rawDeveloper);
 };
-module.exports = { serializePets, serializePet };
+module.exports = { serializeDevelopers, serializeDeveloper };
