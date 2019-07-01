@@ -41,15 +41,19 @@ paths:
           type: string
           required: false
           description: Name of game to return
-        - name: score_min
+        - name: scoreMin
           in: query
-          type: string
+          type: number
+          format: float
           required: false
+          default: 1
           description: Filter results by minimum review score
-        - name: score_max
+        - name: scoreMax
           in: query
-          type: string
+          type: number
+          format: float
           required: false
+          default: 5
           description: Filter results by maximum review score
       responses:
         '200':
@@ -280,17 +284,19 @@ paths:
           type: string
           required: false
           description: Filter by the name of the game reviewer
-        - name: score_min
+        - name: scoreMin
           in: query
           type: number
           format: float
           required: false
+          default: 1
           description: Filter results by minimum review score
-        - name: score_max
+        - name: scoreMax
           in: query
           type: number
           format: float
           required: false
+          default: 5
           description: Filter results by maximum review score
         - name: reviewDate
           in: query
