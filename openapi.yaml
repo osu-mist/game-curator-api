@@ -26,6 +26,7 @@ paths:
     get:
       summary: List all games
       description: Get all games
+      operationId: getGames
       tags:
         - games
       parameters:
@@ -74,6 +75,7 @@ paths:
             $ref: '#/definitions/Errors'
     post:
       summary: Add a new game
+      operationId: createGame
       tags:
         - games
       parameters:
@@ -106,6 +108,7 @@ paths:
     get:
       summary: Find game by ID
       description: Returns a single game
+      operationId: getGameById
       tags:
         - games
       responses:
@@ -124,6 +127,7 @@ paths:
     patch:
       summary: Update information on a game
       description: Pass in parameters to update fields on game resources
+      operationId: updateGameById
       tags:
         - games
       parameters:
@@ -152,6 +156,7 @@ paths:
     delete:
       summary: Delete a game
       description: Delete a game by passing in a gameId
+      operationId: deleteGameById
       tags:
         - games
       responses:
@@ -171,6 +176,7 @@ paths:
     get:
       summary: Get complete or filtered list of developers
       description: Retrieve complete list of developers or pass in query parameters to filter results
+      operationId: getDevelopers
       tags:
         - developers
       parameters:
@@ -194,6 +200,7 @@ paths:
     post:
       summary: Create a new developer record
       description: Pass JSON containing the required parameters to create a new developer record
+      operationId: createDeveloper
       tags:
         - developers
       parameters:
@@ -224,6 +231,7 @@ paths:
         required: true
     get:
       summary: Get developer by its Id
+      operationId: getDeveloperById
       tags:
         - developers
       responses:
@@ -241,6 +249,7 @@ paths:
             $ref: '#/definitions/Errors'
     patch:
       summary: Update developer by its Id
+      operationId: updateDeveloperById
       tags:
       - developers
       parameters:
@@ -267,6 +276,7 @@ paths:
             $ref: '#/definitions/Errors'
     delete:
       summary: Delete a developer record
+      operationId: deleteDeveloperById
       tags:
         - developers
       responses:
@@ -286,6 +296,7 @@ paths:
     get:
       summary: List all reviews
       description: Get a list of all reviews or filter by query parameters
+      operationId: getReviews
       tags:
         - reviews
       parameters:
@@ -339,6 +350,7 @@ paths:
     post:
       summary: Create a review
       description: Post score and review text to create a review
+      operationId: createReview
       tags:
         - reviews
       parameters:
@@ -370,6 +382,7 @@ paths:
     get:
       summary: Find review by Id
       description: Returns all reviews that belong to a particular game
+      operationId: getReviewById
       tags:
         - reviews
       responses:
@@ -388,6 +401,7 @@ paths:
     patch:
       summary: Update a review
       description: Update a review by passing in the reviewId and the parameters to update
+      operationId: updateReviewById
       tags:
         - reviews
       parameters:
@@ -415,6 +429,7 @@ paths:
     delete:
       summary: Delete review
       description: Delete the review with the passed in reviewId
+      operationId: deleteReviewById
       tags:
         - reviews
       responses:
