@@ -2,7 +2,7 @@ const appRoot = require('app-root-path');
 const config = require('config');
 const _ = require('lodash');
 
-const { serializePets, serializePet } = require('../../serializers/pets-serializer');
+const { serializeDevelopers, serializeDeveloper } = require('../../serializers/developers-serializer');
 
 const conn = appRoot.require('api/v1/db/oracledb/connection');
 const { contrib } = appRoot.require('api/v1/db/oracledb/contrib/contrib');
@@ -10,46 +10,46 @@ const { contrib } = appRoot.require('api/v1/db/oracledb/contrib/contrib');
 const { endpointUri } = config.get('server');
 
 /**
- * @summary Return a list of pets
+ * @summary Return a list of developers
  * @function
- * @returns {Promise<Object[]>} Promise object represents a list of pets
+ * @returns {Promise<Object[]>} Promise object represents a list of developers
  */
-const getPets = async () => {
+const getDevelopers = async () => {
   const connection = await conn.getConnection();
   try {
-    const { rawPets } = await connection.execute(contrib.getPets());
-    const serializedPets = serializePets(rawPets, endpointUri);
-    return serializedPets;
+    const { rawDevelopers } = await connection.execute(contrib.getDevelopers());
+    const serializedDevelopers = serializeDevelopers(rawDevelopers, endpointUri);
+    return serializedDevelopers;
   } finally {
     connection.close();
   }
 };
 
 /**
- * @summary Return a specific pet by unique ID
+ * @summary Return a specific developer by unique ID
  * @function
- * @param {string} id Unique pet ID
- * @returns {Promise<Object>} Promise object represents a specific pet or return undefined if term
+ * @param {string} id Unique developer ID
+ * @returns {Promise<Object>} Promise object represents a specific developer or return undefined if term
  *                            is not found
  */
-const getPetById = async (id) => {
+const getDeveloperById = async (id) => {
   const connection = await conn.getConnection();
   try {
-    const { rawPets } = await connection.execute(contrib.getPetById(id), id);
+    const { rawDevelopers } = await connection.execute(contrib.getDeveloperById(id), id);
 
-    if (_.isEmpty(rawPets)) {
+    if (_.isEmpty(rawDevelopers)) {
       return undefined;
     }
-    if (rawPets.length > 1) {
+    if (rawDevelopers.length > 1) {
       throw new Error('Expect a single object but got multiple results.');
     } else {
-      const [rawPet] = rawPets;
-      const serializedPet = serializePet(rawPet);
-      return serializedPet;
+      const [rawDeveloper] = rawDevelopers;
+      const serializedDeveloper = serializeDeveloper(rawDeveloper);
+      return serializedDeveloper;
     }
   } finally {
     connection.close();
   }
 };
 
-module.exports = { getPets, getPetById };
+module.exports = { getDevelopers, getDeveloperById };
