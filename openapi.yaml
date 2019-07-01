@@ -559,8 +559,6 @@ definitions:
                 $ref: '#/definitions/GameResource/properties/name'
               releaseDate:
                 $ref: '#/definitions/GameResource/properties/releaseDate'
-              developerId:
-                $ref: '#/definitions/DeveloperResource/properties/id'
             additionalProperties: false
   DeveloperResource:
     properties:
@@ -702,8 +700,6 @@ definitions:
           attributes:
             type: object
             properties:
-              gameId:
-                $ref: '#/definitions/ReviewResource/properties/gameId'
               reviewText:
                 $ref: '#/definitions/ReviewResource/properties/reviewText'
               score:
