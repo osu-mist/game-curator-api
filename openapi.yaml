@@ -674,6 +674,18 @@ definitions:
             $ref: '#/definitions/ReviewResource/properties/score'
           reviewer:
             $ref: '#/definitions/ReviewResource/properties/reviewer'
+  GameType:
+    type: string
+    enum:
+      - game
+  DeveloperType:
+    type: string
+    enum:
+      - developer
+  ReviewType:
+    type: string
+    enum:
+      - review
   SelfLink:
     properties:
       self:
