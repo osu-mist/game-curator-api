@@ -33,7 +33,7 @@ paths:
         - $ref: '#/parameters/pageSize'
         - name: developerId
           in: query
-          type: integer
+          type: string
           required: false
           description: id of developer to return games from
         - name: name
@@ -92,8 +92,7 @@ paths:
       in: path
       description: Id of game to return
       required: true
-      type: integer
-      format: int64
+      type: string
     get:
       summary: Find game by ID
       description: Returns a single game
@@ -167,7 +166,7 @@ paths:
           description: Name of the developer
         - name: developerId
           in: query
-          type: integer
+          type: string
           description: Id of the developer
       responses:
         '200':
@@ -207,7 +206,7 @@ paths:
       - $ref: '#/parameters/authorization'
       - name: developerId
         in: path
-        type: integer
+        type: string
         required: true
     get:
       summary: Get developer by its Id
@@ -342,8 +341,7 @@ paths:
       in: path
       description: Id of review to return
       required: true
-      type: integer
-      format: int64
+      type: string
     get:
       summary: Find review by Id
       description: Returns all reviews that belong to a particular game
@@ -519,8 +517,7 @@ definitions:
   DeveloperResource:
     properties:
       id:
-        type: integer
-        format: int64
+        type: string
       name:
         type: string
         description: Name of the developer
@@ -571,8 +568,7 @@ definitions:
   ReviewResource:
     properties:
       id:
-        type: integer
-        format: int64
+        type: string
       gameId:
         $ref: '#/definitions/GameResource/properties/id'
       reviewer:
