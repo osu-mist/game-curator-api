@@ -1,7 +1,7 @@
 {
-  "name": "express-api-skeleton",
+  "name": "game-curator-api",
   "version": "1.0.0",
-  "description": "Skeleton for Express APIs.",
+  "description": "API to access game and review data.",
   "main": "app.js",
   "scripts": {
     "start": "./node_modules/.bin/gulp run",
@@ -13,14 +13,14 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/osu-mist/express-api-skeleton.git"
+    "url": "git+https://github.com/osu-mist/game-curator-api.git"
   },
   "author": "osu-mist",
   "license": "AGPL-3.0",
   "bugs": {
-    "url": "https://github.com/osu-mist/express-api-skeleton/issues"
+    "url": "https://github.com/osu-mist/game-curator-api/issues"
   },
-  "homepage": "https://github.com/osu-mist/express-api-skeleton#readme",
+  "homepage": "https://github.com/osu-mist/game-curator-api#readme",
   "dependencies": {
     "app-root-path": "^2.1.0",
     "body-parser": "^1.18.3",
