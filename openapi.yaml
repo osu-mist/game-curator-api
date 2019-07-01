@@ -1,0 +1,765 @@
+swagger: '2.0'
+info:
+  title: Game Curator API
+  description: Learning project API to retrieve and manipulate game review data.
+  version: v1
+  license:
+    name: GNU Affero General Public License Version 3
+    url: http://www.gnu.org/licenses/agpl-3.0.en.html
+  contact:
+    name: IS Data Architecture Team
+    url: https://is.oregonstate.edu/data-architecture
+    email: isdataarchitecture@oregonstate.edu
+schemes:
+  - http
+host: api.oregonstate.edu
+basePath: /v1
+externalDocs:
+  description: GitHub Repository
+  url: https://github.com/osu-mist/game-curator-api
+produces:
+  - application/json
+paths:
+  /games:
+    parameters:
+      - $ref: '#/parameters/authorization'
+    get:
+      summary: List all games
+      description: Get all games
+      operationId: getGames
+      tags:
+        - games
+      parameters:
+        - $ref: '#/parameters/pageNumber'
+        - $ref: '#/parameters/pageSize'
+        - name: developerId
+          in: query
+          type: string
+          required: false
+          description: Id of developer to return games from
+        - name: name
+          in: query
+          type: string
+          required: false
+          description: Name of game to return
+        - $ref: '#/parameters/scoreMin'
+        - $ref: '#/parameters/scoreMax'
+      responses:
+        '200':
+          description: Successful response
+          schema:
+            $ref: '#/definitions/GameResults'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+    post:
+      summary: Add a new game
+      operationId: createGame
+      tags:
+        - games
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/GamePostBody'
+      responses:
+        '201':
+          description: Successfully added a game
+          schema:
+            $ref: '#/definitions/GameResult'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+  /games/{gameId}:
+    parameters:
+    - $ref: '#/parameters/authorization'
+    - name: gameId
+      in: path
+      description: Id of game to return
+      required: true
+      type: string
+    get:
+      summary: Find game by ID
+      description: Returns a single game
+      operationId: getGameById
+      tags:
+        - games
+      responses:
+        '200':
+          description: Successful response
+          schema:
+            $ref: '#/definitions/GameResult'
+        '404':
+          description: Game not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+    patch:
+      summary: Update information on a game
+      description: Pass in parameters to update fields on game resources
+      operationId: updateGameById
+      tags:
+        - games
+      parameters:
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/GamePatchBody'
+      responses:
+        '200':
+          description: Successful response
+          schema:
+            $ref: '#/definitions/GameResult'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: Game not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+    delete:
+      summary: Delete a game
+      description: Delete a game by passing in a gameId
+      operationId: deleteGameById
+      tags:
+        - games
+      responses:
+        '204':
+          description: Game deleted successfully
+        '404':
+          description: Game not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+  /developers:
+    parameters:
+      - $ref: '#/parameters/authorization'
+    get:
+      summary: Get complete or filtered list of developers
+      description: Retrieve complete list of developers or pass in query parameters to filter results
+      operationId: getDevelopers
+      tags:
+        - developers
+      parameters:
+        - name: name
+          in: query
+          type: string
+          description: Name of the developer
+      responses:
+        '200':
+          description: Completed successfully
+          schema:
+            $ref: '#/definitions/DeveloperResults'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+    post:
+      summary: Create a new developer record
+      description: Pass JSON containing the required parameters to create a new developer record
+      operationId: createDeveloper
+      tags:
+        - developers
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/DeveloperPostBody'
+      responses:
+        '200':
+          description: Developer created successfully
+          schema:
+            $ref: '#/definitions/DeveloperResult'
+        '400':
+          description: Invalid developer object
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+  /developers/{developerId}:
+    parameters:
+      - $ref: '#/parameters/authorization'
+      - name: developerId
+        in: path
+        type: string
+        required: true
+    get:
+      summary: Get developer by its Id
+      operationId: getDeveloperById
+      tags:
+        - developers
+      responses:
+        '200':
+          description: Successful response
+          schema:
+            $ref: '#/definitions/DeveloperResult'
+        '404':
+          description: Developer not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+    patch:
+      summary: Update developer by its Id
+      operationId: updateDeveloperById
+      tags:
+      - developers
+      parameters:
+        - name: body
+          in: body
+          schema:
+            $ref: '#/definitions/DeveloperPatchBody'
+      responses:
+        '200':
+          description: Developer updated successfully
+          schema:
+            $ref: '#/definitions/DeveloperResult'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: Developer not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+    delete:
+      summary: Delete a developer record
+      operationId: deleteDeveloperById
+      tags:
+        - developers
+      responses:
+        '204':
+          description: Developer deleted successfully
+        '404':
+          description: Developer not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+  /reviews:
+    parameters:
+    - $ref: '#/parameters/authorization'
+    get:
+      summary: List all reviews
+      description: Get a list of all reviews or filter by query parameters
+      operationId: getReviews
+      tags:
+        - reviews
+      parameters:
+        - name: gameIds
+          in: query
+          type: array
+          items:
+            type: string
+            collectionFormat: csv
+          required: false
+          description: Filter by the Id of the game
+        - name: reviewer
+          in: query
+          type: string
+          required: false
+          description: Filter by the name of the game reviewer
+        - $ref: '#/parameters/scoreMin'
+        - $ref: '#/parameters/scoreMax'
+        - name: reviewDate
+          in: query
+          type: string
+          format: date
+          required: false
+          description: Filter results by posting date
+      responses:
+        '200':
+          description: Successful response
+          schema:
+            $ref: '#/definitions/ReviewResults'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+    post:
+      summary: Create a review
+      description: Post score and review text to create a review
+      operationId: createReview
+      tags:
+        - reviews
+      parameters:
+      - in: body
+        name: requestBody
+        schema:
+          $ref: '#/definitions/ReviewPostBody'
+      responses:
+        '201':
+          description: Successfully created new review
+          schema:
+            $ref: '#/definitions/ReviewResult'
+        '400':
+          description: Invalid review object
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+  /reviews/{reviewId}:
+    parameters:
+    - $ref: '#/parameters/authorization'
+    - name: reviewId
+      in: path
+      description: Id of review to return
+      required: true
+      type: string
+    get:
+      summary: Find review by Id
+      description: Returns all reviews that belong to a particular game
+      operationId: getReviewById
+      tags:
+        - reviews
+      responses:
+        '200':
+          description: Successful response
+          schema:
+            $ref: '#/definitions/ReviewResult'
+        '404':
+          description: Review not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+    patch:
+      summary: Update a review
+      description: Update a review by passing in the reviewId and the parameters to update
+      operationId: updateReviewById
+      tags:
+        - reviews
+      parameters:
+        - name: body
+          in: body
+          schema:
+            $ref: '#/definitions/ReviewPatchBody'
+      responses:
+        '200':
+          description: Game update successful
+          schema:
+            $ref: '#/definitions/ReviewResult'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Errors'
+        '404':
+          description: Review not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+    delete:
+      summary: Delete review
+      description: Delete the review with the passed in reviewId
+      operationId: deleteReviewById
+      tags:
+        - reviews
+      responses:
+        '204':
+          description: Review deleted successfully
+        '404':
+          description: Review not found
+          schema:
+            $ref: '#/definitions/Errors'
+        '500':
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+parameters:
+  authorization:
+    name: Authorization
+    in: header
+    type: string
+    required: true
+    description: '"Bearer [token]" where [token] is your OAuth2 access token'
+  pageNumber:
+    name: page[number]
+    in: query
+    type: integer
+    required: false
+    description: Page number of results
+    default: 1
+    minimum: 1
+  pageSize:
+    name: page[size]
+    in: query
+    type: integer
+    required: false
+    description: Number of results to return
+    default: 25
+    maximum: 500
+    minimum: 1
+  scoreMin:
+    name: scoreMin
+    in: query
+    type: number
+    format: float
+    required: false
+    default: 1
+    minimum: 1
+    maximum: 5
+    description: Filter results by minimum review score
+  scoreMax:
+    name: scoreMax
+    in: query
+    type: number
+    format: float
+    required: false
+    default: 5
+    minimum: 1
+    maximum: 5
+    description: Filter results by maximum review score
+definitions:
+  Meta:
+    properties:
+      totalResults:
+        type: integer
+        description: Total number of results
+        example: 10
+      totalPages:
+        type: integer
+        description: Total number of pages
+        example: 10
+      currentPageNumber:
+        type: integer
+        description: Page number of the returned results
+        example: 1
+      currentPageSize:
+        type: integer
+        description: Number of results per page
+        example: 25
+  GameResource:
+    properties:
+      id:
+        type: integer
+        format: int64
+      developerId:
+        $ref: '#/definitions/DeveloperResource/properties/id'
+      name:
+        type: string
+        description: Name of the game
+        example: Eternal Death Slayer 3
+      score:
+        type: number
+        format: float
+        description: Composite review score of this game out of 5
+        example: 4.5
+      releaseDate:
+        type: string
+        format: date
+        description: Date of the games release
+        example: 12/5/1994
+      links:
+        $ref: '#/definitions/SelfLink'
+  GameResult:
+    properties:
+      links:
+        $ref: '#/definitions/SelfLink'
+      data:
+        $ref: '#/definitions/GameResource'
+  GameResults:
+    properties: 
+      links:
+        allOf:
+          - $ref: '#/definitions/SelfLink'
+          - $ref: '#/definitions/PaginationLinks'
+      meta:
+        $ref: '#/definitions/Meta'
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/GameResource'
+  GamePostBody:
+    properties:
+      data:
+        type: object
+        properties:
+          type:
+            $ref: '#/definitions/GameType'
+          attributes:
+            type: object
+            properties:
+              name:
+                $ref: '#/definitions/GameResource/properties/name'
+              releaseDate:
+                $ref: '#/definitions/GameResource/properties/releaseDate'
+              developerId:
+                $ref: '#/definitions/DeveloperResource/properties/id'
+            required:
+              - name
+              - developerId
+            additionalProperties: false
+  GamePatchBody:
+    properties:
+      data:
+        type: object
+        properties:
+          id:
+            $ref: '#/definitions/GameResource/properties/id'
+          type:
+            $ref: '#/definitions/GameType'
+          attributes:
+            type: object
+            properties:
+              name:
+                $ref: '#/definitions/GameResource/properties/name'
+              releaseDate:
+                $ref: '#/definitions/GameResource/properties/releaseDate'
+            additionalProperties: false
+  DeveloperResource:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+        description: Name of the developer
+        example: Terminal Reality
+      website:
+        type: string
+        description: Url to homepage of developer
+        example: https://bethesda.net/
+  DeveloperResult:
+    properties: 
+      links:
+        $ref: '#/definitions/SelfLink'
+      data:
+        $ref: '#/definitions/DeveloperResource'
+  DeveloperResults:
+    properties: 
+      links:
+        allOf:
+          - $ref: '#/definitions/SelfLink'
+          - $ref: '#/definitions/PaginationLinks'
+      meta:
+        $ref: '#/definitions/Meta'
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/DeveloperResource'
+  DeveloperPostBody:
+    properties:
+      data:
+        type: object
+        properties:
+          type:
+            $ref: '#/definitions/DeveloperType'
+          attributes:
+            type: object
+            properties:
+              name:
+                $ref: '#/definitions/DeveloperResource/properties/name'
+              website:
+                $ref: '#/definitions/DeveloperResource/properties/website'
+            required:
+              - name
+              - website
+  DeveloperPatchBody:
+    properties:
+      data:
+        type: object
+        properties:
+          type:
+            $ref: '#/definitions/DeveloperType'
+          id:
+            $ref: '#/definitions/DeveloperResource/properties/id'
+          attributes:
+            type: object
+            properties:
+              name:
+                $ref: '#/definitions/DeveloperResource/properties/name'
+              website:
+                $ref: '#/definitions/DeveloperResource/properties/website'
+  ReviewResource:
+    properties:
+      id:
+        type: string
+      gameId:
+        $ref: '#/definitions/GameResource/properties/id'
+      reviewer:
+        type: string
+        description: Person who wrote the review.
+        example: Commander Shepard
+      score:
+        type: number
+        format: float
+        description: Score for this review out of 5
+        example: 4.5
+      reviewText:
+        type: string
+        description: Text containing the review for the referenced game
+        example: My name is Commander Shepard and this is my favorite game on the citadel.
+      reviewDate:
+        type: string
+        format: date
+        description: Date the review was finalized
+        example: 10/15/2006
+  ReviewResult:
+    properties:
+      links:
+        $ref: '#/definitions/SelfLink'
+      data:
+        $ref: '#/definitions/ReviewResource'
+  ReviewResults:
+    properties: 
+      links:
+        allOf:
+          - $ref: '#/definitions/SelfLink'
+          - $ref: '#/definitions/PaginationLinks'
+      meta:
+        $ref: '#/definitions/Meta'
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/ReviewResource'
+  ReviewPostBody:
+    properties: 
+      data:
+        type: object
+        properties:
+          type:
+            $ref: '#/definitions/ReviewType'
+          attributes:
+            type: object
+            properties:
+              gameId:
+                $ref: '#/definitions/ReviewResource/properties/gameId'
+              reviewText:
+                $ref: '#/definitions/ReviewResource/properties/reviewText'
+              score:
+                $ref: '#/definitions/ReviewResource/properties/score'
+              reviewer:
+                $ref: '#/definitions/ReviewResource/properties/reviewer'
+            required:
+            - gameId
+            - reviewText
+            - score
+            - reviewer
+  ReviewPatchBody:
+    properties: 
+      data:
+        type: object
+        properties:
+          type:
+            $ref: '#/definitions/ReviewType'
+          id:
+            $ref: '#/definitions/ReviewResource/properties/id'
+          attributes:
+            type: object
+            properties:
+              reviewText:
+                $ref: '#/definitions/ReviewResource/properties/reviewText'
+              score:
+                $ref: '#/definitions/ReviewResource/properties/score'
+              reviewer:
+                $ref: '#/definitions/ReviewResource/properties/reviewer'
+  GameType:
+    type: string
+    enum:
+      - game
+  DeveloperType:
+    type: string
+    enum:
+      - developer
+  ReviewType:
+    type: string
+    enum:
+      - review
+  SelfLink:
+    properties:
+      self:
+        type: string
+        format: url
+        description: Self-link of current resource
+  PaginationLinks:
+    properties:
+      first:
+        type: string
+        format: url
+        description: The first page of data
+      last:
+        type: string
+        format: url
+        description: The last page of data
+      prev:
+        type: string
+        format: url
+        description: The previous page of data
+      next:
+        type: string
+        format: url
+        description: The next page of data
+  Error:
+    properties:
+      status:
+        type: string
+        description: HTTP status code
+        example: '123'
+      title:
+        type: string
+        description: A short, user readable summary of the error
+        example: Not Found
+      code:
+        type: string
+        description: An application-specific error code
+        example: '1234'
+      detail:
+        type: string
+        description: A long description of the error that may contain instance-specific details
+      links:
+        properties:
+          about:
+            type: string
+            format: url
+            description: A link to further information about the error
+            example: https://developer.oregonstate.edu/documentation/error-reference#1234
+  Errors:
+    properties:
+      errors:
+        type: array
+        items:
+          $ref: '#/definitions/Error'
