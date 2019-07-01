@@ -85,6 +85,8 @@ paths:
       responses:
         '201':
           description: Successfully added a game
+          schema:
+            $ref: '#/definitions/GameResult'
         '400':
           description: Bad request
           schema:
