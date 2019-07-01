@@ -498,8 +498,11 @@ definitions:
             $ref: '#/definitions/GameResource/properties/name'
           releaseDate:
             $ref: '#/definitions/GameResource/properties/releaseDate'
+          developerId:
+            $ref: '#/definitions/DeveloperResource/properties/id'
         required:
           - name
+          - developerId
         additionalProperties: false
   DeveloperResource:
     properties:
