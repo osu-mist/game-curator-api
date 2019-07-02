@@ -15,8 +15,9 @@ const { endpointUri } = config.get('server');
  */
 const getDevelopers = async () => {
   const connection = await conn.getConnection();
+  const sqlQuery = 'SELECT ID, NAME, WEBSITE FROM DEVELOPERS';
   try {
-    const rawDevelopersReponse = await connection.execute('SELECT ID FROM DEVELOPERS');
+    const rawDevelopersReponse = await connection.execute(sqlQuery);
     const rawDevelopers = rawDevelopersReponse.rows;
     const serializedDevelopers = serializeDevelopers(rawDevelopers, endpointUri);
     return serializedDevelopers;
