@@ -5,7 +5,7 @@ const _ = require('lodash');
 const { serializeDevelopers, serializeDeveloper } = require('../../serializers/developers-serializer');
 
 const conn = appRoot.require('api/v1/db/oracledb/connection');
-const { contrib } = appRoot.require('api/v1/db/oracledb/contrib/contrib');
+// const { contrib } = appRoot.require('api/v1/db/oracledb/contrib/contrib');
 
 const { endpointUri } = config.get('server');
 
@@ -15,11 +15,18 @@ const { endpointUri } = config.get('server');
  * @returns {Promise<Object[]>} Promise object represents a list of developers
  */
 const getDevelopers = async () => {
+  console.log('something');
   const connection = await conn.getConnection();
+  // console.log(connection);
   try {
-    const { rawDevelopers } = await connection.execute(contrib.getDevelopers());
+    // const { rawDevelopers } = await connection.execute(contrib.getDevelopers());
+    console.log('getting developers');
+    const { rawDevelopers } = await connection.execute('select id from DEVELOPERS');
     const serializedDevelopers = serializeDevelopers(rawDevelopers, endpointUri);
     return serializedDevelopers;
+  } catch (err) {
+    console.log(err);
+    return 'err';
   } finally {
     connection.close();
   }
@@ -35,7 +42,9 @@ const getDevelopers = async () => {
 const getDeveloperById = async (id) => {
   const connection = await conn.getConnection();
   try {
-    const { rawDevelopers } = await connection.execute(contrib.getDeveloperById(id), id);
+    // const { rawDevelopers } = await connection.execute(contrib.getDeveloperById(id), id);
+    const { rawDevelopers } = await connection.execute('select id from DEVELOPERS');
+    console.log(id);
 
     if (_.isEmpty(rawDevelopers)) {
       return undefined;
