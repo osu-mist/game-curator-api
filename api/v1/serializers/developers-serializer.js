@@ -5,7 +5,7 @@ const _ = require('lodash');
 
 const { serializerOptions } = appRoot.require('utils/jsonapi');
 const { openapi } = appRoot.require('utils/load-openapi');
-const { paginate } = appRoot.require('utils/paginator');
+// const { paginate } = appRoot.require('utils/paginator');
 const { apiBaseUrl, resourcePathLink, paramsLink } = appRoot.require('utils/uri-builder');
 
 const developerResourceProp = openapi.definitions.DeveloperResource.properties;
@@ -35,23 +35,23 @@ const serializeDevelopers = (rawDevelopers, query) => {
   /**
    * Add pagination links and meta information to options if pagination is enabled
    */
-  const pageQuery = {
+  /* const pageQuery = {
     size: query['page[size]'],
     number: query['page[number]'],
   };
 
   const pagination = paginate(rawDevelopers, pageQuery);
   pagination.totalResults = rawDevelopers.length;
-  rawDevelopers = pagination.paginatedRows;
+  rawDevelopers = pagination.paginatedRows; */
 
   const topLevelSelfLink = paramsLink(developerResourceUrl, query);
   const serializerArgs = {
     identifierField: 'ID',
     resourceKeys: developerResourceKeys,
-    pagination,
+    // pagination,
     resourcePath: developerResourcePath,
     topLevelSelfLink,
-    query: _.omit(query, 'page[size]', 'page[number]'),
+    query, // : _.omit(query, 'page[size]', 'page[number]'),
     enableDataLinks: true,
   };
 
