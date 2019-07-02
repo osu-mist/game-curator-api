@@ -34,7 +34,7 @@ const getDevelopers = async () => {
  *                            term is not found
  */
 const getDeveloperById = async (id) => {
-    // TODO
+  // TODO
   const connection = await conn.getConnection();
   try {
     const sqlParams = {
