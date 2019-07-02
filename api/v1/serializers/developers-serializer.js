@@ -31,7 +31,7 @@ _.forEach(developerResourceKeys, (key, index) => {
  * @param {Object} query Query parameters
  * @returns {Object} Serialized developerResources object
  */
-const serializedevelopers = (rawDevelopers, query) => {
+const serializeDevelopers = (rawDevelopers, query) => {
   /**
    * Add pagination links and meta information to options if pagination is enabled
    */

@@ -29,8 +29,8 @@ const getDevelopers = async () => {
  * @summary Return a specific developer by unique ID
  * @function
  * @param {string} id Unique developer ID
- * @returns {Promise<Object>} Promise object represents a specific developer or return undefined if term
- *                            is not found
+ * @returns {Promise<Object>} Promise object represents a specific developer or return undefined if
+ *                            term is not found
  */
 const getDeveloperById = async (id) => {
   const connection = await conn.getConnection();
