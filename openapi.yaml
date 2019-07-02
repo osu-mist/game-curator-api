@@ -559,14 +559,17 @@ definitions:
         type: string
       type:
         $ref: '#/definitions/DeveloperType'
-      name:
-        type: string
-        description: Name of the developer
-        example: Terminal Reality
-      website:
-        type: string
-        description: Url to homepage of developer
-        example: https://bethesda.net/
+      attributes:
+        type: object
+        properties:
+          name:
+            type: string
+            description: Name of the developer
+            example: Terminal Reality
+          website:
+            type: string
+            description: Url to homepage of developer
+            example: https://bethesda.net/
   DeveloperResult:
     properties: 
       links:
@@ -596,9 +599,9 @@ definitions:
             type: object
             properties:
               name:
-                $ref: '#/definitions/DeveloperResource/properties/name'
+                $ref: '#/definitions/DeveloperResource/properties/attributes/properties/name'
               website:
-                $ref: '#/definitions/DeveloperResource/properties/website'
+                $ref: '#/definitions/DeveloperResource/properties/attributes/properties/website'
             required:
               - name
               - website
@@ -615,9 +618,9 @@ definitions:
             type: object
             properties:
               name:
-                $ref: '#/definitions/DeveloperResource/properties/name'
+                $ref: '#/definitions/DeveloperResource/properties/attributes/properties/name'
               website:
-                $ref: '#/definitions/DeveloperResource/properties/website'
+                $ref: '#/definitions/DeveloperResource/properties/attributes/properties/website'
   ReviewResource:
     properties:
       id:
