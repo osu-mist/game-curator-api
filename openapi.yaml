@@ -478,6 +478,8 @@ definitions:
       id:
         type: integer
         format: int64
+      type:
+        $ref: '#/definitions/GameType'
       developerId:
         $ref: '#/definitions/DeveloperResource/properties/id'
       name:
@@ -555,6 +557,8 @@ definitions:
     properties:
       id:
         type: string
+      type:
+        $ref: '#/definitions/DeveloperType'
       name:
         type: string
         description: Name of the developer
@@ -618,6 +622,8 @@ definitions:
     properties:
       id:
         type: string
+      type:
+        $ref: '#/definitions/ReviewType'
       gameId:
         $ref: '#/definitions/GameResource/properties/id'
       reviewer:
