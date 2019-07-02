@@ -10,7 +10,7 @@ const { openapi: { paths } } = appRoot.require('utils/load-openapi');
  */
 const get = async (req, res) => {
   try {
-    const developerId = req.params.developerId;
+    const [developerId] = req.params.developerId;
     console.log(developerId);
     const result = await developersDao.getDeveloperById(developerId);
     console.log(result);
