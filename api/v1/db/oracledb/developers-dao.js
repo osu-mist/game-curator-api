@@ -1,6 +1,6 @@
 const appRoot = require('app-root-path');
 const config = require('config');
-const _ = require('lodash');
+// const _ = require('lodash');
 
 const { serializeDevelopers, serializeDeveloper } = require('../../serializers/developers-serializer');
 
@@ -40,16 +40,17 @@ const getDeveloperById = async (id) => {
     const sqlParams = {
       ID: id,
     };
-    const { rawDevelopers } = await connection.execute('select id from DEVELOPERS WHERE ID = :ID', sqlParams);
+    const rawDevelopers = await connection.execute('SELECT ID, NAME, WEBSITE FROM DEVELOPERS WHERE ID = :ID', sqlParams);
+    console.log(rawDevelopers);
 
-    if (_.isEmpty(rawDevelopers)) {
+    /* if (_.isEmpty(rawDevelopers)) {
       return undefined;
-    }
+    } */
     if (rawDevelopers.length > 1) {
       throw new Error('Expect a single object but got multiple results.');
     } else {
-      const [rawDeveloper] = rawDevelopers;
-      const serializedDeveloper = serializeDeveloper(rawDeveloper);
+      // const [rawDeveloper] = rawDevelopers;
+      const serializedDeveloper = serializeDeveloper(rawDevelopers.rows);
       return serializedDeveloper;
     }
   } finally {
