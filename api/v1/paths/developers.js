@@ -2,7 +2,7 @@ const appRoot = require('app-root-path');
 
 const developersDao = require('../db/oracledb/developers-dao');
 
-const { errorHandler } = appRoot.require('errors/errors');
+const { errorBuilder, errorHandler } = appRoot.require('errors/errors');
 const { openapi: { paths } } = appRoot.require('utils/load-openapi');
 
 /**
@@ -17,6 +17,26 @@ const get = async (req, res) => {
   }
 };
 
-get.apiDoc = paths['/developers'].get;
+/**
+ * @summary Post developers
+ */
+const post = async (req, res) => {
+  try {
+    console.log('received post');
+    // Check that a body is present in the request
+    if (!req.body) {
+      errorBuilder(res, 400, ['No body in request.']);
+    } else {
+      const result = await developersDao.postDeveloper(req.body);
+      res.status(201).send(result);
+    }
+  } catch (err) {
+    console.log('sup');
+    errorHandler(res, err);
+  }
+};
 
-module.exports = { get };
+get.apiDoc = paths['/developers'].get;
+post.apiDoc = paths['/developers'].post;
+
+module.exports = { get, post };
