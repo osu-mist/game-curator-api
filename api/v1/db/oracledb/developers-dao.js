@@ -53,4 +53,8 @@ const getDeveloperById = async (id) => {
   }
 };
 
-module.exports = { getDevelopers, getDeveloperById };
+const postDeveloper = async (body) => {
+  console.log(body.data);
+};
+
+module.exports = { getDevelopers, getDeveloperById, postDeveloper };
