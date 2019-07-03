@@ -39,7 +39,8 @@ const getDeveloperById = async (id) => {
     const sqlParams = {
       ID: id,
     };
-    const rawDevelopers = await connection.execute('SELECT ID, NAME, WEBSITE FROM DEVELOPERS WHERE ID = :ID', sqlParams);
+    const sqlQuery = 'SELECT ID, NAME, WEBSITE FROM DEVELOPERS WHERE ID = :ID';
+    const rawDevelopers = await connection.execute(sqlQuery, sqlParams);
 
     /* if (_.isEmpty(rawDevelopers)) {
       return undefined;
