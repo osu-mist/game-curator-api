@@ -190,7 +190,7 @@ paths:
           schema:
             $ref: '#/definitions/DeveloperPostBody'
       responses:
-        '200':
+        '201':
           description: Developer created successfully
           schema:
             $ref: '#/definitions/DeveloperResult'
