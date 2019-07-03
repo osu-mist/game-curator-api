@@ -42,13 +42,9 @@ const getDeveloperById = async (id) => {
     const sqlQuery = 'SELECT ID, NAME, WEBSITE FROM DEVELOPERS WHERE ID = :ID';
     const rawDevelopers = await connection.execute(sqlQuery, sqlParams);
 
-    /* if (_.isEmpty(rawDevelopers)) {
-      return undefined;
-    } */
     if (rawDevelopers.length > 1) {
       throw new Error('Expect a single object but got multiple results.');
     } else {
-      // const [rawDeveloper] = rawDevelopers;
       const serializedDeveloper = serializeDeveloper(rawDevelopers.rows);
       return serializedDeveloper;
     }
