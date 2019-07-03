@@ -54,7 +54,17 @@ const getDeveloperById = async (id) => {
 };
 
 const postDeveloper = async (body) => {
-  console.log(body.data);
+  const connection = await conn.getConnection();
+
+  // console.log(Object.keys(body)[0]);
+  const { attributes } = JSON.parse(Object.keys(body)[0]).data;
+  // const { name, website } = attributes;
+  console.log(attributes);
+  const sqlQuery = 'INSERT INTO DEVELOPERS (NAME, WEBSITE) VALUES (:name, :website)';
+  const sqlParams = attributes;
+
+  const rawDevelopers = await connection.execute(sqlQuery, sqlParams);
+  console.log(rawDevelopers);
 };
 
 module.exports = { getDevelopers, getDeveloperById, postDeveloper };
