@@ -482,24 +482,27 @@ definitions:
         format: int64
       type:
         $ref: '#/definitions/GameType'
-      developerId:
-        $ref: '#/definitions/DeveloperResource/properties/id'
-      name:
-        type: string
-        description: Name of the game
-        example: Eternal Death Slayer 3
-      score:
-        type: number
-        format: float
-        description: Composite review score of this game out of 5
-        example: 4.5
-      releaseDate:
-        type: string
-        format: date
-        description: Date of the games release
-        example: 12/5/1994
-      links:
-        $ref: '#/definitions/SelfLink'
+      attributes:
+        type: object
+        properties:
+          developerId:
+            $ref: '#/definitions/DeveloperResource/properties/id'
+          name:
+            type: string
+            description: Name of the game
+            example: Eternal Death Slayer 3
+          score:
+            type: number
+            format: float
+            description: Composite review score of this game out of 5
+            example: 4.5
+          releaseDate:
+            type: string
+            format: date
+            description: Date of the games release
+            example: 12/5/1994
+          links:
+            $ref: '#/definitions/SelfLink'
   GameResult:
     properties:
       links:
@@ -529,9 +532,9 @@ definitions:
             type: object
             properties:
               name:
-                $ref: '#/definitions/GameResource/properties/name'
+                $ref: '#/definitions/GameResource/properties/attributes/properties/name'
               releaseDate:
-                $ref: '#/definitions/GameResource/properties/releaseDate'
+                $ref: '#/definitions/GameResource/properties/attributes/properties/releaseDate'
               developerId:
                 $ref: '#/definitions/DeveloperResource/properties/id'
             required:
@@ -551,9 +554,9 @@ definitions:
             type: object
             properties:
               name:
-                $ref: '#/definitions/GameResource/properties/name'
+                $ref: '#/definitions/GameResource/properties/attributes/properties/name'
               releaseDate:
-                $ref: '#/definitions/GameResource/properties/releaseDate'
+                $ref: '#/definitions/GameResource/properties/attributes/properties/releaseDate'
             additionalProperties: false
   DeveloperResource:
     properties:
