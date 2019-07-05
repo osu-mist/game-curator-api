@@ -16,8 +16,11 @@ const getDevelopers = async (queries) => {
   if (queries.name) {
     sqlParams.name = queries.name;
   }
-  const sqlQuery = `SELECT ID, NAME, WEBSITE FROM DEVELOPERS 
-                   ${sqlParams.name ? 'WHERE NAME = :name' : ''}`;
+  const sqlQuery = `
+    SELECT ID, NAME, WEBSITE
+    FROM DEVELOPERS 
+    ${sqlParams.name ? 'WHERE NAME = :name' : ''}
+  `;
   try {
     const { rows } = await connection.execute(sqlQuery, sqlParams);
     const serializedDevelopers = serializeDevelopers(rows, queries);
