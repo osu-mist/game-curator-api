@@ -1,12 +1,9 @@
 const appRoot = require('app-root-path');
-const config = require('config');
 const _ = require('lodash');
 
 const { serializeDevelopers, serializeDeveloper } = require('../../serializers/developers-serializer');
 
 const conn = appRoot.require('api/v1/db/oracledb/connection');
-
-const { endpointUri } = config.get('server');
 
 /**
  * @summary Return a list of developers
@@ -23,7 +20,7 @@ const getDevelopers = async (queries) => {
                    ${sqlParams.name ? 'WHERE NAME = :name' : ''}`;
   try {
     const { rows } = await connection.execute(sqlQuery, sqlParams);
-    const serializedDevelopers = serializeDevelopers(rows, endpointUri);
+    const serializedDevelopers = serializeDevelopers(rows, queries);
     return serializedDevelopers;
   } finally {
     connection.close();

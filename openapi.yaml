@@ -164,6 +164,8 @@ paths:
       tags:
         - developers
       parameters:
+        - $ref: '#/parameters/pageNumber'
+        - $ref: '#/parameters/pageSize'
         - name: name
           in: query
           type: string
