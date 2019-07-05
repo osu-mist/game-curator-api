@@ -634,26 +634,29 @@ definitions:
         type: string
       type:
         $ref: '#/definitions/ReviewType'
-      gameId:
-        $ref: '#/definitions/GameResource/properties/id'
-      reviewer:
-        type: string
-        description: Person who wrote the review.
-        example: Commander Shepard
-      score:
-        type: number
-        format: float
-        description: Score for this review out of 5
-        example: 4.5
-      reviewText:
-        type: string
-        description: Text containing the review for the referenced game
-        example: My name is Commander Shepard and this is my favorite game on the citadel.
-      reviewDate:
-        type: string
-        format: date
-        description: Date the review was finalized
-        example: 10/15/2006
+      attributes:
+        type: object
+        properties:
+          gameId:
+            $ref: '#/definitions/GameResource/properties/id'
+          reviewer:
+            type: string
+            description: Person who wrote the review.
+            example: Commander Shepard
+          score:
+            type: number
+            format: float
+            description: Score for this review out of 5
+            example: 4.5
+          reviewText:
+            type: string
+            description: Text containing the review for the referenced game
+            example: My name is Commander Shepard and this is my favorite game on the citadel.
+          reviewDate:
+            type: string
+            format: date
+            description: Date the review was finalized
+            example: 10/15/2006
   ReviewResult:
     properties:
       links:
@@ -683,13 +686,13 @@ definitions:
             type: object
             properties:
               gameId:
-                $ref: '#/definitions/ReviewResource/properties/gameId'
+                $ref: '#/definitions/ReviewResource/properties/attributes/properties/gameId'
               reviewText:
-                $ref: '#/definitions/ReviewResource/properties/reviewText'
+                $ref: '#/definitions/ReviewResource/properties/attributes/properties/reviewText'
               score:
-                $ref: '#/definitions/ReviewResource/properties/score'
+                $ref: '#/definitions/ReviewResource/properties/attributes/properties/score'
               reviewer:
-                $ref: '#/definitions/ReviewResource/properties/reviewer'
+                $ref: '#/definitions/ReviewResource/properties/attributes/properties/reviewer'
             required:
             - gameId
             - reviewText
@@ -708,11 +711,11 @@ definitions:
             type: object
             properties:
               reviewText:
-                $ref: '#/definitions/ReviewResource/properties/reviewText'
+                $ref: '#/definitions/ReviewResource/properties/attributes/properties/reviewText'
               score:
-                $ref: '#/definitions/ReviewResource/properties/score'
+                $ref: '#/definitions/ReviewResource/properties/attributes/properties/score'
               reviewer:
-                $ref: '#/definitions/ReviewResource/properties/reviewer'
+                $ref: '#/definitions/ReviewResource/properties/attributes/properties/reviewer'
   GameType:
     type: string
     enum:
