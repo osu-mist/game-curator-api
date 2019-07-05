@@ -20,7 +20,7 @@ const apiBaseUrl = url.format({ protocol, hostname, pathname: basePath });
  * @param {string} resourcePath resource path
  * @returns A resource path URL
  */
-const resourcePathLink = (baseUrl, resourcePath) => `${baseUrl}/${resourcePath}`;
+const resourcePathLink = (baseUrl, resourcePath) => `${baseUrl}/${resourcePath || ''}`;
 
 /**
  * @summary Params link builder
