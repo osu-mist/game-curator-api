@@ -13,11 +13,16 @@ const { endpointUri } = config.get('server');
  * @function
  * @returns {Promise<Object[]>} Promise object represents a list of developers
  */
-const getDevelopers = async () => {
+const getDevelopers = async (queries) => {
   const connection = await conn.getConnection();
-  const sqlQuery = 'SELECT ID, NAME, WEBSITE FROM DEVELOPERS';
+  const sqlParams = {};
+  if (queries.name) {
+    sqlParams.name = queries.name || null;
+  }
+  const sqlQuery = `SELECT ID, NAME, WEBSITE FROM DEVELOPERS 
+                   ${sqlParams.name ? 'WHERE NAME = :name' : ''}`;
   try {
-    const rawDevelopersReponse = await connection.execute(sqlQuery);
+    const rawDevelopersReponse = await connection.execute(sqlQuery, sqlParams);
     const rawDevelopers = rawDevelopersReponse.rows;
     const serializedDevelopers = serializeDevelopers(rawDevelopers, endpointUri);
     return serializedDevelopers;
