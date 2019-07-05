@@ -53,6 +53,9 @@ const getDeveloperById = async (id) => {
   }
 };
 
+/**
+ * @summary Inserts row into the developer table
+ */
 const postDeveloper = async (body) => {
   const connection = await conn.getConnection();
 
