@@ -22,9 +22,8 @@ const getDevelopers = async (queries) => {
   const sqlQuery = `SELECT ID, NAME, WEBSITE FROM DEVELOPERS 
                    ${sqlParams.name ? 'WHERE NAME = :name' : ''}`;
   try {
-    const rawDevelopersReponse = await connection.execute(sqlQuery, sqlParams);
-    const rawDevelopers = rawDevelopersReponse.rows;
-    const serializedDevelopers = serializeDevelopers(rawDevelopers, endpointUri);
+    const { rows } = await connection.execute(sqlQuery, sqlParams);
+    const serializedDevelopers = serializeDevelopers(rows, endpointUri);
     return serializedDevelopers;
   } finally {
     connection.close();
