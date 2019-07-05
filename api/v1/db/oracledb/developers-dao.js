@@ -14,7 +14,7 @@ const getDevelopers = async (queries) => {
   const connection = await conn.getConnection();
   const sqlParams = {};
   if (queries.name) {
-    sqlParams.name = queries.name || null;
+    sqlParams.name = queries.name;
   }
   const sqlQuery = `SELECT ID, NAME, WEBSITE FROM DEVELOPERS 
                    ${sqlParams.name ? 'WHERE NAME = :name' : ''}`;
