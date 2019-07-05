@@ -1,5 +1,6 @@
 const appRoot = require('app-root-path');
 const config = require('config');
+const oracledb = require('oracledb');
 // const _ = require('lodash');
 
 const { serializeDevelopers, serializeDeveloper } = require('../../serializers/developers-serializer');
@@ -62,11 +63,15 @@ const postDeveloper = async (body) => {
   // console.log(Object.keys(body)[0]);
   const { attributes } = JSON.parse(Object.keys(body)[0]).data;
   // const { name, website } = attributes;
-  console.log(attributes);
-  const sqlQuery = 'INSERT INTO DEVELOPERS (NAME, WEBSITE) VALUES (:name, :website)';
-
+  // Bind newly inserted developer row ID to outId
+  attributes.outId = { type: oracledb.NUMBER, dir: oracledb.BIND_OUT };
+  const sqlQuery = 'INSERT INTO DEVELOPERS (NAME, WEBSITE) VALUES (:name, :website) returning ID into :outId';
   const rawDevelopers = await connection.execute(sqlQuery, attributes, { autoCommit: true });
-  console.log(rawDevelopers);
+
+  // query the newly inserted row
+  const result = await getDeveloperById(rawDevelopers.outBinds.outId[0]);
+
+  return result;
 };
 
 module.exports = { getDevelopers, getDeveloperById, postDeveloper };
