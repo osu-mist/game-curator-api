@@ -61,9 +61,8 @@ const postDeveloper = async (body) => {
   // const { name, website } = attributes;
   console.log(attributes);
   const sqlQuery = 'INSERT INTO DEVELOPERS (NAME, WEBSITE) VALUES (:name, :website)';
-  const sqlParams = attributes;
 
-  const rawDevelopers = await connection.execute(sqlQuery, sqlParams, { autoCommit: true });
+  const rawDevelopers = await connection.execute(sqlQuery, attributes, { autoCommit: true });
   console.log(rawDevelopers);
 };
 
