@@ -27,8 +27,8 @@ const get = async (req, res) => {
  */
 const del = async (req, res) => {
   try {
-    const { id } = req.params;
-    const result = await developersDao.deleteDeveloper(id);
+    const { developerId } = req.params;
+    const result = await developersDao.deleteDeveloper(developerId);
     res.send(result);
   } catch (err) {
     errorHandler(res, err);
