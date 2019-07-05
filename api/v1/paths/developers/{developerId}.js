@@ -10,7 +10,7 @@ const { openapi: { paths } } = appRoot.require('utils/load-openapi');
  */
 const get = async (req, res) => {
   try {
-    const [developerId] = req.params.developerId;
+    const { developerId } = req.params;
     const result = await developersDao.getDeveloperById(developerId);
     if (!result.data || !result.data.length) {
       errorBuilder(res, 404, 'A developer with the specified ID was not found.');
