@@ -67,4 +67,16 @@ const postDeveloper = async (body) => {
   console.log(rawDevelopers);
 };
 
-module.exports = { getDevelopers, getDeveloperById, postDeveloper };
+const deleteDeveloper = async (developerId) => {
+  const connection = await conn.getConnection();
+
+  const sqlQuery = 'DELETE FROM DEVELOPERS WHERE ID = :id';
+  const sqlParams = { id: developerId };
+  const response = await connection.execute(sqlQuery, sqlParams);
+
+  return response;
+};
+
+module.exports = {
+  getDevelopers, getDeveloperById, postDeveloper, deleteDeveloper,
+};
