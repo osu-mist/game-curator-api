@@ -75,7 +75,7 @@ const deleteDeveloper = async (developerId) => {
 
   const sqlQuery = 'DELETE FROM DEVELOPERS WHERE ID = :id';
   const sqlParams = { id: developerId };
-  const response = await connection.execute(sqlQuery, sqlParams);
+  const response = await connection.execute(sqlQuery, sqlParams, { autoCommit: true });
 
   return response;
 };
