@@ -22,6 +22,17 @@ const get = async (req, res) => {
   }
 };
 
+/**
+ * @summary Delete developer by unique ID
+ */
+const del = async (req, res) => {
+  try {
+    console.log(req);
+  } catch (err) {
+    errorHandler(res, err);
+  }
+};
+
 get.apiDoc = paths['/developers/{developerId}'].get;
 
-module.exports = { get };
+module.exports = { get, del };
