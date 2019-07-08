@@ -20,7 +20,7 @@ const developerResourceUrl = resourcePathLink(apiBaseUrl, developerResourcePath)
  * from the raw data rows.
  */
 _.forEach(developerResourceKeys, (key, index) => {
-  developerResourceKeys[index] = key.toUpperCase();
+  developerResourceKeys[index] = key;
 });
 
 /**
@@ -45,7 +45,7 @@ const serializeDevelopers = (rawDevelopers, query) => {
 
   const topLevelSelfLink = paramsLink(developerResourceUrl, query);
   const serializerArgs = {
-    identifierField: 'ID',
+    identifierField: 'id',
     resourceKeys: developerResourceKeys,
     pagination,
     resourcePath: developerResourcePath,
@@ -69,7 +69,7 @@ const serializeDevelopers = (rawDevelopers, query) => {
 const serializeDeveloper = (rawDeveloper) => {
   const topLevelSelfLink = resourcePathLink(developerResourceUrl, rawDeveloper.id);
   const serializerArgs = {
-    identifierField: 'ID',
+    identifierField: 'id',
     resourceKeys: developerResourceKeys,
     resourcePath: developerResourcePath,
     topLevelSelfLink,

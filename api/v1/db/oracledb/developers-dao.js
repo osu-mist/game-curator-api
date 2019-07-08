@@ -17,7 +17,7 @@ const getDevelopers = async (queries) => {
     sqlParams.name = queries.name;
   }
   const sqlQuery = `
-    SELECT ID as id, NAME as name, WEBSITE as website
+    SELECT ID AS "id", NAME AS "name", WEBSITE AS "website"
     FROM DEVELOPERS 
     ${sqlParams.name ? 'WHERE NAME = :name' : ''}
   `;
@@ -42,9 +42,9 @@ const getDeveloperById = async (id) => {
   const connection = await conn.getConnection();
   try {
     const sqlParams = {
-      ID: id,
+      developerId: id,
     };
-    const { rawDevelopers } = await connection.execute('SELECT ID FROM DEVELOPERS WHERE ID = :ID', sqlParams);
+    const { rawDevelopers } = await connection.execute('SELECT ID AS "id" FROM DEVELOPERS WHERE ID = :developerId', sqlParams);
 
     if (_.isEmpty(rawDevelopers)) {
       return undefined;
