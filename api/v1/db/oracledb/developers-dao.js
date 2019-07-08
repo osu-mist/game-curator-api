@@ -66,9 +66,7 @@ const getDeveloperById = async (id) => {
 const postDeveloper = async (body) => {
   const connection = await conn.getConnection();
 
-  // console.log(Object.keys(body)[0]);
   const { attributes } = JSON.parse(Object.keys(body)[0]).data;
-  // const { name, website } = attributes;
   // Bind newly inserted developer row ID to outId
   // We can use outId to query the newly created row and return it
   attributes.outId = { type: oracledb.NUMBER, dir: oracledb.BIND_OUT };
