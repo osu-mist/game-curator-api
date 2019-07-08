@@ -575,6 +575,7 @@ definitions:
             example: Terminal Reality
           website:
             type: string
+            format: url
             description: Url to homepage of developer
             example: https://bethesda.net/
   DeveloperResult:
