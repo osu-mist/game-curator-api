@@ -1,5 +1,4 @@
 const appRoot = require('app-root-path');
-const decamelize = require('decamelize');
 const JsonApiSerializer = require('jsonapi-serializer').Serializer;
 const _ = require('lodash');
 
@@ -21,7 +20,7 @@ const developerResourceUrl = resourcePathLink(apiBaseUrl, developerResourcePath)
  * from the raw data rows.
  */
 _.forEach(developerResourceKeys, (key, index) => {
-  developerResourceKeys[index] = decamelize(key).toUpperCase();
+  developerResourceKeys[index] = key.toUpperCase();
 });
 
 /**
