@@ -38,22 +38,20 @@ const getDevelopers = async (queries) => {
  *                            term is not found
  */
 const getDeveloperById = async (id) => {
-  // TODO
   const connection = await conn.getConnection();
   try {
     const sqlParams = {
       developerId: id,
     };
-    const { rawDevelopers } = await connection.execute('SELECT ID AS "id" FROM DEVELOPERS WHERE ID = :developerId', sqlParams);
+    const sqlQuery = 'SELECT ID AS "id", NAME AS "name", WEBSITE AS "website" FROM DEVELOPERS WHERE ID = :developerId';
+    const { rows } = await connection.execute(sqlQuery, sqlParams);
 
-    if (_.isEmpty(rawDevelopers)) {
-      return undefined;
-    }
-    if (rawDevelopers.length > 1) {
+    if (rows.length > 1) {
       throw new Error('Expect a single object but got multiple results.');
+    } else if (_.isEmpty(rows)) {
+      return undefined;
     } else {
-      const [rawDeveloper] = rawDevelopers;
-      const serializedDeveloper = serializeDeveloper(rawDeveloper);
+      const serializedDeveloper = serializeDeveloper(rows[0]);
       return serializedDeveloper;
     }
   } finally {
