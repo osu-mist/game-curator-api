@@ -67,7 +67,7 @@ const serializeDevelopers = (rawDevelopers, query) => {
  * @returns {Object} Serialized developerResource object
  */
 const serializeDeveloper = (rawDeveloper) => {
-  const topLevelSelfLink = resourcePathLink(developerResourceUrl, rawDeveloper.ID);
+  const topLevelSelfLink = resourcePathLink(developerResourceUrl, rawDeveloper.id);
   const serializerArgs = {
     identifierField: 'ID',
     resourceKeys: developerResourceKeys,
