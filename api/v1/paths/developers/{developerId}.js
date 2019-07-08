@@ -6,13 +6,13 @@ const { errorBuilder, errorHandler } = appRoot.require('errors/errors');
 const { openapi: { paths } } = appRoot.require('utils/load-openapi');
 
 /**
- * @summary Get pet by unique ID
+ * @summary Get developer by unique ID
  */
 const get = async (req, res) => {
   try {
-    const [developerId] = req.params.developerId;
+    const { developerId } = req.params;
     const result = await developersDao.getDeveloperById(developerId);
-    if (!result.data || !result.data.length) {
+    if (!result) {
       errorBuilder(res, 404, 'A developer with the specified ID was not found.');
     } else {
       res.send(result);

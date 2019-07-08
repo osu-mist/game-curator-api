@@ -1,26 +1,30 @@
 const appRoot = require('app-root-path');
-const config = require('config');
 const oracledb = require('oracledb');
-// const _ = require('lodash');
+const _ = require('lodash');
 
 const { serializeDevelopers, serializeDeveloper } = require('../../serializers/developers-serializer');
 
 const conn = appRoot.require('api/v1/db/oracledb/connection');
-
-const { endpointUri } = config.get('server');
 
 /**
  * @summary Return a list of developers
  * @function
  * @returns {Promise<Object[]>} Promise object represents a list of developers
  */
-const getDevelopers = async () => {
+const getDevelopers = async (queries) => {
   const connection = await conn.getConnection();
-  const sqlQuery = 'SELECT ID, NAME, WEBSITE FROM DEVELOPERS';
+  const sqlParams = {};
+  if (queries.name) {
+    sqlParams.name = queries.name;
+  }
+  const sqlQuery = `
+    SELECT ID AS "id", NAME AS "name", WEBSITE AS "website"
+    FROM DEVELOPERS 
+    ${sqlParams.name ? 'WHERE NAME = :name' : ''}
+  `;
   try {
-    const rawDevelopersReponse = await connection.execute(sqlQuery);
-    const rawDevelopers = rawDevelopersReponse.rows;
-    const serializedDevelopers = serializeDevelopers(rawDevelopers, endpointUri);
+    const { rows } = await connection.execute(sqlQuery, sqlParams);
+    const serializedDevelopers = serializeDevelopers(rows, queries);
     return serializedDevelopers;
   } finally {
     connection.close();
@@ -38,15 +42,17 @@ const getDeveloperById = async (id) => {
   const connection = await conn.getConnection();
   try {
     const sqlParams = {
-      ID: id,
+      developerId: id,
     };
-    const sqlQuery = 'SELECT ID, NAME, WEBSITE FROM DEVELOPERS WHERE ID = :ID';
-    const rawDevelopers = await connection.execute(sqlQuery, sqlParams);
+    const sqlQuery = 'SELECT ID AS "id", NAME AS "name", WEBSITE AS "website" FROM DEVELOPERS WHERE ID = :developerId';
+    const { rows } = await connection.execute(sqlQuery, sqlParams);
 
-    if (rawDevelopers.length > 1) {
+    if (rows.length > 1) {
       throw new Error('Expect a single object but got multiple results.');
+    } else if (_.isEmpty(rows)) {
+      return undefined;
     } else {
-      const serializedDeveloper = serializeDeveloper(rawDevelopers.rows);
+      const serializedDeveloper = serializeDeveloper(rows[0]);
       return serializedDeveloper;
     }
   } finally {
