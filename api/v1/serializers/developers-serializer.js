@@ -14,16 +14,6 @@ const developerResourcePath = 'developers';
 const developerResourceUrl = resourcePathLink(apiBaseUrl, developerResourcePath);
 
 /**
- * The column name getting from database is usually UPPER_CASE.
- * This block of code is to make the camelCase keys defined in openapi.yaml be
- * UPPER_CASE so that the serializer can correctly match the corresponding columns
- * from the raw data rows.
- */
-_.forEach(developerResourceKeys, (key, index) => {
-  developerResourceKeys[index] = key;
-});
-
-/**
  * @summary Serialize developerResources to JSON API
  * @function
  * @param {[Object]} rawdevelopers Raw data rows from data source
