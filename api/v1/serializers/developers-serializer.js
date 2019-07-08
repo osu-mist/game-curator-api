@@ -69,6 +69,6 @@ const serializeDeveloper = (rawDeveloper) => {
   return new JsonApiSerializer(
     developerResourceType,
     serializerOptions(serializerArgs),
-  ).serialize(rawDeveloper);
+  ).serialize([rawDeveloper]);
 };
 module.exports = { serializeDevelopers, serializeDeveloper };

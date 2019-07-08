@@ -48,7 +48,7 @@ const getDeveloperById = async (id) => {
     if (rows.length > 1) {
       throw new Error('Expect a single object but got multiple results.');
     } else {
-      const serializedDeveloper = serializeDeveloper(rows);
+      const serializedDeveloper = serializeDeveloper(rows[0]);
       return serializedDeveloper;
     }
   } finally {
