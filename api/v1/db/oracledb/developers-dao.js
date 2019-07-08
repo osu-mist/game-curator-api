@@ -70,6 +70,7 @@ const postDeveloper = async (body) => {
   const { attributes } = JSON.parse(Object.keys(body)[0]).data;
   // const { name, website } = attributes;
   // Bind newly inserted developer row ID to outId
+  // We can use outId to query the newly created row and return it
   attributes.outId = { type: oracledb.NUMBER, dir: oracledb.BIND_OUT };
   const sqlQuery = 'INSERT INTO DEVELOPERS (NAME, WEBSITE) VALUES (:name, :website) returning ID into :outId';
   const rawDevelopers = await connection.execute(sqlQuery, attributes, { autoCommit: true });
