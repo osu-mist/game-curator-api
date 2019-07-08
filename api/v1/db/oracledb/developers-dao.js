@@ -17,7 +17,7 @@ const getDevelopers = async (queries) => {
     sqlParams.name = queries.name;
   }
   const sqlQuery = `
-    SELECT ID, NAME, WEBSITE
+    SELECT ID as id, NAME as name, WEBSITE as website
     FROM DEVELOPERS 
     ${sqlParams.name ? 'WHERE NAME = :name' : ''}
   `;
