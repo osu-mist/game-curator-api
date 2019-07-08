@@ -12,7 +12,7 @@ const get = async (req, res) => {
   try {
     const { developerId } = req.params;
     const result = await developersDao.getDeveloperById(developerId);
-    if (!result.data || !result.data.length) {
+    if (!result) {
       errorBuilder(res, 404, 'A developer with the specified ID was not found.');
     } else {
       res.send(result);

@@ -1,4 +1,5 @@
 const appRoot = require('app-root-path');
+const _ = require('lodash');
 
 const { serializeDevelopers, serializeDeveloper } = require('../../serializers/developers-serializer');
 
@@ -47,6 +48,8 @@ const getDeveloperById = async (id) => {
 
     if (rows.length > 1) {
       throw new Error('Expect a single object but got multiple results.');
+    } else if (_.isEmpty(rows)) {
+      return undefined;
     } else {
       const serializedDeveloper = serializeDeveloper(rows[0]);
       return serializedDeveloper;
