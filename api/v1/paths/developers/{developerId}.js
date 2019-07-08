@@ -32,7 +32,8 @@ const del = async (req, res) => {
     if (result.rowsAffected < 1) {
       errorBuilder(res, 404, 'A developer with the specified ID was not found.');
     } else {
-      res.send(result);
+      // send 204 on successful delete
+      res.send(204);
     }
   } catch (err) {
     errorHandler(res, err);
