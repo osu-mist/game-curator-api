@@ -1,11 +1,10 @@
 const appRoot = require('app-root-path');
-const decamelize = require('decamelize');
 const JsonApiSerializer = require('jsonapi-serializer').Serializer;
 const _ = require('lodash');
 
 const { serializerOptions } = appRoot.require('utils/jsonapi');
 const { openapi } = appRoot.require('utils/load-openapi');
-// const { paginate } = appRoot.require('utils/paginator');
+const { paginate } = appRoot.require('utils/paginator');
 const { apiBaseUrl, resourcePathLink, paramsLink } = appRoot.require('utils/uri-builder');
 
 const developerResourceProp = openapi.definitions.DeveloperResource.properties;
@@ -13,16 +12,6 @@ const developerResourceType = developerResourceProp.type.enum[0];
 const developerResourceKeys = _.keys(developerResourceProp.attributes.properties);
 const developerResourcePath = 'developers';
 const developerResourceUrl = resourcePathLink(apiBaseUrl, developerResourcePath);
-
-/**
- * The column name getting from database is usually UPPER_CASE.
- * This block of code is to make the camelCase keys defined in openapi.yaml be
- * UPPER_CASE so that the serializer can correctly match the corresponding columns
- * from the raw data rows.
- */
-_.forEach(developerResourceKeys, (key, index) => {
-  developerResourceKeys[index] = decamelize(key).toUpperCase();
-});
 
 /**
  * @summary Serialize developerResources to JSON API
@@ -35,23 +24,23 @@ const serializeDevelopers = (rawDevelopers, query) => {
   /**
    * Add pagination links and meta information to options if pagination is enabled
    */
-  /* const pageQuery = {
+  const pageQuery = {
     size: query['page[size]'],
     number: query['page[number]'],
   };
 
   const pagination = paginate(rawDevelopers, pageQuery);
   pagination.totalResults = rawDevelopers.length;
-  rawDevelopers = pagination.paginatedRows; */
+  rawDevelopers = pagination.paginatedRows;
 
   const topLevelSelfLink = paramsLink(developerResourceUrl, query);
   const serializerArgs = {
-    identifierField: 'ID',
+    identifierField: 'id',
     resourceKeys: developerResourceKeys,
-    // pagination,
+    pagination,
     resourcePath: developerResourcePath,
     topLevelSelfLink,
-    query, // : _.omit(query, 'page[size]', 'page[number]'),
+    query: _.omit(query, 'page[size]', 'page[number]'),
     enableDataLinks: true,
   };
 
@@ -68,9 +57,9 @@ const serializeDevelopers = (rawDevelopers, query) => {
  * @returns {Object} Serialized developerResource object
  */
 const serializeDeveloper = (rawDeveloper) => {
-  const topLevelSelfLink = resourcePathLink(developerResourceUrl, rawDeveloper.ID);
+  const topLevelSelfLink = resourcePathLink(developerResourceUrl, rawDeveloper.id);
   const serializerArgs = {
-    identifierField: 'ID',
+    identifierField: 'id',
     resourceKeys: developerResourceKeys,
     resourcePath: developerResourcePath,
     topLevelSelfLink,
