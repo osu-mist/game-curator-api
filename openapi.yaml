@@ -482,6 +482,8 @@ definitions:
         format: int64
       type:
         $ref: '#/definitions/GameType'
+      links:
+        $ref: '#/definitions/SelfLink'
       attributes:
         type: object
         properties:
@@ -501,8 +503,6 @@ definitions:
             format: date
             description: Date of the games release
             example: 12/5/1994
-          links:
-            $ref: '#/definitions/SelfLink'
   GameResult:
     properties:
       links:
@@ -634,6 +634,8 @@ definitions:
         type: string
       type:
         $ref: '#/definitions/ReviewType'
+      links:
+        $ref: '#/definitions/SelfLink'
       attributes:
         type: object
         properties:
