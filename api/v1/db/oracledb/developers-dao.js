@@ -69,6 +69,8 @@ const postDeveloper = async (body) => {
 
 /**
  * @summary Deletes developer row from db by ID
+ * @function
+ * @param {string} developerId Unique developer ID
  */
 const deleteDeveloper = async (developerId) => {
   const connection = await conn.getConnection();
