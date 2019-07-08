@@ -29,7 +29,11 @@ const del = async (req, res) => {
   try {
     const { developerId } = req.params;
     const result = await developersDao.deleteDeveloper(developerId);
-    res.send(result);
+    if (result.rowsAffected < 1) {
+      errorBuilder(res, 404, 'A developer with the specified ID was not found.');
+    } else {
+      res.send(result);
+    }
   } catch (err) {
     errorHandler(res, err);
   }
