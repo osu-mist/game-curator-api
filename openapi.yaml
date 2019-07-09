@@ -19,6 +19,8 @@ externalDocs:
   url: https://github.com/osu-mist/game-curator-api
 produces:
   - application/json
+consumes:
+  - application/json
 paths:
   /games:
     parameters:
@@ -613,6 +615,7 @@ definitions:
             required:
               - name
               - website
+            additionalProperties: false
   DeveloperPatchBody:
     properties:
       data:
