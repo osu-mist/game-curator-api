@@ -544,6 +544,11 @@ definitions:
               - name
               - developerId
             additionalProperties: false
+        required:
+          - type
+          - attributes
+    required:
+      - data
   GamePatchBody:
     properties:
       data:
@@ -561,6 +566,12 @@ definitions:
               releaseDate:
                 $ref: '#/definitions/GameResource/properties/attributes/properties/releaseDate'
             additionalProperties: false
+        required:
+          - id
+          - type
+          - attributes
+    required:
+      - data
   DeveloperResource:
     properties:
       id:
@@ -617,6 +628,11 @@ definitions:
               - name
               - website
             additionalProperties: false
+        required:
+          - type
+          - attributes
+    required:
+      - data
   DeveloperPatchBody:
     properties:
       data:
@@ -633,6 +649,12 @@ definitions:
                 $ref: '#/definitions/DeveloperResource/properties/attributes/properties/name'
               website:
                 $ref: '#/definitions/DeveloperResource/properties/attributes/properties/website'
+        required:
+          - type
+          - id
+          - attributes
+    required:
+      - data
   ReviewResource:
     properties:
       id:
@@ -706,6 +728,11 @@ definitions:
             - score
             - reviewer
             additionalProperties: false
+        required:
+          - type
+          - attributes
+    required:
+      - data
   ReviewPatchBody:
     properties: 
       data:
@@ -724,6 +751,12 @@ definitions:
                 $ref: '#/definitions/ReviewResource/properties/attributes/properties/score'
               reviewer:
                 $ref: '#/definitions/ReviewResource/properties/attributes/properties/reviewer'
+        required:
+          - type
+          - id
+          - attributes
+    required:
+      - data
   GameType:
     type: string
     enum:
