@@ -45,8 +45,8 @@ const del = async (req, res) => {
  */
 const patch = async (req, res) => {
   try {
-    // const { developerId } = req.params;
-    const result = await developersDao.patchDeveloper(req.body);
+    const { developerId } = req.params;
+    const result = await developersDao.patchDeveloper(developerId, req.body);
     res.send(result);
   } catch (err) {
     errorHandler(res, err);

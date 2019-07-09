@@ -105,10 +105,11 @@ const deleteDeveloper = async (developerId) => {
 /**
  * @summary update a developer record
  */
-const patchDeveloper = async (body) => {
+const patchDeveloper = async (id, body) => {
   const connection = await conn.getConnection();
   try {
     const { attributes } = body.data;
+    attributes.id = id;
     const sqlQuery = 'UPDATE DEVELOPERS SET NAME = :name, WEBSITE = :website WHERE ID = :id';
     const response = await connection.execute(sqlQuery, attributes, { autoCommit: true });
 
