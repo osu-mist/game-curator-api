@@ -213,6 +213,7 @@ paths:
         in: path
         type: string
         required: true
+        description: Unique id of a developer record
     get:
       summary: Get developer by its Id
       operationId: getDeveloperById

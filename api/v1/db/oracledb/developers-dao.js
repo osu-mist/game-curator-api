@@ -66,17 +66,42 @@ const getDeveloperById = async (id) => {
 const postDeveloper = async (body) => {
   const connection = await conn.getConnection();
 
-  // Bind newly inserted developer row ID to outId
-  // We can use outId to query the newly created row and return it
-  const { attributes } = body.data;
-  attributes.outId = { type: oracledb.NUMBER, dir: oracledb.BIND_OUT };
-  const sqlQuery = 'INSERT INTO DEVELOPERS (NAME, WEBSITE) VALUES (:name, :website) RETURNING ID INTO :outId';
-  const rawDevelopers = await connection.execute(sqlQuery, attributes, { autoCommit: true });
+  try {
+    // Bind newly inserted developer row ID to outId
+    // We can use outId to query the newly created row and return it
+    const { attributes } = body.data;
+    attributes.outId = { type: oracledb.NUMBER, dir: oracledb.BIND_OUT };
+    const sqlQuery = 'INSERT INTO DEVELOPERS (NAME, WEBSITE) VALUES (:name, :website) RETURNING ID INTO :outId';
+    const rawDevelopers = await connection.execute(sqlQuery, attributes, { autoCommit: true });
 
-  // query the newly inserted row
-  const result = await getDeveloperById(rawDevelopers.outBinds.outId[0]);
+    // query the newly inserted row
+    const result = await getDeveloperById(rawDevelopers.outBinds.outId[0]);
 
-  return result;
+    return result;
+  } finally {
+    connection.close();
+  }
 };
 
-module.exports = { getDevelopers, getDeveloperById, postDeveloper };
+/**
+ * @summary Deletes developer row from db by ID
+ * @function
+ * @param {string} developerId Unique developer ID
+ */
+const deleteDeveloper = async (developerId) => {
+  const connection = await conn.getConnection();
+
+  try {
+    const sqlQuery = 'DELETE FROM DEVELOPERS WHERE ID = :id';
+    const sqlParams = { id: developerId };
+    const response = await connection.execute(sqlQuery, sqlParams, { autoCommit: true });
+
+    return response;
+  } finally {
+    connection.close();
+  }
+};
+
+module.exports = {
+  getDevelopers, getDeveloperById, postDeveloper, deleteDeveloper,
+};
