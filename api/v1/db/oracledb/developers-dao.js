@@ -66,7 +66,7 @@ const patchDeveloper = async (body) => {
   const connection = await conn.getConnection();
   try {
     const { attributes } = body.data;
-    const sqlQuery = '';
+    const sqlQuery = 'UPDATE DEVELOPERS SET NAME = :name, WEBSITE = :website';
   } finally {
     connection.close();
   }
