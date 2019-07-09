@@ -59,6 +59,7 @@ const patch = async (req, res) => {
 };
 
 get.apiDoc = paths['/developers/{developerId}'].get;
+del.apiDoc = paths['/developers/{developerId}'].delete;
 patch.apiDoc = paths['/developers/{developerId}'].patch;
 
 module.exports = { get, del, patch };
