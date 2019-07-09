@@ -62,11 +62,14 @@ const getDeveloperById = async (id) => {
 /**
  * @summary update a developer record
  */
-const patchDeveloper = async () => {
+const patchDeveloper = async (body) => {
   const connection = await conn.getConnection();
   try {
-    
+    const { attributes } = body.data;
+    const sqlQuery = '';
+  } finally {
+    connection.close();
   }
 };
 
-module.exports = { getDevelopers, getDeveloperById };
+module.exports = { getDevelopers, getDeveloperById, patchDeveloper };

@@ -27,12 +27,15 @@ const get = async (req, res) => {
  */
 const patch = async (req, res) => {
   try {
-    const result = await developersDao.patchDeveloper();
+    // const { developerId } = req.params;
+    const result = await developersDao.patchDeveloper(req.body);
+    res.send(result);
   } catch (err) {
     errorHandler(res, err);
   }
 };
 
 get.apiDoc = paths['/developers/{developerId}'].get;
+patch.apiDoc = paths['/developers/{developerId}'].patch;
 
-module.exports = { get };
+module.exports = { get, patch };
