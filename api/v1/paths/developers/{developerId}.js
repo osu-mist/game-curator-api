@@ -6,7 +6,7 @@ const { errorBuilder, errorHandler } = appRoot.require('errors/errors');
 const { openapi: { paths } } = appRoot.require('utils/load-openapi');
 
 /**
- * @summary Get developer by unique ID
+ * @summary Get developer by unique id
  */
 const get = async (req, res) => {
   try {
@@ -17,6 +17,17 @@ const get = async (req, res) => {
     } else {
       res.send(result);
     }
+  } catch (err) {
+    errorHandler(res, err);
+  }
+};
+
+/**
+ * @summary Patch developer by unique id
+ */
+const patch = async (req, res) => {
+  try {
+    const result = await developersDao.patchDeveloper();
   } catch (err) {
     errorHandler(res, err);
   }

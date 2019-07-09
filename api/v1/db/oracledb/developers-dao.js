@@ -59,4 +59,14 @@ const getDeveloperById = async (id) => {
   }
 };
 
+/**
+ * @summary update a developer record
+ */
+const patchDeveloper = async () => {
+  const connection = await conn.getConnection();
+  try {
+    
+  }
+};
+
 module.exports = { getDevelopers, getDeveloperById };
