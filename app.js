@@ -29,6 +29,12 @@ const appRouter = express.Router();
 const adminApp = express();
 const adminAppRouter = express.Router();
 
+// Body will not be found in request unless bodyParser is used
+app.use(bodyParser.urlencoded({
+  extended: true,
+}));
+app.use(bodyParser.json());
+
 /**
  * @summary Use the simple query parser to prevent the parameters which contain square brackets
  * be parsed as a nested object
