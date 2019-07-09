@@ -1,4 +1,5 @@
 const appRoot = require('app-root-path');
+const _ = require('lodash');
 
 const developersDao = require('../db/oracledb/developers-dao');
 
@@ -24,7 +25,7 @@ const get = async (req, res) => {
 const post = async (req, res) => {
   try {
     // Check that a body is present in the request
-    if (!req.body) {
+    if (_.isEmpty(req.body)) {
       errorBuilder(res, 400, ['No body in request.']);
     } else {
       const result = await developersDao.postDeveloper(req.body);
