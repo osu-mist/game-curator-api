@@ -47,7 +47,12 @@ const patch = async (req, res) => {
   try {
     const { developerId } = req.params;
     const result = await developersDao.patchDeveloper(developerId, req.body);
-    res.send(result);
+    if (result.rowsAffected < 1) {
+      errorBuilder(res, 404, 'A developer with the specified ID was not found.');
+    } else {
+      const updatedResult = await developersDao.getDeveloperById(developerId);
+      res.send(updatedResult);
+    }
   } catch (err) {
     errorHandler(res, err);
   }
