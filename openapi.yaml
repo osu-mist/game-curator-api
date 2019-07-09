@@ -327,6 +327,7 @@ paths:
       parameters:
       - in: body
         name: requestBody
+        required: true
         schema:
           $ref: '#/definitions/ReviewPostBody'
       responses:
@@ -704,6 +705,7 @@ definitions:
             - reviewText
             - score
             - reviewer
+            additionalProperties: false
   ReviewPatchBody:
     properties: 
       data:
