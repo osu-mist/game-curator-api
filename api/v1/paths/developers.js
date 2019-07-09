@@ -28,8 +28,14 @@ const post = async (req, res) => {
     if (_.isEmpty(req.body)) {
       errorBuilder(res, 400, ['No body in request.']);
     } else {
-      const result = await developersDao.postDeveloper(req.body);
-      res.status(201).send(result);
+      // parse body JSON and check that required attributes are present
+      const { attributes } = JSON.parse(Object.keys(req.body)[0]).data;
+      if (!attributes.name || !attributes.website) {
+        errorBuilder(res, 400, ['Malformed body.']);
+      } else {
+        const result = await developersDao.postDeveloper(attributes);
+        res.status(201).send(result);
+      }
     }
   } catch (err) {
     errorHandler(res, err);
