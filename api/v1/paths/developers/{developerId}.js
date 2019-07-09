@@ -46,12 +46,16 @@ const del = async (req, res) => {
 const patch = async (req, res) => {
   try {
     const { developerId } = req.params;
-    const result = await developersDao.patchDeveloper(developerId, req.body);
-    if (result.rowsAffected < 1) {
-      errorBuilder(res, 404, 'A developer with the specified ID was not found.');
+    if (developerId !== req.body.data.id) {
+      errorBuilder(res, 400, ['Developer id in path does not match id in body.']);
     } else {
-      const updatedResult = await developersDao.getDeveloperById(developerId);
-      res.send(updatedResult);
+      const result = await developersDao.patchDeveloper(developerId, req.body);
+      if (result.rowsAffected < 1) {
+        errorBuilder(res, 404, 'A developer with the specified ID was not found.');
+      } else {
+        const updatedResult = await developersDao.getDeveloperById(developerId);
+        res.send(updatedResult);
+      }
     }
   } catch (err) {
     errorHandler(res, err);
