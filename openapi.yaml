@@ -19,6 +19,8 @@ externalDocs:
   url: https://github.com/osu-mist/game-curator-api
 produces:
   - application/json
+consumes:
+  - application/json
 paths:
   /games:
     parameters:
@@ -164,6 +166,8 @@ paths:
       tags:
         - developers
       parameters:
+        - $ref: '#/parameters/pageNumber'
+        - $ref: '#/parameters/pageSize'
         - name: name
           in: query
           type: string
@@ -324,6 +328,7 @@ paths:
       parameters:
       - in: body
         name: requestBody
+        required: true
         schema:
           $ref: '#/definitions/ReviewPostBody'
       responses:
@@ -481,24 +486,27 @@ definitions:
         format: int64
       type:
         $ref: '#/definitions/GameType'
-      developerId:
-        $ref: '#/definitions/DeveloperResource/properties/id'
-      name:
-        type: string
-        description: Name of the game
-        example: Eternal Death Slayer 3
-      score:
-        type: number
-        format: float
-        description: Composite review score of this game out of 5
-        example: 4.5
-      releaseDate:
-        type: string
-        format: date
-        description: Date of the games release
-        example: 12/5/1994
       links:
         $ref: '#/definitions/SelfLink'
+      attributes:
+        type: object
+        properties:
+          developerId:
+            $ref: '#/definitions/DeveloperResource/properties/id'
+          name:
+            type: string
+            description: Name of the game
+            example: Eternal Death Slayer 3
+          score:
+            type: number
+            format: float
+            description: Composite review score of this game out of 5
+            example: 4.5
+          releaseDate:
+            type: string
+            format: date
+            description: Date of the games release
+            example: 12/5/1994
   GameResult:
     properties:
       links:
@@ -528,15 +536,20 @@ definitions:
             type: object
             properties:
               name:
-                $ref: '#/definitions/GameResource/properties/name'
+                $ref: '#/definitions/GameResource/properties/attributes/properties/name'
               releaseDate:
-                $ref: '#/definitions/GameResource/properties/releaseDate'
+                $ref: '#/definitions/GameResource/properties/attributes/properties/releaseDate'
               developerId:
                 $ref: '#/definitions/DeveloperResource/properties/id'
             required:
               - name
               - developerId
             additionalProperties: false
+        required:
+          - type
+          - attributes
+    required:
+      - data
   GamePatchBody:
     properties:
       data:
@@ -550,16 +563,24 @@ definitions:
             type: object
             properties:
               name:
-                $ref: '#/definitions/GameResource/properties/name'
+                $ref: '#/definitions/GameResource/properties/attributes/properties/name'
               releaseDate:
-                $ref: '#/definitions/GameResource/properties/releaseDate'
+                $ref: '#/definitions/GameResource/properties/attributes/properties/releaseDate'
             additionalProperties: false
+        required:
+          - id
+          - type
+          - attributes
+    required:
+      - data
   DeveloperResource:
     properties:
       id:
         type: string
       type:
         $ref: '#/definitions/DeveloperType'
+      links:
+        $ref: '#/definitions/SelfLink'
       attributes:
         type: object
         properties:
@@ -569,6 +590,7 @@ definitions:
             example: Terminal Reality
           website:
             type: string
+            format: url
             description: Url to homepage of developer
             example: https://bethesda.net/
   DeveloperResult:
@@ -606,6 +628,12 @@ definitions:
             required:
               - name
               - website
+            additionalProperties: false
+        required:
+          - type
+          - attributes
+    required:
+      - data
   DeveloperPatchBody:
     properties:
       data:
@@ -622,32 +650,43 @@ definitions:
                 $ref: '#/definitions/DeveloperResource/properties/attributes/properties/name'
               website:
                 $ref: '#/definitions/DeveloperResource/properties/attributes/properties/website'
+        required:
+          - type
+          - id
+          - attributes
+    required:
+      - data
   ReviewResource:
     properties:
       id:
         type: string
       type:
         $ref: '#/definitions/ReviewType'
-      gameId:
-        $ref: '#/definitions/GameResource/properties/id'
-      reviewer:
-        type: string
-        description: Person who wrote the review.
-        example: Commander Shepard
-      score:
-        type: number
-        format: float
-        description: Score for this review out of 5
-        example: 4.5
-      reviewText:
-        type: string
-        description: Text containing the review for the referenced game
-        example: My name is Commander Shepard and this is my favorite game on the citadel.
-      reviewDate:
-        type: string
-        format: date
-        description: Date the review was finalized
-        example: 10/15/2006
+      links:
+        $ref: '#/definitions/SelfLink'
+      attributes:
+        type: object
+        properties:
+          gameId:
+            $ref: '#/definitions/GameResource/properties/id'
+          reviewer:
+            type: string
+            description: Person who wrote the review.
+            example: Commander Shepard
+          score:
+            type: number
+            format: float
+            description: Score for this review out of 5
+            example: 4.5
+          reviewText:
+            type: string
+            description: Text containing the review for the referenced game
+            example: My name is Commander Shepard and this is my favorite game on the citadel.
+          reviewDate:
+            type: string
+            format: date
+            description: Date the review was finalized
+            example: 10/15/2006
   ReviewResult:
     properties:
       links:
@@ -677,18 +716,24 @@ definitions:
             type: object
             properties:
               gameId:
-                $ref: '#/definitions/ReviewResource/properties/gameId'
+                $ref: '#/definitions/ReviewResource/properties/attributes/properties/gameId'
               reviewText:
-                $ref: '#/definitions/ReviewResource/properties/reviewText'
+                $ref: '#/definitions/ReviewResource/properties/attributes/properties/reviewText'
               score:
-                $ref: '#/definitions/ReviewResource/properties/score'
+                $ref: '#/definitions/ReviewResource/properties/attributes/properties/score'
               reviewer:
-                $ref: '#/definitions/ReviewResource/properties/reviewer'
+                $ref: '#/definitions/ReviewResource/properties/attributes/properties/reviewer'
             required:
             - gameId
             - reviewText
             - score
             - reviewer
+            additionalProperties: false
+        required:
+          - type
+          - attributes
+    required:
+      - data
   ReviewPatchBody:
     properties: 
       data:
@@ -702,11 +747,17 @@ definitions:
             type: object
             properties:
               reviewText:
-                $ref: '#/definitions/ReviewResource/properties/reviewText'
+                $ref: '#/definitions/ReviewResource/properties/attributes/properties/reviewText'
               score:
-                $ref: '#/definitions/ReviewResource/properties/score'
+                $ref: '#/definitions/ReviewResource/properties/attributes/properties/score'
               reviewer:
-                $ref: '#/definitions/ReviewResource/properties/reviewer'
+                $ref: '#/definitions/ReviewResource/properties/attributes/properties/reviewer'
+        required:
+          - type
+          - id
+          - attributes
+    required:
+      - data
   GameType:
     type: string
     enum:
