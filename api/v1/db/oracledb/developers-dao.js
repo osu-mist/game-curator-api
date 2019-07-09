@@ -109,7 +109,10 @@ const patchDeveloper = async (body) => {
   const connection = await conn.getConnection();
   try {
     const { attributes } = body.data;
-    const sqlQuery = 'UPDATE DEVELOPERS SET NAME = :name, WEBSITE = :website';
+    const sqlQuery = 'UPDATE DEVELOPERS SET NAME = :name, WEBSITE = :website WHERE ID = :id';
+    const response = await connection.execute(sqlQuery, attributes, { autoCommit: true });
+
+    return response;
   } finally {
     connection.close();
   }
