@@ -24,18 +24,12 @@ const get = async (req, res) => {
  */
 const post = async (req, res) => {
   try {
-    // Check that a body is present in the request
+    // 500 error will be thrown unless we check for an existing body
     if (_.isEmpty(req.body)) {
-      errorBuilder(res, 400, ['No body in request.']);
+      errorBuilder(res, 400, ['No body in request']);
     } else {
-      // parse body JSON and check that required attributes are present
-      const { attributes } = JSON.parse(Object.keys(req.body)[0]).data;
-      if (!attributes.name || !attributes.website) {
-        errorBuilder(res, 400, ['Malformed body.']);
-      } else {
-        const result = await developersDao.postDeveloper(attributes);
-        res.status(201).send(result);
-      }
+      const result = await developersDao.postDeveloper(req.body);
+      res.status(201).send(result);
     }
   } catch (err) {
     errorHandler(res, err);
