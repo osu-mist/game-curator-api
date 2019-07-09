@@ -19,6 +19,8 @@ externalDocs:
   url: https://github.com/osu-mist/game-curator-api
 produces:
   - application/json
+consumes:
+  - application/json
 paths:
   /games:
     parameters:
@@ -192,7 +194,7 @@ paths:
           schema:
             $ref: '#/definitions/DeveloperPostBody'
       responses:
-        '200':
+        '201':
           description: Developer created successfully
           schema:
             $ref: '#/definitions/DeveloperResult'
@@ -325,6 +327,7 @@ paths:
       parameters:
       - in: body
         name: requestBody
+        required: true
         schema:
           $ref: '#/definitions/ReviewPostBody'
       responses:
@@ -541,6 +544,11 @@ definitions:
               - name
               - developerId
             additionalProperties: false
+        required:
+          - type
+          - attributes
+    required:
+      - data
   GamePatchBody:
     properties:
       data:
@@ -558,6 +566,12 @@ definitions:
               releaseDate:
                 $ref: '#/definitions/GameResource/properties/attributes/properties/releaseDate'
             additionalProperties: false
+        required:
+          - id
+          - type
+          - attributes
+    required:
+      - data
   DeveloperResource:
     properties:
       id:
@@ -613,6 +627,12 @@ definitions:
             required:
               - name
               - website
+            additionalProperties: false
+        required:
+          - type
+          - attributes
+    required:
+      - data
   DeveloperPatchBody:
     properties:
       data:
@@ -629,6 +649,12 @@ definitions:
                 $ref: '#/definitions/DeveloperResource/properties/attributes/properties/name'
               website:
                 $ref: '#/definitions/DeveloperResource/properties/attributes/properties/website'
+        required:
+          - type
+          - id
+          - attributes
+    required:
+      - data
   ReviewResource:
     properties:
       id:
@@ -701,6 +727,12 @@ definitions:
             - reviewText
             - score
             - reviewer
+            additionalProperties: false
+        required:
+          - type
+          - attributes
+    required:
+      - data
   ReviewPatchBody:
     properties: 
       data:
@@ -719,6 +751,12 @@ definitions:
                 $ref: '#/definitions/ReviewResource/properties/attributes/properties/score'
               reviewer:
                 $ref: '#/definitions/ReviewResource/properties/attributes/properties/reviewer'
+        required:
+          - type
+          - id
+          - attributes
+    required:
+      - data
   GameType:
     type: string
     enum:

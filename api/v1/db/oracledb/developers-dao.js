@@ -1,4 +1,5 @@
 const appRoot = require('app-root-path');
+const oracledb = require('oracledb');
 const _ = require('lodash');
 
 const { serializeDevelopers, serializeDeveloper } = require('../../serializers/developers-serializer');
@@ -59,4 +60,23 @@ const getDeveloperById = async (id) => {
   }
 };
 
-module.exports = { getDevelopers, getDeveloperById };
+/**
+ * @summary Inserts row into the developer table
+ */
+const postDeveloper = async (body) => {
+  const connection = await conn.getConnection();
+
+  // Bind newly inserted developer row ID to outId
+  // We can use outId to query the newly created row and return it
+  const { attributes } = body.data;
+  attributes.outId = { type: oracledb.NUMBER, dir: oracledb.BIND_OUT };
+  const sqlQuery = 'INSERT INTO DEVELOPERS (NAME, WEBSITE) VALUES (:name, :website) RETURNING ID INTO :outId';
+  const rawDevelopers = await connection.execute(sqlQuery, attributes, { autoCommit: true });
+
+  // query the newly inserted row
+  const result = await getDeveloperById(rawDevelopers.outBinds.outId[0]);
+
+  return result;
+};
+
+module.exports = { getDevelopers, getDeveloperById, postDeveloper };
