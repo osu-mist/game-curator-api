@@ -73,7 +73,7 @@ const serializeGames = (rawGames, query) => {
  * @returns {Object} Serialized gameResource object
  */
 const serializeGame = (rawGame) => {
-  gameConverter(rawGame);
+  gameConverter([rawGame]);
 
   const topLevelSelfLink = resourcePathLink(gameResourceUrl, rawGame.id);
   const serializerArgs = {
