@@ -28,7 +28,8 @@ const getGames = async (queries) => {
     SCORE AS "score",
     RELEASE_DATE AS "releaseDate"
     FROM VIDEO_GAMES
-    WHERE ((SCORE BETWEEN :scoreMin AND :scoreMax) OR SCORE IS NULL)
+    WHERE ((SCORE BETWEEN :scoreMin AND :scoreMax)
+    ${sqlParams.scoreMin > 1 || sqlParams.scoreMax < 5 ? '' : 'OR SCORE IS NULL'})
     ${sqlParams.name ? 'AND NAME = :name' : ''}
     ${sqlParams.developerId ? 'AND DEVELOPER_ID = :developerId' : ''}
   `;
