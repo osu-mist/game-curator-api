@@ -12,8 +12,8 @@ const conn = appRoot.require('api/v1/db/oracledb/connection');
 const getGames = async (queries) => {
   // parse passed in parameters and construct query
   const sqlParams = {
-    scoreMin: parseFloat(queries.scoreMin),
-    scoreMax: parseFloat(queries.scoreMax),
+    scoreMin: queries.scoreMin,
+    scoreMax: queries.scoreMax,
   };
   if (queries.name) {
     sqlParams.name = queries.name;
