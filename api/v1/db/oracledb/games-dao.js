@@ -1,4 +1,5 @@
 const appRoot = require('app-root-path');
+const oracledb = require('oracledb');
 const _ = require('lodash');
 
 const { serializeGame, serializeGames } = require('../../serializers/games-serializer');
@@ -75,4 +76,27 @@ const getGameById = async (id) => {
   }
 };
 
-module.exports = { getGames, getGameById };
+/**
+ * @summary Inserts row into the game table
+ */
+const postGame = async (body) => {
+  const connection = await conn.getConnection();
+
+  try {
+    // Bind newly inserted game row ID to outId
+    // We can use outId to query the newly created row and return it
+    const { attributes } = body.data;
+    attributes.outId = { type: oracledb.NUMBER, dir: oracledb.BIND_OUT };
+    const sqlQuery = 'INSERT INTO (';
+    const rawGames = await connection.execute(sqlQuery, attributes, { autoCommit: true });
+
+    // query the newly inserted row
+    const result = await getGameById(rawGames.outBinds.outId[0]);
+
+    return result;
+  } finally {
+    connection.close();
+  }
+};
+
+module.exports = { getGames, getGameById, postGame };
