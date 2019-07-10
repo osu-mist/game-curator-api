@@ -11,10 +11,13 @@ const conn = appRoot.require('api/v1/db/oracledb/connection');
  */
 const getGames = async (queries) => {
   // parse passed in parameters and construct query
-  const sqlParams = {
-    scoreMin: queries.scoreMin,
-    scoreMax: queries.scoreMax,
-  };
+  const sqlParams = {};
+  if (queries.scoreMin) {
+    sqlParams.scoreMin = queries.scoreMin;
+  }
+  if (queries.scoreMax) {
+    sqlParams.scoreMax = queries.scoreMax;
+  }
   if (queries.name) {
     sqlParams.name = queries.name;
   }
@@ -28,8 +31,9 @@ const getGames = async (queries) => {
     SCORE AS "score",
     RELEASE_DATE AS "releaseDate"
     FROM VIDEO_GAMES
-    WHERE ((SCORE BETWEEN :scoreMin AND :scoreMax)
-    ${sqlParams.scoreMin > 1 || sqlParams.scoreMax < 5 ? '' : 'OR SCORE IS NULL'})
+    WHERE 1=1
+    ${sqlParams.scoreMin ? 'AND SCORE >= :scoreMin' : ''}
+    ${sqlParams.scoreMax ? 'AND SCORE <= :scoreMax' : ''}
     ${sqlParams.name ? 'AND NAME = :name' : ''}
     ${sqlParams.developerId ? 'AND DEVELOPER_ID = :developerId' : ''}
   `;

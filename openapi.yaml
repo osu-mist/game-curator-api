@@ -446,7 +446,6 @@ parameters:
     type: number
     format: float
     required: false
-    default: 1
     minimum: 1
     maximum: 5
     description: Filter results by minimum review score
@@ -456,7 +455,6 @@ parameters:
     type: number
     format: float
     required: false
-    default: 5
     minimum: 1
     maximum: 5
     description: Filter results by maximum review score
