@@ -10,7 +10,7 @@ const conn = appRoot.require('api/v1/db/oracledb/connection');
  * @returns {Promise<Object[]>} Promise object represents a list of games
  */
 const getGames = async (queries) => {
-  const connection = await conn.getConnection();
+  // parse passed in parameters and construct query
   const sqlParams = {
     scoreMin: parseFloat(queries.scoreMin),
     scoreMax: parseFloat(queries.scoreMax),
@@ -28,7 +28,10 @@ const getGames = async (queries) => {
     ${sqlParams.name ? 'AND NAME = :name' : ''}
     ${sqlParams.developerId ? 'AND DEVELOPER_ID = :developerId' : ''}
   `;
+
+  const connection = await conn.getConnection();
   try {
+    // execute query and return results
     const { rows } = await connection.execute(sqlQuery, sqlParams);
     const serializedGames = serializeGames(rows, queries);
     return serializedGames;
