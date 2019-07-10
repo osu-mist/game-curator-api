@@ -17,9 +17,9 @@ const getGames = async (queries) => {
   // parse passed in parameters and construct query
   const sqlParams = {};
   // iterate through parameters and add parameters in request to the sql query
-  _.forEach(getParameters, (index) => {
-    if (queries[index.name] && index.name !== 'page[size]' && index.name !== 'page[number]') {
-      sqlParams[index.name] = queries[index.name];
+  _.forEach(getParameters, (key) => {
+    if (queries[key.name] && key.name !== 'page[size]' && key.name !== 'page[number]') {
+      sqlParams[key.name] = queries[key.name];
     }
   });
   const sqlQuery = `
