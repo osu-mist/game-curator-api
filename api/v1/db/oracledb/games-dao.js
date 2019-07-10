@@ -1,6 +1,10 @@
 const appRoot = require('app-root-path');
+const _ = require('lodash');
 
 const { serializeGames } = require('../../serializers/games-serializer');
+
+const { openapi } = appRoot.require('utils/load-openapi');
+const getParameters = openapi.paths['/games'].get.parameters;
 
 const conn = appRoot.require('api/v1/db/oracledb/connection');
 
@@ -12,18 +16,12 @@ const conn = appRoot.require('api/v1/db/oracledb/connection');
 const getGames = async (queries) => {
   // parse passed in parameters and construct query
   const sqlParams = {};
-  if (queries.scoreMin) {
-    sqlParams.scoreMin = queries.scoreMin;
-  }
-  if (queries.scoreMax) {
-    sqlParams.scoreMax = queries.scoreMax;
-  }
-  if (queries.name) {
-    sqlParams.name = queries.name;
-  }
-  if (queries.developerId) {
-    sqlParams.developerId = queries.developerId;
-  }
+  // iterate through parameters and add parameters in request to the sql query
+  _.forEach(getParameters, (index) => {
+    if (queries[index.name] && index.name !== 'page[size]' && index.name !== 'page[number]') {
+      sqlParams[index.name] = queries[index.name];
+    }
+  });
   const sqlQuery = `
     SELECT ID AS "id",
     DEVELOPER_ID AS "developerId",
