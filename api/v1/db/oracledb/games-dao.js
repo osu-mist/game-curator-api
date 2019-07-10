@@ -11,13 +11,9 @@ const conn = appRoot.require('api/v1/db/oracledb/connection');
  */
 const getGames = async (queries) => {
   const connection = await conn.getConnection();
-  const sqlParams = {};
-  if (queries.name) {
-    sqlParams.name = queries.name;
-  }
-  const sqlQuery = 'TODO';
+  const sqlQuery = 'SELECT ID AS "id", NAME AS "name" FROM VIDEO_GAMES';
   try {
-    const { rows } = await connection.execute(sqlQuery, sqlParams);
+    const { rows } = await connection.execute(sqlQuery);
     const serializedGames = serializeGames(rows, queries);
     return serializedGames;
   } finally {
