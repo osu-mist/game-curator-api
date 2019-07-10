@@ -87,7 +87,7 @@ const postGame = async (body) => {
     // We can use outId to query the newly created row and return it
     const { attributes } = body.data;
     attributes.outId = { type: oracledb.NUMBER, dir: oracledb.BIND_OUT };
-    const sqlQuery = 'INSERT INTO (';
+    const sqlQuery = 'INSERT INTO (NAME, RELEASE_DATE, DEVELOPER_ID) VALUES (:name, :releaseDate, :developerId) RETURNING ID INTO :outId;';
     const rawGames = await connection.execute(sqlQuery, attributes, { autoCommit: true });
 
     // query the newly inserted row
