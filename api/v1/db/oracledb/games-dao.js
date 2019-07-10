@@ -99,4 +99,25 @@ const postGame = async (body) => {
   }
 };
 
-module.exports = { getGames, getGameById, postGame };
+/**
+ * @summary Deletes game row from db by ID
+ * @function
+ * @param {string} gameId Unique game ID
+ */
+const deleteGame = async (gameId) => {
+  const connection = await conn.getConnection();
+
+  try {
+    const sqlQuery = 'DELETE FROM VIDEO_GAMES WHERE ID = :id';
+    const sqlParams = { id: gameId };
+    const response = await connection.execute(sqlQuery, sqlParams, { autoCommit: true });
+
+    return response;
+  } finally {
+    connection.close();
+  }
+};
+
+module.exports = {
+  getGames, getGameById, postGame, deleteGame,
+};
