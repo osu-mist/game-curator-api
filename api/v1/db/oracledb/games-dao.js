@@ -15,10 +15,18 @@ const getGames = async (queries) => {
     scoreMin: parseFloat(queries.scoreMin),
     scoreMax: parseFloat(queries.scoreMax),
   };
+  if (queries.name) {
+    sqlParams.name = queries.name;
+  }
+  if (queries.developerId) {
+    sqlParams.developerId = queries.developerId;
+  }
   const sqlQuery = `
     SELECT ID AS "id", DEVELOPER_ID AS "developerId", NAME AS "name", SCORE AS "score", RELEASE_DATE AS "releaseDate"
     FROM VIDEO_GAMES
     WHERE (SCORE >= :scoreMin AND SCORE <= :scoreMax) OR SCORE IS NULL
+    ${sqlParams.name ? 'AND NAME = :name' : ''}
+    ${sqlParams.developerId ? 'AND DEVELOPER_ID = :developerId' : ''}
   `;
   try {
     const { rows } = await connection.execute(sqlQuery, sqlParams);
