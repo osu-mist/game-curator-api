@@ -23,7 +23,7 @@ const getGames = async (queries) => {
   }
   const sqlQuery = `
     SELECT ID AS "id",
-    DEVELOPER_ID AS "gameId",
+    DEVELOPER_ID AS "developerId",
     NAME AS "name",
     SCORE AS "score",
     RELEASE_DATE AS "releaseDate"
