@@ -59,8 +59,11 @@ const getGameById = async (id) => {
       gameId: id,
     };
     const sqlQuery = `
-      SELECT ID AS "id", DEVELOPER_ID AS "gameId", NAME AS "name",
-      SCORE AS "score", RELEASE_DATE AS "releaseDate"
+      SELECT ID AS "id",
+      DEVELOPER_ID AS "developerId",
+      NAME AS "name",
+      SCORE AS "score",
+      RELEASE_DATE AS "releaseDate"
       FROM VIDEO_GAMES
       WHERE ID = :gameId
     `;
