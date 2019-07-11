@@ -14,6 +14,10 @@ const getReviews = async (queries) => {
   if (queries.gameIds) {
     sqlParams.gameIds = queries.gameIds;
   }
+  if (queries.reviewer) {
+    sqlParams.reviewer = queries.reviewer;
+  }
+  console.log(sqlParams);
   const sqlQuery = `
     SELECT ID AS "id",
     REVIEWER AS "reviewer",
@@ -23,9 +27,10 @@ const getReviews = async (queries) => {
     REVIEW_DATE AS "reviewDate"
     FROM REVIEWS
     WHERE 1=1
-    ${sqlParams.gameIds ? 'AND GAME_ID IN :gameIds' : ''}
+    ${sqlParams.reviewer ? 'AND REVIEWER = :reviewer' : ''}
   `;
 
+  // ${sqlParams.gameIds ? 'AND GAME_ID IN :gameIds' : ''}
   const connection = await conn.getConnection();
   try {
     // execute query and return results
