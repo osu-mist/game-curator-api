@@ -286,6 +286,8 @@ paths:
       tags:
         - reviews
       parameters:
+        - $ref: '#/parameters/pageNumber'
+        - $ref: '#/parameters/pageSize'
         - name: gameIds
           in: query
           type: array
