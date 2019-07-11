@@ -10,7 +10,10 @@ const conn = appRoot.require('api/v1/db/oracledb/connection');
  * @returns {Promise<Object[]>} Promise object represents a list of reviews
  */
 const getReviews = async (queries) => {
-  // const sqlParams = {};
+  const sqlParams = {};
+  if (queries.gameIds) {
+    sqlParams.gameIds = queries.gameIds;
+  }
   const sqlQuery = `
     SELECT ID AS "id",
     REVIEWER AS "reviewer",
@@ -19,6 +22,8 @@ const getReviews = async (queries) => {
     REVIEW_TEXT AS "reviewText",
     REVIEW_DATE AS "reviewDate"
     FROM REVIEWS
+    WHERE 1=1
+    ${sqlParams.gameIds ? 'AND GAME_ID IN :gameIds' : ''}
   `;
 
   const connection = await conn.getConnection();
