@@ -6,7 +6,7 @@ const { errorBuilder, errorHandler } = appRoot.require('errors/errors');
 const { openapi: { paths } } = appRoot.require('utils/load-openapi');
 
 /**
- * @summary Get developer by unique ID
+ * @summary Get developer by unique id
  */
 const get = async (req, res) => {
   try {
@@ -40,6 +40,30 @@ const del = async (req, res) => {
   }
 };
 
-get.apiDoc = paths['/developers/{developerId}'].get;
+/**
+ * @summary Patch developer by unique id
+ */
+const patch = async (req, res) => {
+  try {
+    const { developerId } = req.params;
+    if (developerId !== req.body.data.id) {
+      errorBuilder(res, 400, ['Developer id in path does not match id in body.']);
+    } else {
+      const result = await developersDao.patchDeveloper(developerId, req.body);
+      if (result.rowsAffected < 1) {
+        errorBuilder(res, 404, 'A developer with the specified ID was not found.');
+      } else {
+        const updatedResult = await developersDao.getDeveloperById(developerId);
+        res.send(updatedResult);
+      }
+    }
+  } catch (err) {
+    errorHandler(res, err);
+  }
+};
 
-module.exports = { get, del };
+get.apiDoc = paths['/developers/{developerId}'].get;
+del.apiDoc = paths['/developers/{developerId}'].delete;
+patch.apiDoc = paths['/developers/{developerId}'].patch;
+
+module.exports = { get, del, patch };
