@@ -3,6 +3,9 @@ const _ = require('lodash');
 
 const { serializeGame, serializeGames } = require('../../serializers/games-serializer');
 
+const { openapi } = appRoot.require('utils/load-openapi');
+const getParameters = openapi.paths['/games'].get.parameters;
+
 const conn = appRoot.require('api/v1/db/oracledb/connection');
 
 /**
@@ -12,16 +15,13 @@ const conn = appRoot.require('api/v1/db/oracledb/connection');
  */
 const getGames = async (queries) => {
   // parse passed in parameters and construct query
-  const sqlParams = {
-    scoreMin: parseFloat(queries.scoreMin),
-    scoreMax: parseFloat(queries.scoreMax),
-  };
-  if (queries.name) {
-    sqlParams.name = queries.name;
-  }
-  if (queries.gameId) {
-    sqlParams.gameId = queries.gameId;
-  }
+  const sqlParams = {};
+  // iterate through parameters and add parameters in request to the sql query
+  _.forEach(getParameters, (key) => {
+    if (queries[key.name] && key.name !== 'page[size]' && key.name !== 'page[number]') {
+      sqlParams[key.name] = queries[key.name];
+    }
+  });
   const sqlQuery = `
     SELECT ID AS "id",
     DEVELOPER_ID AS "developerId",
@@ -29,9 +29,11 @@ const getGames = async (queries) => {
     SCORE AS "score",
     RELEASE_DATE AS "releaseDate"
     FROM VIDEO_GAMES
-    WHERE ((SCORE BETWEEN :scoreMin AND :scoreMax) OR SCORE IS NULL)
+    WHERE 1=1
+    ${sqlParams.scoreMin ? 'AND SCORE >= :scoreMin' : ''}
+    ${sqlParams.scoreMax ? 'AND SCORE <= :scoreMax' : ''}
     ${sqlParams.name ? 'AND NAME = :name' : ''}
-    ${sqlParams.gameId ? 'AND DEVELOPER_ID = :gameId' : ''}
+    ${sqlParams.developerId ? 'AND DEVELOPER_ID = :developerId' : ''}
   `;
 
   const connection = await conn.getConnection();
