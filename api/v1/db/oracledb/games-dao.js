@@ -128,8 +128,8 @@ const patchGame = async (id, body) => {
     attributes.id = id;
     const sqlQuery = `
       UPDATE VIDEO_GAMES
-      SET NAME = :name
-      ${attributes.releaseDate ? ', RELEASE_DATE = TO_DATE(:releaseDate, \'YYYY/MM/DD\')' : ''}
+      SET ${attributes.name ? 'NAME = :name' : ''}
+      ${attributes.releaseDate ? `${attributes.name ? ', ' : ''} RELEASE_DATE = TO_DATE(:releaseDate, 'YYYY/MM/DD')` : ''}
       WHERE ID = :id
     `;
     const response = await connection.execute(sqlQuery, attributes, { autoCommit: true });
