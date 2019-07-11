@@ -29,7 +29,7 @@ const getReviews = async (queries) => {
   const connection = await conn.getConnection();
   try {
     // execute query and return results
-    const { rows } = await connection.execute(sqlQuery);
+    const { rows } = await connection.execute(sqlQuery, sqlParams);
     const serializedReviews = serializeReviews(rows, queries);
     return serializedReviews;
   } finally {
