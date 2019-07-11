@@ -13,7 +13,11 @@ const getReviews = async (queries) => {
   // const sqlParams = {};
   const sqlQuery = `
     SELECT ID AS "id",
-    REVIEWER AS "reviewer"
+    REVIEWER AS "reviewer",
+    GAME_ID AS "gameId",
+    SCORE AS "score",
+    REVIEW_TEXT AS "reviewText",
+    REVIEW_DATE AS "reviewDate"
     FROM REVIEWS
   `;
 
