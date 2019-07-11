@@ -118,6 +118,28 @@ const deleteGame = async (gameId) => {
   }
 };
 
+/**
+ * @summary update a developer record
+ */
+const patchDeveloper = async (id, body) => {
+  const connection = await conn.getConnection();
+  try {
+    const { attributes } = body.data;
+    attributes.id = id;
+    const sqlQuery = `
+      UPDATE VIDEO_GAMES
+      SET NAME = :name,
+      releaseDate = :releaseDate,
+      WHERE ID = :id
+    `;
+    const response = await connection.execute(sqlQuery, attributes, { autoCommit: true });
+
+    return response;
+  } finally {
+    connection.close();
+  }
+};
+
 module.exports = {
-  getGames, getGameById, postGame, deleteGame,
+  getGames, getGameById, postGame, deleteGame, patchDeveloper,
 };
