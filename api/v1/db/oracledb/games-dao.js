@@ -119,7 +119,7 @@ const deleteGame = async (gameId) => {
 };
 
 /**
- * @summary update a developer record
+ * @summary update a game record
  */
 const patchGame = async (id, body) => {
   const connection = await conn.getConnection();
