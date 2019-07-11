@@ -141,5 +141,5 @@ const patchDeveloper = async (id, body) => {
 };
 
 module.exports = {
-  getGames, getGameById, postGame, deleteGame, patchDeveloper,
+  getGames, getGameById, postGame, deleteGame, patchGame,
 };
