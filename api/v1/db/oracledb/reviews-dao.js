@@ -12,8 +12,8 @@ const conn = appRoot.require('api/v1/db/oracledb/connection');
 const getReviews = async (queries) => {
   // const sqlParams = {};
   const sqlQuery = `
-    SELECT ID as "id",
-    REVIEWER as "reviewer"
+    SELECT ID AS "id",
+    REVIEWER AS "reviewer"
     FROM REVIEWS
   `;
 
