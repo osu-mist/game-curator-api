@@ -40,6 +40,17 @@ const del = async (req, res) => {
   }
 };
 
+/**
+ * @summary update review by id
+ */
+const patch = async (req, res) => {
+  try {
+    console.log(patch);
+  } catch (err) {
+    errorHandler(res, err);
+  }
+};
+
 get.apiDoc = paths['/reviews/{reviewId}'].get;
 
-module.exports = { get, del };
+module.exports = { get, del, patch };
