@@ -1,4 +1,5 @@
 const appRoot = require('app-root-path');
+const oracledb = require('oracledb');
 const _ = require('lodash');
 
 const { serializeReview, serializeReviews } = require('../../serializers/reviews-serializer');
@@ -92,7 +93,13 @@ const getReviewById = async (id) => {
 const postReview = async (body) => {
   const connection = await conn.getConnection();
   try {
-    console.log(body);
+    const { attributes } = body.data;
+    attributes.outId = { type: oracledb.NUMBER, dir: oracledb.BIND_OUT };
+    const sqlQuery = 'TODO';
+    const rawReviews = await connection.execute(sqlQuery, attributes, { autoCommit: true });
+
+    const result = await getReviewById(rawReviews.outBinds.outId);
+    return result;
   } finally {
     connection.close();
   }
