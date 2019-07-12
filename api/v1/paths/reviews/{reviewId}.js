@@ -27,7 +27,14 @@ const get = async (req, res) => {
  */
 const del = async (req, res) => {
   try {
-    console.log(req);
+    const { reviewId } = req.params;
+    const result = await reviewsDao.deleteReview(reviewId);
+    if (result.rowsAffected < 1) {
+      errorBuilder(res, 404, 'A review with the specified ID was not found.');
+    } else {
+      // send 204 on successful delete
+      res.sendStatus(204);
+    }
   } catch (err) {
     errorHandler(res, err);
   }
