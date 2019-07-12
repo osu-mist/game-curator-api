@@ -1,7 +1,7 @@
 const appRoot = require('app-root-path');
 const _ = require('lodash');
 
-const { serializeReviews } = require('../../serializers/reviews-serializer');
+const { serializeReview, serializeReviews } = require('../../serializers/reviews-serializer');
 
 const conn = appRoot.require('api/v1/db/oracledb/connection');
 
@@ -48,4 +48,42 @@ const getReviews = async (queries) => {
   }
 };
 
-module.exports = { getReviews };
+/**
+ * @summary Return a specific review by unique ID
+ * @function
+ * @param {string} id Unique review ID
+ * @returns {Promise<Object>} Promise object represents a specific review or return undefined if
+ *                            term is not found
+ */
+const getReviewById = async (id) => {
+  const sqlParams = {
+    reviewId: id,
+  };
+  const sqlQuery = `
+    SELECT ID AS "id",
+    REVIEWER AS "reviewer",
+    SCORE AS "score",
+    REVIEW_DATE AS "reviewDate"
+    FROM REVIEWS
+    WHERE ID = :reviewId
+  `;
+  console.log(sqlParams);
+
+  const connection = await conn.getConnection();
+  try {
+    const { rows } = await connection.execute(sqlQuery, sqlParams);
+
+    if (rows.length > 1) {
+      throw new Error('Expect a single object but got multiple results.');
+    } else if (_.isEmpty(rows)) {
+      return undefined;
+    } else {
+      const serializedReview = serializeReview(rows[0]);
+      return serializedReview;
+    }
+  } finally {
+    connection.close();
+  }
+};
+
+module.exports = { getReviews, getReviewById };
