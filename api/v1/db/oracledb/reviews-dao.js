@@ -103,7 +103,7 @@ const postReview = async (body) => {
     `;
     const rawReviews = await connection.execute(sqlQuery, attributes, { autoCommit: true });
 
-    const result = await getReviewById(rawReviews.outBinds.outId);
+    const result = await getReviewById(rawReviews.outBinds.outId[0]);
     return result;
   } finally {
     connection.close();
