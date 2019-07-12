@@ -114,9 +114,9 @@ const postReview = async (body) => {
 /**
  * @summary Delete review record
  */
-const deleteReview = async (id) => {
-  const sqlParams = { reviewId: id };
-  const sqlQuery = 'DELETE FROM REVIEWS WHERE ID = :reviewId';
+const deleteReview = async (reviewId) => {
+  const sqlParams = { id: reviewId };
+  const sqlQuery = 'DELETE FROM REVIEWS WHERE ID = :id';
 
   const connection = await conn.getConnection();
   try {
