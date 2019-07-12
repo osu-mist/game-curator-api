@@ -112,4 +112,28 @@ const postGame = async (body) => {
   }
 };
 
-module.exports = { getGames, getGameById, postGame };
+/**
+ *
+ * @param {id} developerId id of developer record to check existance
+ * @returns true if developer record is found and false if no records are found
+ */
+const isValidDeveloper = async (developerId) => {
+  const sqlParams = { id: developerId };
+  const sqlQuery = `
+    SELECT ID AS "id"
+    FROM DEVELOPERS
+    WHERE ID = :id
+  `;
+
+  const connection = await conn.getConnection();
+  try {
+    const response = await connection.execute(sqlQuery, sqlParams);
+    return !_.isEmpty(response.rows);
+  } finally {
+    connection.close();
+  }
+};
+
+module.exports = {
+  getGames, getGameById, postGame, isValidDeveloper,
+};
