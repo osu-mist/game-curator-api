@@ -481,8 +481,8 @@ definitions:
   GameResource:
     properties:
       id:
-        type: integer
-        format: int64
+        type: string
+        pattern: '^\d+$'
       type:
         $ref: '#/definitions/GameType'
       links:
@@ -577,6 +577,7 @@ definitions:
     properties:
       id:
         type: string
+        pattern: '^\d+$'
       type:
         $ref: '#/definitions/DeveloperType'
       links:
@@ -660,6 +661,7 @@ definitions:
     properties:
       id:
         type: string
+        pattern: '^\d+$'
       type:
         $ref: '#/definitions/ReviewType'
       links:
