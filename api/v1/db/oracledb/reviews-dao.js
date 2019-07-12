@@ -67,7 +67,6 @@ const getReviewById = async (id) => {
     FROM REVIEWS
     WHERE ID = :reviewId
   `;
-  console.log(sqlParams);
 
   const connection = await conn.getConnection();
   try {
