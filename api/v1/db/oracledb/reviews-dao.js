@@ -86,4 +86,16 @@ const getReviewById = async (id) => {
   }
 };
 
-module.exports = { getReviews, getReviewById };
+/**
+ * @summary Create review record
+ */
+const postReview = async (body) => {
+  const connection = await conn.getConnection();
+  try {
+    console.log(body);
+  } finally {
+    connection.close();
+  }
+};
+
+module.exports = { getReviews, getReviewById, postReview };
