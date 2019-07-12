@@ -1,4 +1,5 @@
 const appRoot = require('app-root-path');
+const _ = require('lodash');
 
 const { serializeReviews } = require('../../serializers/reviews-serializer');
 
@@ -11,14 +12,20 @@ const conn = appRoot.require('api/v1/db/oracledb/connection');
  */
 const getReviews = async (queries) => {
   const sqlParams = {};
+  let gameIdQuery = '(';
   if (queries.gameIds) {
-    sqlParams.gameIds = queries.gameIds.join(',');
-    // sqlParams.gameIds = (1,2,3);
+    _.forEach(queries.gameIds, (id, index) => {
+      sqlParams[`gameId${index}`] = id;
+      gameIdQuery += `:gameId${index}`;
+      if (index !== queries.gameIds.length - 1) {
+        gameIdQuery += ', ';
+      }
+    });
+    gameIdQuery += ')';
   }
   if (queries.reviewer) {
     sqlParams.reviewer = queries.reviewer;
   }
-  console.log(sqlParams);
   const sqlQuery = `
     SELECT ID AS "id",
     REVIEWER AS "reviewer",
@@ -29,7 +36,7 @@ const getReviews = async (queries) => {
     FROM REVIEWS
     WHERE 1=1
     ${sqlParams.reviewer ? 'AND REVIEWER = :reviewer' : ''}
-    ${sqlParams.gameIds ? 'AND GAME_ID IN :gameIds' : ''}
+    ${sqlParams.gameId0 ? `AND GAME_ID IN ${gameIdQuery}` : ''}
   `;
 
   const connection = await conn.getConnection();
