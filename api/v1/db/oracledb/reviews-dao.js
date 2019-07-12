@@ -12,6 +12,8 @@ const conn = appRoot.require('api/v1/db/oracledb/connection');
  */
 const getReviews = async (queries) => {
   const sqlParams = {};
+
+  // setup gameIds array in a format that will work with oracledb
   let gameIdQuery = '(';
   if (queries.gameIds) {
     _.forEach(queries.gameIds, (id, index) => {
@@ -23,6 +25,8 @@ const getReviews = async (queries) => {
     });
     gameIdQuery += ')';
   }
+
+  // get parameters from query
   _.forEach(Object.keys(queries), (param) => {
     if (param !== 'gameIds' && param !== 'page[size]' && param !== 'page[number]') {
       sqlParams[param] = queries[param];
@@ -40,6 +44,9 @@ const getReviews = async (queries) => {
     WHERE 1=1
     ${sqlParams.reviewer ? 'AND REVIEWER = :reviewer' : ''}
     ${sqlParams.gameId0 ? `AND GAME_ID IN ${gameIdQuery}` : ''}
+    ${sqlParams.scoreMin ? 'AND SCORE >= :scoreMin' : ''}
+    ${sqlParams.scoreMax ? 'AND SCORE <= :scoreMax' : ''}
+    ${sqlParams.reviewDate ? 'AND TRUNC(REVIEW_DATE) = TO_DATE(:reviewDate, \'YYYY-MM-DD\')' : ''}
   `;
 
   const connection = await conn.getConnection();
