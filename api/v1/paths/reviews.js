@@ -17,6 +17,19 @@ const get = async (req, res) => {
   }
 };
 
-get.apiDoc = paths['/reviews'].get;
+/**
+ * @summary Post reviews
+ */
+const post = async (req, res) => {
+  try {
+    const result = await reviewsDao.postReviews(req.body);
+    return res.send(result);
+  } catch (err) {
+    return errorHandler(res, err);
+  }
+};
 
-module.exports = { get };
+get.apiDoc = paths['/reviews'].get;
+post.apiDoc = paths['/reviews'].post;
+
+module.exports = { get, post };
