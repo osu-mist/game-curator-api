@@ -22,7 +22,7 @@ const get = async (req, res) => {
  */
 const post = async (req, res) => {
   try {
-    const result = await reviewsDao.postReviews(req.body);
+    const result = await reviewsDao.postReview(req.body);
     return res.send(result);
   } catch (err) {
     return errorHandler(res, err);
