@@ -63,12 +63,13 @@ const getReviewById = async (id) => {
   const sqlQuery = `
     SELECT ID AS "id",
     REVIEWER AS "reviewer",
+    GAME_ID AS "gameId",
     SCORE AS "score",
+    REVIEW_TEXT AS "reviewText",
     REVIEW_DATE AS "reviewDate"
     FROM REVIEWS
     WHERE ID = :reviewId
   `;
-  console.log(sqlParams);
 
   const connection = await conn.getConnection();
   try {
