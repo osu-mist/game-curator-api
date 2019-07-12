@@ -120,7 +120,8 @@ const deleteReview = async (id) => {
 
   const connection = await conn.getConnection();
   try {
-    return await connection.execute(sqlQuery, sqlParams);
+    const response = await connection.execute(sqlQuery, sqlParams, { autoCommit: true });
+    return response;
   } finally {
     connection.close();
   }
