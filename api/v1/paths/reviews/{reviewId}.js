@@ -45,7 +45,8 @@ const del = async (req, res) => {
  */
 const patch = async (req, res) => {
   try {
-    console.log(patch);
+    const response = await reviewsDao.patchReview(req.params.id, req.body);
+    res.send(response);
   } catch (err) {
     errorHandler(res, err);
   }
