@@ -41,5 +41,6 @@ const del = async (req, res) => {
 };
 
 get.apiDoc = paths['/reviews/{reviewId}'].get;
+del.apiDoc = paths['/reviews/{reviewId}'].del;
 
 module.exports = { get, del };
