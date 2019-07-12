@@ -23,9 +23,12 @@ const getReviews = async (queries) => {
     });
     gameIdQuery += ')';
   }
-  if (queries.reviewer) {
-    sqlParams.reviewer = queries.reviewer;
-  }
+  _.forEach(Object.keys(queries), (param) => {
+    if (param !== 'gameIds' && param !== 'page[size]' && param !== 'page[number]') {
+      sqlParams[param] = queries[param];
+    }
+  });
+  console.log(sqlParams);
   const sqlQuery = `
     SELECT ID AS "id",
     REVIEWER AS "reviewer",
