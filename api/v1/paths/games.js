@@ -22,9 +22,8 @@ const get = async (req, res) => {
  */
 const post = async (req, res) => {
   try {
-    const { developerId } = req.body.data.attributes;
-    if (!Number.isNaN(developerId) && !Number.isInteger(parseFloat(developerId))) {
-      errorBuilder(res, 400, ['developerId must be a string containing a valid integer']);
+    if (!await gamesDao.isValidDeveloper(req.body.data.attributes.developerId)) {
+      errorBuilder(res, 400, ['A developer with developerId does not exist.']);
     } else {
       const result = await gamesDao.postGame(req.body);
       res.status(201).send(result);
