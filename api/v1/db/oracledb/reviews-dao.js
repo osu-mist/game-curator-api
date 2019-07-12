@@ -95,7 +95,12 @@ const postReview = async (body) => {
   try {
     const { attributes } = body.data;
     attributes.outId = { type: oracledb.NUMBER, dir: oracledb.BIND_OUT };
-    const sqlQuery = 'TODO';
+    const sqlQuery = `
+      INSERT INTO REVIEWS
+      (REVIEWER, REVIEW_TEXT, SCORE, GAME_ID)
+      VALUES (:reviewer, :reviewText, :score, :gameId)
+      RETURNING ID INTO :outId
+    `;
     const rawReviews = await connection.execute(sqlQuery, attributes, { autoCommit: true });
 
     const result = await getReviewById(rawReviews.outBinds.outId);
