@@ -22,6 +22,17 @@ const get = async (req, res) => {
   }
 };
 
+/**
+ * @summary Delete review by id
+ */
+const del = async (req, res) => {
+  try {
+    console.log(req);
+  } catch (err) {
+    errorHandler(res, err);
+  }
+};
+
 get.apiDoc = paths['/reviews/{reviewId}'].get;
 
-module.exports = { get };
+module.exports = { get, del };
