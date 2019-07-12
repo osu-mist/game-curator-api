@@ -12,7 +12,8 @@ const conn = appRoot.require('api/v1/db/oracledb/connection');
 const getReviews = async (queries) => {
   const sqlParams = {};
   if (queries.gameIds) {
-    sqlParams.gameIds = queries.gameIds;
+    sqlParams.gameIds = queries.gameIds.join(',');
+    // sqlParams.gameIds = (1,2,3);
   }
   if (queries.reviewer) {
     sqlParams.reviewer = queries.reviewer;
@@ -28,9 +29,9 @@ const getReviews = async (queries) => {
     FROM REVIEWS
     WHERE 1=1
     ${sqlParams.reviewer ? 'AND REVIEWER = :reviewer' : ''}
+    ${sqlParams.gameIds ? 'AND GAME_ID IN :gameIds' : ''}
   `;
 
-  // ${sqlParams.gameIds ? 'AND GAME_ID IN :gameIds' : ''}
   const connection = await conn.getConnection();
   try {
     // execute query and return results
