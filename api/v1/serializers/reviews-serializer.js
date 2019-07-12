@@ -14,6 +14,17 @@ const reviewResourcePath = 'reviews';
 const reviewResourceUrl = resourcePathLink(apiBaseUrl, reviewResourcePath);
 
 /**
+ * @summary Converts raw review data from db into types defined by the openapi
+ */
+const reviewConverter = (reviews) => {
+  _.forEach(reviews, (review) => {
+    review.score = parseFloat(review.score);
+    const date = new Date(review.reviewDate);
+    review.reviewDate = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+  });
+};
+
+/**
  * @summary Serialize reviewResources to JSON API
  * @function
  * @param {[Object]} rawReviews Raw data rows from data source
@@ -21,6 +32,8 @@ const reviewResourceUrl = resourcePathLink(apiBaseUrl, reviewResourcePath);
  * @returns {Object} Serialized reviewResources object
  */
 const serializeReviews = (rawReviews, query) => {
+  reviewConverter(rawReviews);
+
   /**
    * Add pagination links and meta information to options if pagination is enabled
    */
@@ -57,6 +70,8 @@ const serializeReviews = (rawReviews, query) => {
  * @returns {Object} Serialized reviewResource object
  */
 const serializeReview = (rawReview) => {
+  reviewConverter([rawReview]);
+
   const topLevelSelfLink = resourcePathLink(reviewResourceUrl, rawReview.id);
   const serializerArgs = {
     identifierField: 'id',
