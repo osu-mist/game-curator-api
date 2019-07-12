@@ -133,11 +133,17 @@ const deleteReview = async (reviewId) => {
 const patchReview = async (reviewId, body) => {
   const { attributes } = body.data;
   attributes.id = reviewId;
-  const sqlQuery = 'TODO';
+  const sqlQuery = `
+    UPDATE REVIEWS
+    SET REVIEW_TEXT = :reviewText,
+    SCORE = :score,
+    REVIEWER = :reviewer
+    WHERE ID = :id
+  `;
 
   const connection = await conn.getConnection();
   try {
-    const response = await connection.execute(sqlQuery);
+    const response = await connection.execute(sqlQuery, attributes);
     return response;
   } finally {
     connection.close();
