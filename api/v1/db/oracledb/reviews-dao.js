@@ -127,6 +127,23 @@ const deleteReview = async (reviewId) => {
   }
 };
 
+/**
+ * @summary update review record
+ */
+const patchReview = async (reviewId, body) => {
+  const { attributes } = body.data;
+  attributes.id = reviewId;
+  const sqlQuery = 'TODO';
+
+  const connection = await conn.getConnection();
+  try {
+    const response = await connection.execute(sqlQuery);
+    return response;
+  } finally {
+    connection.close();
+  }
+};
+
 module.exports = {
-  getReviews, getReviewById, postReview, deleteReview,
+  getReviews, getReviewById, postReview, deleteReview, patchReview,
 };
