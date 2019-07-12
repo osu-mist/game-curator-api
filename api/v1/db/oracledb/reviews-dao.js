@@ -111,4 +111,21 @@ const postReview = async (body) => {
   }
 };
 
-module.exports = { getReviews, getReviewById, postReview };
+/**
+ * @summary Delete review record
+ */
+const deleteReview = async (id) => {
+  const sqlParams = { reviewId: id };
+  const sqlQuery = 'DELETE FROM REVIEWS WHERE ID = :reviewId';
+
+  const connection = await conn.getConnection();
+  try {
+    return await connection.execute(sqlQuery, sqlParams);
+  } finally {
+    connection.close();
+  }
+};
+
+module.exports = {
+  getReviews, getReviewById, postReview, deleteReview,
+};
