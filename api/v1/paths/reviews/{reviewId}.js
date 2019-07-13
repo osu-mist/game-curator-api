@@ -46,8 +46,16 @@ const del = async (req, res) => {
 const patch = async (req, res) => {
   try {
     const { reviewId } = req.params;
-    const response = await reviewsDao.patchReview(reviewId, req.body);
-    res.send(response);
+    if (reviewId !== req.body.data.id) {
+      errorBuilder(res, 400, ['Review id in path does not match id in body.']);
+    } else {
+      const response = await reviewsDao.patchReview(reviewId, req.body);
+      if (response.rowsAffected < 1) {
+        errorBuilder(res, 404, 'A review with the specified ID was not found.');
+      } else {
+        res.send(response);
+      }
+    }
   } catch (err) {
     errorHandler(res, err);
   }
