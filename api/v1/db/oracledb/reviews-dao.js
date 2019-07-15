@@ -119,7 +119,11 @@ const postReview = async (body) => {
  */
 const isValidGame = async (gameId) => {
   const sqlParams = { id: gameId };
-  const sqlQuery = '';
+  const sqlQuery = `
+    SELECT COUNT(ID)
+    FROM VIDEO_GAMES
+    WHERE ID = :id
+  `;
 
   const connection = await conn.getConnection();
   try {
