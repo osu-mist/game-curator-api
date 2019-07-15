@@ -120,7 +120,7 @@ const postGame = async (body) => {
 const isValidDeveloper = async (developerId) => {
   const sqlParams = { id: developerId };
   const sqlQuery = `
-    SELECT ID AS "id"
+    SELECT COUNT(ID)
     FROM DEVELOPERS
     WHERE ID = :id
   `;
@@ -128,7 +128,7 @@ const isValidDeveloper = async (developerId) => {
   const connection = await conn.getConnection();
   try {
     const response = await connection.execute(sqlQuery, sqlParams);
-    return !_.isEmpty(response.rows);
+    return response.rows[0]['COUNT(ID)'] > 0;
   } finally {
     connection.close();
   }
