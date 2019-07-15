@@ -111,4 +111,25 @@ const postReview = async (body) => {
   }
 };
 
-module.exports = { getReviews, getReviewById, postReview };
+/**
+ * @summary Checks if the id (gameId) matches a record in the database
+ * @function
+ * @param {string} gameId Id of game to check for in database
+ * @returns true if at least one record is found, false if no records are found
+ */
+const isValidGame = async (gameId) => {
+  const sqlParams = { id: gameId };
+  const sqlQuery = '';
+
+  const connection = await conn.getConnection();
+  try {
+    const result = await conn.execute(sqlQuery, sqlParams);
+    console.log(result);
+  } finally {
+    connection.close();
+  }
+};
+
+module.exports = {
+  getReviews, getReviewById, postReview, isValidGame,
+};
