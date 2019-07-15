@@ -132,14 +132,17 @@ const deleteReview = async (reviewId) => {
  */
 const patchReview = async (reviewId, body) => {
   const { attributes } = body.data;
+  const iter = Object.keys(attributes)[Symbol.iterator]();
+  iter.next();
   attributes.id = reviewId;
   const sqlQuery = `
     UPDATE REVIEWS
-    SET ${attributes.reviewText ? 'REVIEW_TEXT = :reviewText,' : ''}
-    SCORE = :score,
-    REVIEWER = :reviewer
+    SET ${attributes.reviewText ? 'REVIEW_TEXT = :reviewText' : ''}${iter.next().value ? ', ' : ''}
+    ${attributes.score ? 'SCORE = :score' : ''}${iter.next().value ? ', ' : ''}
+    ${attributes.reviewer ? 'REVIEWER = :reviewer' : ''}${iter.next().value ? ', ' : ''}
     WHERE ID = :id
   `;
+  console.log(sqlQuery);
 
   const connection = await conn.getConnection();
   try {
