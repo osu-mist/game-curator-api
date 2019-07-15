@@ -115,12 +115,12 @@ const postReview = async (body) => {
  * @summary Checks if the id (gameId) matches a record in the database
  * @function
  * @param {string} gameId Id of game to check for in database
- * @returns true if at least one record is found, false if no records are found
+ * @returns {boolean} true if at least one record is found, false if no records are found
  */
 const isValidGame = async (gameId) => {
   const sqlParams = { id: gameId };
   const sqlQuery = `
-    SELECT COUNT(ID)
+    SELECT COUNT(ID) AS "id"
     FROM VIDEO_GAMES
     WHERE ID = :id
   `;
@@ -129,7 +129,7 @@ const isValidGame = async (gameId) => {
   try {
     const result = await connection.execute(sqlQuery, sqlParams);
 
-    return result.rows[0]['COUNT(ID)'] > 0;
+    return result.rows[0].id > 0;
   } finally {
     connection.close();
   }
