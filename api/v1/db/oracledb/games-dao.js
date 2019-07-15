@@ -132,6 +132,28 @@ const deleteGame = async (gameId) => {
 };
 
 /**
+ * @summary update a game record
+ */
+const patchGame = async (id, body) => {
+  const connection = await conn.getConnection();
+  try {
+    const { attributes } = body.data;
+    attributes.id = id;
+    const sqlQuery = `
+      UPDATE VIDEO_GAMES
+      SET ${attributes.name ? 'NAME = :name' : ''}
+      ${attributes.releaseDate ? `${attributes.name ? ', ' : ''} RELEASE_DATE = TO_DATE(:releaseDate, 'YYYY/MM/DD')` : ''}
+      WHERE ID = :id
+    `;
+    const response = await connection.execute(sqlQuery, attributes, { autoCommit: true });
+
+    return response;
+  } finally {
+    connection.close();
+  }
+};
+
+/**
  * @summary Checks if a developer record with an id that matches the passed in developerId exists
  * @param {string} developerId id of developer record to check existance
  * @returns {boolean} true if developer record is found and false if no records are found
@@ -159,4 +181,5 @@ module.exports = {
   postGame,
   isValidDeveloper,
   deleteGame,
+  patchGame,
 };
