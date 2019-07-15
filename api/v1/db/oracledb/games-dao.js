@@ -115,12 +115,12 @@ const postGame = async (body) => {
 /**
  * @summary Checks if a developer record with an id that matches the passed in developerId exists
  * @param {string} developerId id of developer record to check existance
- * @returns true if developer record is found and false if no records are found
+ * @returns {boolean} true if developer record is found and false if no records are found
  */
 const isValidDeveloper = async (developerId) => {
   const sqlParams = { id: developerId };
   const sqlQuery = `
-    SELECT COUNT(ID)
+    SELECT COUNT(ID) AS "id"
     FROM DEVELOPERS
     WHERE ID = :id
   `;
@@ -128,7 +128,7 @@ const isValidDeveloper = async (developerId) => {
   const connection = await conn.getConnection();
   try {
     const response = await connection.execute(sqlQuery, sqlParams);
-    return response.rows[0]['COUNT(ID)'] > 0;
+    return response.rows[0].id > 0;
   } finally {
     connection.close();
   }
