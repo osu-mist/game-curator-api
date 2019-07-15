@@ -20,7 +20,7 @@ const reviewConverter = (reviews) => {
   _.forEach(reviews, (review) => {
     review.score = parseFloat(review.score);
     const date = new Date(review.reviewDate);
-    review.reviewDate = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+    review.reviewDate = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
   });
 };
 
