@@ -137,9 +137,9 @@ const patchReview = async (reviewId, body) => {
   attributes.id = reviewId;
   const sqlQuery = `
     UPDATE REVIEWS
-    SET ${attributes.reviewText ? 'REVIEW_TEXT = :reviewText' : ''}${iter.next().value ? ', ' : ''}
-    ${attributes.score ? 'SCORE = :score' : ''}${iter.next().value ? ', ' : ''}
-    ${attributes.reviewer ? 'REVIEWER = :reviewer' : ''}${iter.next().value ? ', ' : ''}
+    SET ${attributes.reviewText ? `REVIEW_TEXT = :reviewText${iter.next().value ? ', ' : ''}` : ''}
+    ${attributes.score ? `SCORE = :score${iter.next().value ? ', ' : ''}` : ''}
+    ${attributes.reviewer ? `REVIEWER = :reviewer${iter.next().value ? ', ' : ''}` : ''}
     WHERE ID = :id
   `;
   console.log(sqlQuery);
