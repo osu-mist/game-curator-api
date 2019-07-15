@@ -483,8 +483,8 @@ definitions:
   GameResource:
     properties:
       id:
-        type: integer
-        format: int64
+        type: string
+        pattern: '^\d+$'
       type:
         $ref: '#/definitions/GameType'
       links:
@@ -507,7 +507,7 @@ definitions:
             type: string
             format: date
             description: Date of the games release
-            example: 12/5/1994
+            example: 1994-12-5
   GameResult:
     properties:
       links:
@@ -544,6 +544,7 @@ definitions:
                 $ref: '#/definitions/DeveloperResource/properties/id'
             required:
               - name
+              - releaseDate
               - developerId
             additionalProperties: false
         required:
@@ -578,6 +579,7 @@ definitions:
     properties:
       id:
         type: string
+        pattern: '^\d+$'
       type:
         $ref: '#/definitions/DeveloperType'
       links:
@@ -661,6 +663,7 @@ definitions:
     properties:
       id:
         type: string
+        pattern: '^\d+$'
       type:
         $ref: '#/definitions/ReviewType'
       links:
@@ -687,7 +690,7 @@ definitions:
             type: string
             format: date
             description: Date the review was finalized
-            example: 10/15/2006
+            example: "1994-12-5"
   ReviewResult:
     properties:
       links:

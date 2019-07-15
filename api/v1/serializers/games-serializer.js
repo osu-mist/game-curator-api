@@ -23,7 +23,7 @@ const gameConverter = (games) => {
 
     // convert db date format to mm/dd/yyyy format specified in openapi
     const date = new Date(game.releaseDate);
-    game.releaseDate = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+    game.releaseDate = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
   });
 };
 
