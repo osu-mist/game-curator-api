@@ -138,6 +138,7 @@ const patchReview = async (reviewId, body) => {
   const paramIter = Object.keys(attributes)[Symbol.iterator]();
   // immediantly hit the next iteration to fix an off by one issue
   paramIter.next();
+
   attributes.id = reviewId;
   const sqlQuery = `
     UPDATE REVIEWS
