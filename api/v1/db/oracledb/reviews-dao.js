@@ -127,8 +127,9 @@ const isValidGame = async (gameId) => {
 
   const connection = await conn.getConnection();
   try {
-    const result = await conn.execute(sqlQuery, sqlParams);
-    console.log(result);
+    const result = await connection.execute(sqlQuery, sqlParams);
+
+    return result.rows[0]['COUNT(ID)'] > 0;
   } finally {
     connection.close();
   }
