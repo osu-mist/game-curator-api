@@ -1,6 +1,6 @@
 const appRoot = require('app-root-path');
-const oracledb = require('oracledb');
 const _ = require('lodash');
+const oracledb = require('oracledb');
 
 const { serializeDevelopers, serializeDeveloper } = require('../../serializers/developers-serializer');
 
@@ -102,6 +102,23 @@ const deleteDeveloper = async (developerId) => {
   }
 };
 
+/**
+ * @summary update a developer record
+ */
+const patchDeveloper = async (id, body) => {
+  const connection = await conn.getConnection();
+  try {
+    const { attributes } = body.data;
+    attributes.id = id;
+    const sqlQuery = 'UPDATE DEVELOPERS SET NAME = :name, WEBSITE = :website WHERE ID = :id';
+    const response = await connection.execute(sqlQuery, attributes, { autoCommit: true });
+
+    return response;
+  } finally {
+    connection.close();
+  }
+};
+
 module.exports = {
-  getDevelopers, getDeveloperById, postDeveloper, deleteDeveloper,
+  getDevelopers, getDeveloperById, postDeveloper, deleteDeveloper, patchDeveloper,
 };

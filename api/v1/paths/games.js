@@ -2,7 +2,7 @@ const appRoot = require('app-root-path');
 
 const gamesDao = require('../db/oracledb/games-dao');
 
-const { errorHandler } = appRoot.require('errors/errors');
+const { errorBuilder, errorHandler } = appRoot.require('errors/errors');
 const { openapi: { paths } } = appRoot.require('utils/load-openapi');
 
 /**
@@ -22,8 +22,12 @@ const get = async (req, res) => {
  */
 const post = async (req, res) => {
   try {
-    const result = await gamesDao.postGame(req.body);
-    res.status(201).send(result);
+    if (!await gamesDao.isValidDeveloper(req.body.data.attributes.developerId)) {
+      errorBuilder(res, 400, ['A developer with developerId does not exist.']);
+    } else {
+      const result = await gamesDao.postGame(req.body);
+      res.status(201).send(result);
+    }
   } catch (err) {
     errorHandler(res, err);
   }
