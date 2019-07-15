@@ -113,8 +113,8 @@ const postGame = async (body) => {
 };
 
 /**
- *
- * @param {id} developerId id of developer record to check existance
+ * @summary Checks if a developer record with an id that matches the passed in developerId exists
+ * @param {string} developerId id of developer record to check existance
  * @returns true if developer record is found and false if no records are found
  */
 const isValidDeveloper = async (developerId) => {
