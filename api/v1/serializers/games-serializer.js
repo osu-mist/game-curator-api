@@ -14,6 +14,20 @@ const gameResourcePath = 'games';
 const gameResourceUrl = resourcePathLink(apiBaseUrl, gameResourcePath);
 
 /**
+ * @summary Converts raw game data from db into types defined by the openapi
+ */
+const gameConverter = (games) => {
+  _.forEach(games, (game) => {
+    // convert score to float
+    game.score = parseFloat(game.score);
+
+    // convert db date format to mm/dd/yyyy format specified in openapi
+    const date = new Date(game.releaseDate);
+    game.releaseDate = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+  });
+};
+
+/**
  * @summary Serialize gameResources to JSON API
  * @function
  * @param {[Object]} rawGames Raw data rows from data source
@@ -21,6 +35,8 @@ const gameResourceUrl = resourcePathLink(apiBaseUrl, gameResourcePath);
  * @returns {Object} Serialized gameResources object
  */
 const serializeGames = (rawGames, query) => {
+  gameConverter(rawGames);
+
   /**
    * Add pagination links and meta information to options if pagination is enabled
    */
@@ -57,6 +73,8 @@ const serializeGames = (rawGames, query) => {
  * @returns {Object} Serialized gameResource object
  */
 const serializeGame = (rawGame) => {
+  gameConverter([rawGame]);
+
   const topLevelSelfLink = resourcePathLink(gameResourceUrl, rawGame.id);
   const serializerArgs = {
     identifierField: 'id',
