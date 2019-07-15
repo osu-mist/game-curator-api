@@ -176,5 +176,10 @@ const isValidDeveloper = async (developerId) => {
 };
 
 module.exports = {
-  getGames, getGameById, postGame, isValidDeveloper, deleteGame, patchGame,
+  getGames,
+  getGameById,
+  postGame,
+  isValidDeveloper,
+  deleteGame,
+  patchGame,
 };
