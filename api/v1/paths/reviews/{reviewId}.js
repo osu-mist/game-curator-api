@@ -53,7 +53,8 @@ const patch = async (req, res) => {
       if (response.rowsAffected < 1) {
         errorBuilder(res, 404, 'A review with the specified ID was not found.');
       } else {
-        res.send(response);
+        const result = await reviewsDao.getReviewById(reviewId);
+        res.send(result);
       }
     }
   } catch (err) {
