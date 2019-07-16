@@ -286,6 +286,8 @@ paths:
       tags:
         - reviews
       parameters:
+        - $ref: '#/parameters/pageNumber'
+        - $ref: '#/parameters/pageSize'
         - name: gameIds
           in: query
           type: array
@@ -688,7 +690,7 @@ definitions:
             type: string
             format: date
             description: Date the review was finalized
-            example: 10/15/2006
+            example: "1994-12-5"
   ReviewResult:
     properties:
       links:
