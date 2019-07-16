@@ -136,5 +136,8 @@ const isValidGame = async (gameId) => {
 };
 
 module.exports = {
-  getReviews, getReviewById, postReview, isValidGame,
+  getReviews,
+  getReviewById,
+  postReview,
+  isValidGame,
 };
