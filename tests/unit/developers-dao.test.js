@@ -1,16 +1,16 @@
 const appRoot = require('app-root-path');
 const chai = require('chai');
-// const chaiAsPromised = require('chai-as-promised');
+const chaiAsPromised = require('chai-as-promised');
 const config = require('config');
 const _ = require('lodash');
-// const sinon = require('sinon');
+const sinon = require('sinon');
 
-// sinon.replace(config, 'get', () => ({ oracledb: {} }));
+sinon.replace(config, 'get', () => ({ oracledb: {} }));
 const conn = appRoot.require('api/v1/db/oracledb/connection');
 const developersDao = appRoot.require('api/v1/db/oracledb/developers-dao');
 
 chai.should();
-// chai.use(chaiAsPromised);
+chai.use(chaiAsPromised);
 
 describe('Test the test thing', () => {
   console.log('This test is running');
