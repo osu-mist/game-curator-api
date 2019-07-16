@@ -14,4 +14,16 @@ chai.use(chaiAsPromised);
 
 describe('Test the test thing', () => {
   console.log('This test is running');
+
+  sinon.stub(conn, 'getConnection').resolves({
+    execute: (sql) => {
+      const sqlResults = {
+        multiResults: { rows: [{}, {}] },
+        singleResults: { rows: [{}] },
+      };
+      return sql in sqlResults ? sqlResults[sql] : sqlResults.singleResults;
+    },
+    close: () => null,
+  });
+
 });
