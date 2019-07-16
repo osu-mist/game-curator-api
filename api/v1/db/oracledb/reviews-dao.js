@@ -150,7 +150,7 @@ const patchReview = async (reviewId, body) => {
 
   const connection = await conn.getConnection();
   try {
-    const response = await connection.execute(sqlQuery, attributes);
+    const response = await connection.execute(sqlQuery, attributes, { autoCommit: true });
     return response;
   } finally {
     connection.close();
