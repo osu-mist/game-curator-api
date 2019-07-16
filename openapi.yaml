@@ -753,6 +753,7 @@ definitions:
                 $ref: '#/definitions/ReviewResource/properties/attributes/properties/score'
               reviewer:
                 $ref: '#/definitions/ReviewResource/properties/attributes/properties/reviewer'
+            additionalProperties: false
         required:
           - type
           - id
