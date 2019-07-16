@@ -26,4 +26,27 @@ describe('Test the test thing', () => {
     close: () => null,
   });
 
+  it(`should be fulfilled if
+        1. figure this out`, () => {
+    const fulfilledCases = [
+      { fakeSql: () => 'singleResult', isSingleton: true, expectResult: {} },
+      { fakeSql: () => 'singleResult', isSingleton: false, expectResult: [{}] },
+      { fakeSql: () => 'multiResult', isSingleton: false, expectResult: [{}, {}] },
+    ];
+
+    const fulfilledPromises = [];
+    _.each(fulfilledCases, ({ fakeSql, isSingleton, expectResult }) => {
+      const result = developersDao.getDeveloperById(
+        fakeId, fakeSql, stubDevelopersSerializer, isSingleton, fakeParams,
+      );
+      fulfilledPromises.push(result.should
+        .eventually.be.fulfilled
+        .and.deep.equal(expectResult)
+        .then(() => {
+          sinon.assert.alwaysCalledWithExactly(stubDevelopersSerializer, any, any, fakeParams);
+          sinon.assert.callCount(stubDevelopersSerializer, fulfilledCases.length);
+        }));
+    });
+    return Promise.all(fulfilledPromises);
+  });
 });
