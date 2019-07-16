@@ -134,7 +134,7 @@ const patchReview = async (reviewId, body) => {
   const { attributes } = body.data;
   // create iterator for the list of keys in attributes (parmeter names)
   // we use this to check if there is another parameter with a value when creating the sql query
-  // if there is another value we add a , at the end of the current parameter
+  // if there is another value we add a "," at the end of the current parameter
   const paramIter = Object.keys(attributes)[Symbol.iterator]();
   // immediantly hit the next iteration to fix an off by one issue
   paramIter.next();
