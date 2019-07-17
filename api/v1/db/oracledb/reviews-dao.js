@@ -19,12 +19,7 @@ const getReviews = async (queries) => {
   const acceptedParams = openapi.paths['/reviews'].get.parameters.map(x => x.name).filter(param => !paramsToFilter.includes(param));
 
   // pick parameters specified in openapi (getReviewsParameters) from passed in queries list
-  const sqlParams = {};
-  _.forEach(acceptedParams, (param) => {
-    if (queries[param]) {
-      sqlParams[param] = queries[param];
-    }
-  });
+  const sqlParams = _.pick(queries, acceptedParams);
 
   // construct query
   const sqlQuery = `
@@ -37,7 +32,7 @@ const getReviews = async (queries) => {
     FROM REVIEWS
     WHERE 1=1
     ${sqlParams.reviewer ? 'AND REVIEWER = :reviewer' : ''}
-    ${queries.gameIds ? `AND GAME_ID IN (${queries.gameIds.join(', ')})` : ''}
+    ${queries.gameIds ? `AND GAME_ID IN (${queries.gameIds})` : ''}
     ${sqlParams.scoreMin ? 'AND SCORE >= :scoreMin' : ''}
     ${sqlParams.scoreMax ? 'AND SCORE <= :scoreMax' : ''}
     ${sqlParams.reviewDate ? 'AND TRUNC(REVIEW_DATE) = TO_DATE(:reviewDate, \'YYYY-MM-DD\')' : ''}
