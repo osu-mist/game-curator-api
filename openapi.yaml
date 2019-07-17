@@ -439,8 +439,10 @@ parameters:
   gameIds:
     name: gameIds
     in: query
-    type: string
-    pattern: '^(\d,)*\d$'
+    type: array
+    items:
+      type: integer
+      collectionFormat: csv
     required: false
     description: 'Filter by the Id of the game. Example: gameIds=1,2,3'
   scoreMin:
