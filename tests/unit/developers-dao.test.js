@@ -14,6 +14,9 @@ chai.use(chaiAsPromised);
 
 describe('Test the test thing', () => {
   console.log('This test is running');
+  const stubDevelopersSerializer = sinon.stub().returnsArg(0);
+  const fakeId = 'fakeId';
+  const fakeParams = {};
 
   sinon.stub(conn, 'getConnection').resolves({
     execute: (sql) => {
