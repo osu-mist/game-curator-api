@@ -132,19 +132,20 @@ const deleteReview = async (reviewId) => {
  */
 const patchReview = async (reviewId, body) => {
   const { attributes } = body.data;
-  // create iterator for the list of keys in attributes (parmeter names)
-  // we use this to check if there is another parameter with a value when creating the sql query
-  // if there is another value we add a "," at the end of the current parameter
-  const paramIter = Object.keys(attributes)[Symbol.iterator]();
-  // immediantly hit the next iteration to fix an off by one issue
-  paramIter.next();
+
+  // setup text for the SET clause in the sql query
+  const paramSet = [
+    `${attributes.reviewText ? 'REVIEW_TEXT = :reviewText' : ''}`,
+    `${attributes.score ? 'SCORE = :score' : ''}`,
+    `${attributes.reviewer ? 'REVIEWER = :reviewer' : ''}`,
+  ];
+  // filter out empty strings ('') otherwise join adds trailing commas
+  const filteredParamSet = paramSet.filter(element => element !== '');
 
   attributes.id = reviewId;
   const sqlQuery = `
     UPDATE REVIEWS
-    SET ${attributes.reviewText ? `REVIEW_TEXT = :reviewText ${paramIter.next().value ? ', ' : ''}` : ''}
-    ${attributes.score ? `SCORE = :score ${paramIter.next().value ? ', ' : ''}` : ''}
-    ${attributes.reviewer ? `REVIEWER = :reviewer ${paramIter.next().value ? ', ' : ''}` : ''}
+    SET ${filteredParamSet.join(', ')}
     WHERE ID = :id
   `;
 
