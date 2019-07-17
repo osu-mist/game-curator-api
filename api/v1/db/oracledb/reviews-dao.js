@@ -140,7 +140,8 @@ const patchReview = async (reviewId, body) => {
     `${attributes.reviewer ? 'REVIEWER = :reviewer' : ''}`,
   ];
   // filter out empty strings ('') otherwise join adds trailing commas
-  const filteredParamSet = paramSet.filter(element => element !== '');
+  // '' is considered false
+  const filteredParamSet = paramSet.filter(element => element);
 
   attributes.id = reviewId;
   const sqlQuery = `
