@@ -13,7 +13,6 @@ chai.should();
 chai.use(chaiAsPromised);
 
 describe('Test the test thing', () => {
-  console.log('This test is running');
   const stubDevelopersSerializer = sinon.stub().returnsArg(0);
   const fakeId = 'fakeId';
   const fakeParams = {};
@@ -22,9 +21,9 @@ describe('Test the test thing', () => {
     execute: (sql) => {
       const sqlResults = {
         multiResults: { rows: [{}, {}] },
-        singleResults: { rows: [{}] },
+        singleResult: { rows: [{}] },
       };
-      return sql in sqlResults ? sqlResults[sql] : sqlResults.singleResults;
+      return sql in sqlResults ? sqlResults[sql] : sqlResults.singleResult;
     },
     close: () => null,
   });
