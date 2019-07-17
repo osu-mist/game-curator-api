@@ -22,6 +22,9 @@ const get = async (req, res) => {
   }
 };
 
+const patch = () => {};
+const del = () => {};
+
 get.apiDoc = paths['/reviews/{reviewId}'].get;
 
-module.exports = { get };
+module.exports = { get, patch, del };
