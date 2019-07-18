@@ -3,12 +3,18 @@ const fakeBaseUrl = `/v1/developers/${fakeId}`;
 const fakeType = 'fakeType';
 const fakePath = 'fakePath';
 const fakePathUrl = `${fakeBaseUrl}/${fakePath}`; */
-const rawDeveloper = [
-  {
-    id: 'fakeId',
-    name: 'testDeveloper',
-    website: 'http://www.example.com',
-  },
-];
+const fakeDeveloperQuery = {
+  'page[size]': 25,
+  'page[number]': 1,
+};
+const rawDevelopers = {
+  rows: [
+    {
+      id: 'fakeId',
+      name: 'testDeveloper',
+      website: 'http://www.example.com',
+    },
+  ],
+};
 
-module.exports = { rawDeveloper };
+module.exports = { rawDevelopers, fakeDeveloperQuery };
