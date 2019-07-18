@@ -2,7 +2,8 @@ const appRoot = require('app-root-path');
 const _ = require('lodash');
 const oracledb = require('oracledb');
 
-const { serializeDevelopers, serializeDeveloper } = require('../../serializers/developers-serializer');
+// removed destructuring of these methods so they can be stubbed with sinon
+const developersSerializer = require('../../serializers/developers-serializer');
 
 const conn = appRoot.require('api/v1/db/oracledb/connection');
 
@@ -24,7 +25,7 @@ const getDevelopers = async (queries) => {
   `;
   try {
     const { rows } = await connection.execute(sqlQuery, sqlParams);
-    const serializedDevelopers = serializeDevelopers(rows, queries);
+    const serializedDevelopers = developersSerializer.serializeDevelopers(rows, queries);
     return serializedDevelopers;
   } finally {
     connection.close();
@@ -52,7 +53,7 @@ const getDeveloperById = async (id) => {
     } else if (_.isEmpty(rows)) {
       return undefined;
     } else {
-      const serializedDeveloper = serializeDeveloper(rows[0]);
+      const serializedDeveloper = developersSerializer.serializeDeveloper(rows[0]);
       return serializedDeveloper;
     }
   } finally {
