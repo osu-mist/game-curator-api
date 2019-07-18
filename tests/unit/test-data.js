@@ -7,14 +7,17 @@ const fakeDeveloperQuery = {
   'page[size]': 25,
   'page[number]': 1,
 };
-const rawDevelopers = {
-  rows: [
-    {
-      id: 'fakeId',
-      name: 'testDeveloper',
-      website: 'http://www.example.com',
-    },
-  ],
-};
+const rawDevelopers = [
+  {
+    id: 'fakeId',
+    name: 'testDeveloper',
+    website: 'http://www.example.com',
+  },
+  {
+    id: '123123',
+    name: 'fakeDeveloper',
+    website: 'www.notascam.com',
+  },
+];
 
 module.exports = { rawDevelopers, fakeDeveloperQuery };

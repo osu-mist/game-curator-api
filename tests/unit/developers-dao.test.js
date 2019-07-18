@@ -75,7 +75,7 @@ describe('Test developers-dao', () => {
 describe('Test getDevelopers', () => {
   beforeEach(() => {
     sinon.stub(conn, 'getConnection').resolves({
-      execute: () => testData.rawDevelopers,
+      execute: () => ({ rows: testData.rawDevelopers }),
       close: () => null,
     });
   });
