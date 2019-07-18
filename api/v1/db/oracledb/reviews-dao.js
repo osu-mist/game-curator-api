@@ -129,6 +129,38 @@ const deleteReview = async (reviewId) => {
 };
 
 /**
+ * @summary update review record
+ */
+const patchReview = async (reviewId, body) => {
+  const { attributes } = body.data;
+
+  // setup text for the SET clause in the sql query
+  const paramSet = [
+    `${attributes.reviewText ? 'REVIEW_TEXT = :reviewText' : ''}`,
+    `${attributes.score ? 'SCORE = :score' : ''}`,
+    `${attributes.reviewer ? 'REVIEWER = :reviewer' : ''}`,
+  ];
+  // filter out empty strings ('') otherwise join adds trailing commas
+  // '' is considered false
+  const filteredParamSet = paramSet.filter(element => element);
+
+  attributes.id = reviewId;
+  const sqlQuery = `
+    UPDATE REVIEWS
+    SET ${filteredParamSet.join(', ')}
+    WHERE ID = :id
+  `;
+
+  const connection = await conn.getConnection();
+  try {
+    const response = await connection.execute(sqlQuery, attributes, { autoCommit: true });
+    return response;
+  } finally {
+    connection.close();
+  }
+};
+
+/**
  * @summary Checks if the id (gameId) matches a record in the database
  * @function
  * @param {string} gameId Id of game to check for in database
@@ -158,4 +190,5 @@ module.exports = {
   postReview,
   isValidGame,
   deleteReview,
+  patchReview,
 };
