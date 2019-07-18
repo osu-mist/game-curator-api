@@ -16,15 +16,19 @@ chai.use(chaiAsPromised);
 describe('Test developers-dao', () => {
   const fakeId = 'fakeId';
 
-  sinon.stub(conn, 'getConnection').resolves({
-    execute: (sql) => {
-      const sqlResults = {
-        multiResults: { rows: [{}, {}] },
-        singleResult: { rows: [{}] },
-      };
-      return sql in sqlResults ? sqlResults[sql] : sqlResults.singleResult;
-    },
-    close: () => null,
+  beforeEach(() => {
+    sinon.stub(conn, 'getConnection').resolves({
+      execute: (sql) => {
+        const sqlResults = {
+          multiResults: { rows: [{}, {}] },
+          singleResult: { rows: [{}] },
+        };
+        return sql in sqlResults ? sqlResults[sql] : sqlResults.singleResult;
+      },
+      close: () => null,
+    });
+  });
+  afterEach(() => sinon.restore());
   });
 
   it(`should be fulfilled if
