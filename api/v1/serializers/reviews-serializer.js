@@ -20,14 +20,14 @@ const reviewConverter = (reviews) => {
   _.forEach(reviews, (review) => {
     review.score = parseFloat(review.score);
     const date = new Date(review.reviewDate);
-    review.reviewDate = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+    review.reviewDate = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
   });
 };
 
 /**
  * @summary Serialize reviewResources to JSON API
  * @function
- * @param {[Object]} rawReviews Raw data rows from data source
+ * @param {Object[]} rawReviews Raw data rows from data source
  * @param {Object} query Query parameters
  * @returns {Object} Serialized reviewResources object
  */

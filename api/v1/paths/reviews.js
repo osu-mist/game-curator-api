@@ -2,7 +2,7 @@ const appRoot = require('app-root-path');
 
 const reviewsDao = require('../db/oracledb/reviews-dao');
 
-const { errorHandler } = appRoot.require('errors/errors');
+const { errorBuilder, errorHandler } = appRoot.require('errors/errors');
 const { openapi: { paths } } = appRoot.require('utils/load-openapi');
 
 /**
@@ -22,10 +22,14 @@ const get = async (req, res) => {
  */
 const post = async (req, res) => {
   try {
-    const result = await reviewsDao.postReview(req.body);
-    return res.send(result);
+    if (!await reviewsDao.isValidGame(req.body.data.attributes.gameId)) {
+      errorBuilder(res, 400, ['A game with gameId does not exist.']);
+    } else {
+      const result = await reviewsDao.postReview(req.body);
+      res.status(201).send(result);
+    }
   } catch (err) {
-    return errorHandler(res, err);
+    errorHandler(res, err);
   }
 };
 
