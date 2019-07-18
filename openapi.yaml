@@ -509,7 +509,7 @@ definitions:
             type: string
             format: date
             description: Date of the games release
-            example: 1994-12-5
+            example: "1994-12-5"
   GameResult:
     properties:
       links:

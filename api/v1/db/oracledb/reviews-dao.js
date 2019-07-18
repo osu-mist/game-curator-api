@@ -1,4 +1,5 @@
 const appRoot = require('app-root-path');
+const oracledb = require('oracledb');
 const _ = require('lodash');
 
 const { serializeReview, serializeReviews } = require('../../serializers/reviews-serializer');
@@ -88,4 +89,56 @@ const getReviewById = async (id) => {
   }
 };
 
-module.exports = { getReviews, getReviewById };
+/**
+ * @summary Create review record
+ */
+const postReview = async (body) => {
+  const { attributes } = body.data;
+  attributes.outId = { type: oracledb.NUMBER, dir: oracledb.BIND_OUT };
+  const sqlQuery = `
+    INSERT INTO REVIEWS
+    (REVIEWER, REVIEW_TEXT, SCORE, GAME_ID)
+    VALUES (:reviewer, :reviewText, :score, :gameId)
+    RETURNING ID INTO :outId
+  `;
+
+  const connection = await conn.getConnection();
+  try {
+    const rawReviews = await connection.execute(sqlQuery, attributes, { autoCommit: true });
+    const result = await getReviewById(rawReviews.outBinds.outId[0]);
+    return result;
+  } finally {
+    connection.close();
+  }
+};
+
+/**
+ * @summary Checks if the id (gameId) matches a record in the database
+ * @function
+ * @param {string} gameId Id of game to check for in database
+ * @returns {boolean} true if at least one record is found, false if no records are found
+ */
+const isValidGame = async (gameId) => {
+  const sqlParams = { id: gameId };
+  const sqlQuery = `
+    SELECT COUNT(ID) AS "id"
+    FROM VIDEO_GAMES
+    WHERE ID = :id
+  `;
+
+  const connection = await conn.getConnection();
+  try {
+    const result = await connection.execute(sqlQuery, sqlParams);
+
+    return result.rows[0].id > 0;
+  } finally {
+    connection.close();
+  }
+};
+
+module.exports = {
+  getReviews,
+  getReviewById,
+  postReview,
+  isValidGame,
+};
