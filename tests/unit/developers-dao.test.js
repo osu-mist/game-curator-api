@@ -83,7 +83,17 @@ describe('Test getDevelopers', () => {
   });
   afterEach(() => sinon.restore());
 
+  // get expectedResult by wrapping each element in testData.rawDevelopers with 'attributes' object
+  const expectedResult = [];
+  _.forEach(testData.rawDevelopers, (item) => {
+    expectedResult.push({ attributes: _.omit(item, 'id') });
+  });
+
   it('getDevelopers should return data', () => {
-    console.log(developersDao.getDevelopers(testData.fakeDeveloperQuery));
+    const result = developersDao.getDevelopers(testData.fakeDeveloperQuery);
+    return Promise.all([result.should
+      .eventually.be.fulfilled
+      .and.has.property('data')
+      .excluding(['links', 'type', 'id']).deep.equal(expectedResult)]);
   });
 });
