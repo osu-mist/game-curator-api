@@ -8,10 +8,11 @@ const sinon = require('sinon');
 sinon.replace(config, 'get', () => ({ oracledb: {} }));
 const conn = appRoot.require('api/v1/db/oracledb/connection');
 const developersDao = appRoot.require('api/v1/db/oracledb/developers-dao');
-// const developersSerializer = appRoot.require('api/v1/serializers/developers-serializer');
+const developersSerializer = appRoot.require('api/v1/serializers/developers-serializer');
 
 chai.should();
 chai.use(chaiAsPromised);
+// const { any } = sinon.match;
 
 describe('Test developers-dao', () => {
   const fakeId = 'fakeId';
@@ -31,11 +32,10 @@ describe('Test developers-dao', () => {
   afterEach(() => sinon.restore());
   });
 
-  it(`should be fulfilled if
-        1. figure this out`, () => {
+  it('getDeveloperById should return singleResult', () => {
     // causes tests to pass
     // sinon.stub(developersDao, 'getDeveloperById').returns({});
-    // sinon.stub(developersSerializer, 'serializeDevelopers').returns({});
+    const developersSerializerStub = sinon.stub(developersSerializer, 'serializeDeveloper').returnsArg(0);
 
     const fulfilledCases = [
       { expectResult: {} },
@@ -46,8 +46,14 @@ describe('Test developers-dao', () => {
       const result = developersDao.getDeveloperById(
         fakeId,
       );
-      fulfilledPromises.push(result.should.deep.equal(expectResult));
+      fulfilledPromises.push(result.should
+        .eventually.be.fulfilled
+        .and.deep.equal(expectResult)
+        .then(() => {
+          sinon.assert.callCount(developersSerializerStub, fulfilledCases.length);
+        }));
     });
+    // sinon.assert.callCount(developersSerializerStub, fulfilledCases.length);
     return Promise.all(fulfilledPromises);
   });
 
