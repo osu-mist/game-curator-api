@@ -8,11 +8,12 @@ const sinon = require('sinon');
 sinon.replace(config, 'get', () => ({ oracledb: {} }));
 const conn = appRoot.require('api/v1/db/oracledb/connection');
 const developersDao = appRoot.require('api/v1/db/oracledb/developers-dao');
+// const developersSerializer = appRoot.require('api/v1/serializers/developers-serializer');
 
 chai.should();
 chai.use(chaiAsPromised);
 
-describe('Test the test thing', () => {
+describe('Test developers-dao', () => {
   const fakeId = 'fakeId';
 
   sinon.stub(conn, 'getConnection').resolves({
@@ -29,7 +30,8 @@ describe('Test the test thing', () => {
   it(`should be fulfilled if
         1. figure this out`, () => {
     // causes tests to pass
-    sinon.stub(developersDao, 'getDeveloperById').returns({});
+    // sinon.stub(developersDao, 'getDeveloperById').returns({});
+    // sinon.stub(developersSerializer, 'serializeDevelopers').returns({});
 
     const fulfilledCases = [
       { expectResult: {} },
