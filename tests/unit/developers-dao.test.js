@@ -54,17 +54,17 @@ describe('Test developers-dao', () => {
     developersSerializerStub.returnsArg(0);
 
     const fulfilledCases = [
-      { expectResult: {} },
+      { expectedResult: {} },
     ];
 
     const fulfilledPromises = [];
-    _.each(fulfilledCases, ({ expectResult }) => {
+    _.each(fulfilledCases, ({ expectedResult }) => {
       const result = developersDao.getDeveloperById(
         fakeId,
       );
       fulfilledPromises.push(result.should
         .eventually.be.fulfilled
-        .and.deep.equal(expectResult)
+        .and.deep.equal(expectedResult)
         .then(() => {
           sinon.assert.callCount(developersSerializerStub, fulfilledCases.length);
         }));
