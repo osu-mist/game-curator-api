@@ -30,6 +30,9 @@ describe('Test developers-dao', () => {
     });
   });
   afterEach(() => sinon.restore());
+
+  it('getDevelopers should return multiResult', () => {
+    // TODO
   });
 
   it('getDeveloperById should return singleResult', () => {
