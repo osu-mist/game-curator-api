@@ -71,16 +71,4 @@ describe('Test developers-dao', () => {
     // sinon.assert.callCount(developersSerializerStub, fulfilledCases.length);
     return Promise.all(fulfilledPromises);
   });
-
-  /* it('getDevelopers should be rejected', async () => {
-    const expectResult = {};
-
-    sinon.stub(developersDao, 'getDevelopers').returns('multiResults');
-    sinon.stub(developersSerializer, 'serializeDevelopers').returns(expectResult);
-    const fulfilledResult = developersDao.getDevelopers();
-
-    return fulfilledResult.should
-      .eventually.be.fulfilled
-      .and.deep.equal(expectResult);
-  }); */
 });
