@@ -9,6 +9,7 @@ sinon.replace(config, 'get', () => ({ oracledb: {} }));
 const conn = appRoot.require('api/v1/db/oracledb/connection');
 const developersDao = appRoot.require('api/v1/db/oracledb/developers-dao');
 const developersSerializer = appRoot.require('api/v1/serializers/developers-serializer');
+const testData = require('./test-data');
 
 chai.should();
 chai.use(chaiAsPromised);
@@ -68,5 +69,19 @@ describe('Test developers-dao', () => {
     });
     // sinon.assert.callCount(developersSerializerStub, fulfilledCases.length);
     return Promise.all(fulfilledPromises);
+  });
+});
+
+describe('Test getDevelopers', () => {
+  beforeEach(() => {
+    sinon.stub(conn, 'getConnection').resolves({
+      execute: () => testData.rawDevelopers,
+      close: () => null,
+    });
+  });
+  afterEach(() => sinon.restore());
+
+  it('getDevelopers should return data', () => {
+    console.log(developersDao.getDevelopers(testData.fakeDeveloperQuery));
   });
 });
