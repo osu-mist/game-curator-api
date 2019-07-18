@@ -1,6 +1,6 @@
 const appRoot = require('app-root-path');
-const oracledb = require('oracledb');
 const _ = require('lodash');
+const oracledb = require('oracledb');
 
 const { serializeReview, serializeReviews } = require('../../serializers/reviews-serializer');
 
@@ -113,6 +113,22 @@ const postReview = async (body) => {
 };
 
 /**
+ * @summary Delete review record
+ */
+const deleteReview = async (reviewId) => {
+  const sqlParams = { id: reviewId };
+  const sqlQuery = 'DELETE FROM REVIEWS WHERE ID = :id';
+
+  const connection = await conn.getConnection();
+  try {
+    const response = await connection.execute(sqlQuery, sqlParams, { autoCommit: true });
+    return response;
+  } finally {
+    connection.close();
+  }
+};
+
+/**
  * @summary Checks if the id (gameId) matches a record in the database
  * @function
  * @param {string} gameId Id of game to check for in database
@@ -141,4 +157,5 @@ module.exports = {
   getReviewById,
   postReview,
   isValidGame,
+  deleteReview,
 };

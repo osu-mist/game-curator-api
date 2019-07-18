@@ -22,9 +22,27 @@ const get = async (req, res) => {
   }
 };
 
+/**
+ * @summary Delete review by id
+ */
+const del = async (req, res) => {
+  try {
+    const { reviewId } = req.params;
+    const result = await reviewsDao.deleteReview(reviewId);
+    if (result.rowsAffected < 1) {
+      errorBuilder(res, 404, 'A review with the specified ID was not found.');
+    } else {
+      // send 204 on successful delete
+      res.sendStatus(204);
+    }
+  } catch (err) {
+    errorHandler(res, err);
+  }
+};
+
 const patch = () => {};
-const del = () => {};
 
 get.apiDoc = paths['/reviews/{reviewId}'].get;
+del.apiDoc = paths['/reviews/{reviewId}'].del;
 
 module.exports = { get, patch, del };
