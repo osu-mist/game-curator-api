@@ -32,7 +32,18 @@ describe('Test developers-dao', () => {
   afterEach(() => sinon.restore());
 
   it('getDevelopers should return multiResult', () => {
-    // TODO
+    const developersSerializerStub = sinon.stub(developersSerializer, 'serializeDevelopers');
+    developersSerializerStub.returnsArg(0);
+
+    const fulfilledPromises = [];
+    const result = developersDao.getDevelopers(fakeId);
+    fulfilledPromises.push(result.should
+      .eventually.be.fulfilled
+      .and.deep.equal([{}])
+      .then(() => {
+        sinon.assert.callCount(developersSerializerStub, 1);
+      }));
+    return Promise.all(fulfilledPromises);
   });
 
   it('getDeveloperById should return singleResult', () => {
