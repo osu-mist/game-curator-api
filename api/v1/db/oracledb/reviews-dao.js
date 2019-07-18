@@ -1,9 +1,11 @@
 const appRoot = require('app-root-path');
 const _ = require('lodash');
+const oracledb = require('oracledb');
 
 const { serializeReview, serializeReviews } = require('../../serializers/reviews-serializer');
 
 const conn = appRoot.require('api/v1/db/oracledb/connection');
+const { openapi } = appRoot.require('utils/load-openapi');
 
 /**
  * @summary Return a list of reviews
@@ -11,14 +13,14 @@ const conn = appRoot.require('api/v1/db/oracledb/connection');
  * @returns {Promise<Object[]>} Promise object represents a list of reviews
  */
 const getReviews = async (queries) => {
-  const sqlParams = {};
+  // get parameters accepted by this endpoint in openapi
+  // filter params that should not be included in query
+  // gameIds is special since the values are parsed directly into the query string
+  const paramsToFilter = ['page[size]', 'page[number]', 'gameIds'];
+  const acceptedParams = openapi.paths['/reviews'].get.parameters.map(x => x.name).filter(param => !paramsToFilter.includes(param));
 
-  // get parameters from query
-  _.forEach(Object.keys(queries), (param) => {
-    if (param !== 'gameIds' && param !== 'page[size]' && param !== 'page[number]') {
-      sqlParams[param] = queries[param];
-    }
-  });
+  // pick parameters specified in openapi (getReviewsParameters) from passed in queries list
+  const sqlParams = _.pick(queries, acceptedParams);
 
   // construct query
   const sqlQuery = `
@@ -31,7 +33,7 @@ const getReviews = async (queries) => {
     FROM REVIEWS
     WHERE 1=1
     ${sqlParams.reviewer ? 'AND REVIEWER = :reviewer' : ''}
-    ${queries.gameIds ? `AND GAME_ID IN (${queries.gameIds.join(', ')})` : ''}
+    ${queries.gameIds ? `AND GAME_ID IN (${queries.gameIds})` : ''}
     ${sqlParams.scoreMin ? 'AND SCORE >= :scoreMin' : ''}
     ${sqlParams.scoreMax ? 'AND SCORE <= :scoreMax' : ''}
     ${sqlParams.reviewDate ? 'AND TRUNC(REVIEW_DATE) = TO_DATE(:reviewDate, \'YYYY-MM-DD\')' : ''}
@@ -87,4 +89,106 @@ const getReviewById = async (id) => {
   }
 };
 
-module.exports = { getReviews, getReviewById };
+/**
+ * @summary Create review record
+ */
+const postReview = async (body) => {
+  const { attributes } = body.data;
+  attributes.outId = { type: oracledb.NUMBER, dir: oracledb.BIND_OUT };
+  const sqlQuery = `
+    INSERT INTO REVIEWS
+    (REVIEWER, REVIEW_TEXT, SCORE, GAME_ID)
+    VALUES (:reviewer, :reviewText, :score, :gameId)
+    RETURNING ID INTO :outId
+  `;
+
+  const connection = await conn.getConnection();
+  try {
+    const rawReviews = await connection.execute(sqlQuery, attributes, { autoCommit: true });
+    const result = await getReviewById(rawReviews.outBinds.outId[0]);
+    return result;
+  } finally {
+    connection.close();
+  }
+};
+
+/**
+ * @summary Delete review record
+ */
+const deleteReview = async (reviewId) => {
+  const sqlParams = { id: reviewId };
+  const sqlQuery = 'DELETE FROM REVIEWS WHERE ID = :id';
+
+  const connection = await conn.getConnection();
+  try {
+    const response = await connection.execute(sqlQuery, sqlParams, { autoCommit: true });
+    return response;
+  } finally {
+    connection.close();
+  }
+};
+
+/**
+ * @summary update review record
+ */
+const patchReview = async (reviewId, body) => {
+  const { attributes } = body.data;
+
+  // setup text for the SET clause in the sql query
+  const paramSet = [
+    `${attributes.reviewText ? 'REVIEW_TEXT = :reviewText' : ''}`,
+    `${attributes.score ? 'SCORE = :score' : ''}`,
+    `${attributes.reviewer ? 'REVIEWER = :reviewer' : ''}`,
+  ];
+  // filter out empty strings ('') otherwise join adds trailing commas
+  // '' is considered false
+  const filteredParamSet = paramSet.filter(element => element);
+
+  attributes.id = reviewId;
+  const sqlQuery = `
+    UPDATE REVIEWS
+    SET ${filteredParamSet.join(', ')}
+    WHERE ID = :id
+  `;
+
+  const connection = await conn.getConnection();
+  try {
+    const response = await connection.execute(sqlQuery, attributes, { autoCommit: true });
+    return response;
+  } finally {
+    connection.close();
+  }
+};
+
+/**
+ * @summary Checks if the id (gameId) matches a record in the database
+ * @function
+ * @param {string} gameId Id of game to check for in database
+ * @returns {boolean} true if at least one record is found, false if no records are found
+ */
+const isValidGame = async (gameId) => {
+  const sqlParams = { id: gameId };
+  const sqlQuery = `
+    SELECT COUNT(ID) AS "id"
+    FROM VIDEO_GAMES
+    WHERE ID = :id
+  `;
+
+  const connection = await conn.getConnection();
+  try {
+    const result = await connection.execute(sqlQuery, sqlParams);
+
+    return result.rows[0].id > 0;
+  } finally {
+    connection.close();
+  }
+};
+
+module.exports = {
+  getReviews,
+  getReviewById,
+  postReview,
+  isValidGame,
+  deleteReview,
+  patchReview,
+};
