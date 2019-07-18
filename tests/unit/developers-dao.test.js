@@ -38,7 +38,8 @@ describe('Test developers-dao', () => {
   it('getDeveloperById should return singleResult', () => {
     // causes tests to pass
     // sinon.stub(developersDao, 'getDeveloperById').returns({});
-    const developersSerializerStub = sinon.stub(developersSerializer, 'serializeDeveloper').returnsArg(0);
+    const developersSerializerStub = sinon.stub(developersSerializer, 'serializeDeveloper');
+    developersSerializerStub.returnsArg(0);
 
     const fulfilledCases = [
       { expectResult: {} },
