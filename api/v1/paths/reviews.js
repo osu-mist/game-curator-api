@@ -17,6 +17,8 @@ const get = async (req, res) => {
   }
 };
 
+const post = () => {};
+
 get.apiDoc = paths['/reviews'].get;
 
-module.exports = { get };
+module.exports = { get, post };
