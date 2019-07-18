@@ -5,6 +5,7 @@ const _ = require('lodash');
 const { serializeReview, serializeReviews } = require('../../serializers/reviews-serializer');
 
 const conn = appRoot.require('api/v1/db/oracledb/connection');
+const { openapi } = appRoot.require('utils/load-openapi');
 
 /**
  * @summary Return a list of reviews
@@ -12,14 +13,14 @@ const conn = appRoot.require('api/v1/db/oracledb/connection');
  * @returns {Promise<Object[]>} Promise object represents a list of reviews
  */
 const getReviews = async (queries) => {
-  const sqlParams = {};
+  // get parameters accepted by this endpoint in openapi
+  // filter params that should not be included in query
+  // gameIds is special since the values are parsed directly into the query string
+  const paramsToFilter = ['page[size]', 'page[number]', 'gameIds'];
+  const acceptedParams = openapi.paths['/reviews'].get.parameters.map(x => x.name).filter(param => !paramsToFilter.includes(param));
 
-  // get parameters from query
-  _.forEach(Object.keys(queries), (param) => {
-    if (param !== 'gameIds' && param !== 'page[size]' && param !== 'page[number]') {
-      sqlParams[param] = queries[param];
-    }
-  });
+  // pick parameters specified in openapi (getReviewsParameters) from passed in queries list
+  const sqlParams = _.pick(queries, acceptedParams);
 
   // construct query
   const sqlQuery = `
@@ -32,7 +33,7 @@ const getReviews = async (queries) => {
     FROM REVIEWS
     WHERE 1=1
     ${sqlParams.reviewer ? 'AND REVIEWER = :reviewer' : ''}
-    ${queries.gameIds ? `AND GAME_ID IN (${queries.gameIds.join(', ')})` : ''}
+    ${queries.gameIds ? `AND GAME_ID IN (${queries.gameIds})` : ''}
     ${sqlParams.scoreMin ? 'AND SCORE >= :scoreMin' : ''}
     ${sqlParams.scoreMax ? 'AND SCORE <= :scoreMax' : ''}
     ${sqlParams.reviewDate ? 'AND TRUNC(REVIEW_DATE) = TO_DATE(:reviewDate, \'YYYY-MM-DD\')' : ''}

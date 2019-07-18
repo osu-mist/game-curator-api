@@ -27,7 +27,7 @@ const reviewConverter = (reviews) => {
 /**
  * @summary Serialize reviewResources to JSON API
  * @function
- * @param {[Object]} rawReviews Raw data rows from data source
+ * @param {Object[]} rawReviews Raw data rows from data source
  * @param {Object} query Query parameters
  * @returns {Object} Serialized reviewResources object
  */
