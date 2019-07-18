@@ -1,6 +1,6 @@
 const appRoot = require('app-root-path');
-const oracledb = require('oracledb');
 const _ = require('lodash');
+const oracledb = require('oracledb');
 
 const { serializeDevelopers, serializeDeveloper } = require('../../serializers/developers-serializer');
 

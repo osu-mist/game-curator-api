@@ -288,14 +288,7 @@ paths:
       parameters:
         - $ref: '#/parameters/pageNumber'
         - $ref: '#/parameters/pageSize'
-        - name: gameIds
-          in: query
-          type: array
-          items:
-            type: string
-            collectionFormat: csv
-          required: false
-          description: Filter by the Id of the game
+        - $ref: '#/parameters/gameIds'
         - name: reviewer
           in: query
           type: string
@@ -308,7 +301,7 @@ paths:
           type: string
           format: date
           required: false
-          description: Filter results by posting date
+          description: 'Filter results by posting date. Example: reviewDate=2019-12-30'
       responses:
         '200':
           description: Successful response
@@ -443,6 +436,15 @@ parameters:
     default: 25
     maximum: 500
     minimum: 1
+  gameIds:
+    name: gameIds
+    in: query
+    type: array
+    items:
+      type: integer
+      collectionFormat: csv
+    required: false
+    description: 'Filter by the Id of the game. Example: gameIds=1,2,3'
   scoreMin:
     name: scoreMin
     in: query
@@ -483,8 +485,8 @@ definitions:
   GameResource:
     properties:
       id:
-        type: integer
-        format: int64
+        type: string
+        pattern: '^\d+$'
       type:
         $ref: '#/definitions/GameType'
       links:
@@ -507,7 +509,7 @@ definitions:
             type: string
             format: date
             description: Date of the games release
-            example: 12/5/1994
+            example: "1994-12-5"
   GameResult:
     properties:
       links:
@@ -544,6 +546,7 @@ definitions:
                 $ref: '#/definitions/DeveloperResource/properties/id'
             required:
               - name
+              - releaseDate
               - developerId
             additionalProperties: false
         required:
@@ -578,6 +581,7 @@ definitions:
     properties:
       id:
         type: string
+        pattern: '^\d+$'
       type:
         $ref: '#/definitions/DeveloperType'
       links:
@@ -661,6 +665,7 @@ definitions:
     properties:
       id:
         type: string
+        pattern: '^\d+$'
       type:
         $ref: '#/definitions/ReviewType'
       links:
@@ -687,7 +692,7 @@ definitions:
             type: string
             format: date
             description: Date the review was finalized
-            example: 10/15/2006
+            example: "1994-12-5"
   ReviewResult:
     properties:
       links:

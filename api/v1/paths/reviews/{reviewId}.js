@@ -40,7 +40,9 @@ const del = async (req, res) => {
   }
 };
 
+const patch = () => {};
+
 get.apiDoc = paths['/reviews/{reviewId}'].get;
 del.apiDoc = paths['/reviews/{reviewId}'].del;
 
-module.exports = { get, del };
+module.exports = { get, patch, del };
