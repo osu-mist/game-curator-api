@@ -122,6 +122,17 @@ describe('Test developers-dao', () => {
       .and.deep.equal(expectedResult);
   });
 
+  it('deleteDeveloper should return empty result', () => {
+    const developersSerializerStub = sinon.stub(developersSerializer, 'serializeDeveloper');
+    developersSerializerStub.returnsArg(0);
+
+    const expectedResult = [];
+    const result = developersDao.deleteDeveloper();
+    return result.should
+      .eventually.be.fulfilled
+      .and.has.property('rows').deep.equal(expectedResult);
+  });
+
   it('patchDeveloper with improper body should be rejected', () => {
     const developersSerializerStub = sinon.stub(developersSerializer, 'serializeDeveloper');
     developersSerializerStub.returnsArg(0);
