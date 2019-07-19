@@ -145,6 +145,26 @@ describe('Test developers-dao', () => {
         sinon.assert.notCalled(developersSerializerStub);
       });
   });
+
+  it('patchDeveloper should return singleResult', () => {
+    const developersSerializerStub = sinon.stub(developersSerializer, 'serializeDeveloper');
+    developersSerializerStub.returnsArg(0);
+
+    const fakeBody = {
+      data: {
+        id: fakeId,
+        attributes: {
+          name: 'test',
+        },
+      },
+    };
+
+    const expectedResult = [{}];
+    const result = developersDao.patchDeveloper(fakeId, fakeBody);
+    return result.should
+      .eventually.be.fulfilled
+      .and.has.property('rows').deep.equal(expectedResult);
+  });
 });
 
 describe('Test getDevelopers', () => {
