@@ -38,10 +38,10 @@ describe('Test developers-dao', () => {
           emptyResult: { rows: [] },
         };
         let result;
-        if ('developerId' in sqlParams) {
-          result = sqlResults.singleResult;
-        } else if (sql.includes('DELETE')) {
+        if (sql.includes('DELETE')) {
           result = sqlResults.emptyResult;
+        } else if ('developerId' in sqlParams || 'id' in sqlParams) {
+          result = sqlResults.singleResult;
         } else {
           result = sqlResults.multiResults;
         }
