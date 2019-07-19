@@ -1,6 +1,6 @@
-/* const fakeId = 'fakeId';
+const fakeId = 'fakeId';
 const fakeBaseUrl = `/v1/developers/${fakeId}`;
-const fakeType = 'fakeType';
+/* const fakeType = 'fakeType';
 const fakePath = 'fakePath';
 const fakePathUrl = `${fakeBaseUrl}/${fakePath}`; */
 const fakeDeveloperQuery = {
@@ -20,4 +20,9 @@ const rawDevelopers = [
   },
 ];
 
-module.exports = { rawDevelopers, fakeDeveloperQuery };
+module.exports = {
+  rawDevelopers,
+  fakeDeveloperQuery,
+  fakeId,
+  fakeBaseUrl,
+};
