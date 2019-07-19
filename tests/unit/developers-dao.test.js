@@ -81,7 +81,7 @@ describe('Test developers-dao', () => {
     return Promise.all(fulfilledPromises);
   });
 
-  it('postDeveloper should be rejected', () => {
+  it('postDeveloper with improper body should be rejected', () => {
     const developersSerializerStub = sinon.stub(developersSerializer, 'serializeDeveloper');
     developersSerializerStub.returnsArg(0);
 
@@ -113,7 +113,7 @@ describe('Test developers-dao', () => {
       .and.deep.equal(expectedResult);
   });
 
-  it('patchDeveloper should be rejected', () => {
+  it('patchDeveloper with improper body should be rejected', () => {
     const developersSerializerStub = sinon.stub(developersSerializer, 'serializeDeveloper');
     developersSerializerStub.returnsArg(0);
 
