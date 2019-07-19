@@ -70,6 +70,32 @@ describe('Test developers-dao', () => {
     });
     return Promise.all(fulfilledPromises);
   });
+
+  it('postDeveloper should be rejected', () => {
+    const developersSerializerStub = sinon.stub(developersSerializer, 'serializeDeveloper');
+    developersSerializerStub.returnsArg(0);
+
+    const result = developersDao.postDeveloper('fakeId', 'fakeBody');
+    return result.should
+      .eventually.be.rejected
+      .and.be.an.instanceOf(TypeError)
+      .then(() => {
+        sinon.assert.notCalled(developersSerializerStub);
+      });
+  });
+
+  it('patchDeveloper should be rejected', () => {
+    const developersSerializerStub = sinon.stub(developersSerializer, 'serializeDeveloper');
+    developersSerializerStub.returnsArg(0);
+
+    const result = developersDao.patchDeveloper('fakeId', 'fakeBody');
+    return result.should
+      .eventually.be.rejected
+      .and.be.an.instanceOf(Error)
+      .then(() => {
+        sinon.assert.notCalled(developersSerializerStub);
+      });
+  });
 });
 
 describe('Test getDevelopers', () => {
