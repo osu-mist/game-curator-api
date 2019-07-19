@@ -23,7 +23,7 @@ describe('Test developers-serializer', () => {
   const resourceSubsetSchema = (resourceType, resourceAttributes) => {
     const schema = {
       links: {
-        self: `${fakeBaseUrl}/${resourceType}`,
+        self: `${fakeBaseUrl}`,
       },
       data: {
         id: fakeId,
@@ -79,7 +79,9 @@ describe('Test developers-serializer', () => {
     const { rawDevelopers } = testData;
     const resourceType = 'developer';
 
-    const serializedDeveloper = serializeDeveloper(rawDevelopers);
-    console.log(serializedDeveloper);
+    const serializedDeveloper = serializeDeveloper(rawDevelopers[0]);
+    testSingleResource(serializedDeveloper, resourceType, ['name', 'website']);
+    // console.log(resourceSubsetSchema(resourceType))
+    // console.log(_.keys(getDefinitionProps('DeveloperResource')));
   });
 });
