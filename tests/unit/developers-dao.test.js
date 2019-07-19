@@ -21,7 +21,7 @@ describe('Test developers-dao', () => {
 
   beforeEach(() => {
     sinon.stub(conn, 'getConnection').resolves({
-      execute: (sql) => {
+      execute: (sql, sqlParams) => {
         const sqlResults = {
           multiResults: {
             rows: [{}, {}],
@@ -35,8 +35,18 @@ describe('Test developers-dao', () => {
               outId: [1],
             },
           },
+          emptyResult: { rows: [] },
         };
-        return sql in sqlResults ? sqlResults[sql] : sqlResults.singleResult;
+        let result;
+        if ('developerId' in sqlParams) {
+          result = sqlResults.singleResult;
+        } else if (sql.includes('DELETE')) {
+          result = sqlResults.emptyResult;
+        } else {
+          result = sqlResults.multiResults;
+        }
+        // return 'developerId' in sqlParams ? sqlResults.singleResult : sqlResults.multiResults;
+        return result;
       },
       close: () => null,
     });
