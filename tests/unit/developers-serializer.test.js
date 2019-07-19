@@ -3,7 +3,7 @@
 const appRoot = require('app-root-path');
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
-const chaiExclude = require('chai-exclude');
+const chaiSubset = require('chai-subset');
 const config = require('config');
 const _ = require('lodash');
 const sinon = require('sinon');
@@ -13,8 +13,9 @@ const developersSerializer = appRoot.require('api/v1/serializers/developers-seri
 const testData = appRoot.require('tests/unit/test-data');
 
 chai.should();
-chai.use(chaiExclude);
 chai.use(chaiAsPromised);
+chai.use(chaiSubset);
+const { expect } = chai;
 
 describe('Test developers-serializer', () => {
   const { fakeId, fakeBaseUrl } = testData;
