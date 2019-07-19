@@ -15,7 +15,6 @@ const testData = require('./test-data');
 chai.should();
 chai.use(chaiExclude);
 chai.use(chaiAsPromised);
-// const { any } = sinon.match;
 
 describe('Test developers-dao', () => {
   const fakeId = 'fakeId';
@@ -69,7 +68,6 @@ describe('Test developers-dao', () => {
           sinon.assert.callCount(developersSerializerStub, fulfilledCases.length);
         }));
     });
-    // sinon.assert.callCount(developersSerializerStub, fulfilledCases.length);
     return Promise.all(fulfilledPromises);
   });
 });
