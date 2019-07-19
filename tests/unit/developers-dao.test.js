@@ -23,8 +23,18 @@ describe('Test developers-dao', () => {
     sinon.stub(conn, 'getConnection').resolves({
       execute: (sql) => {
         const sqlResults = {
-          multiResults: { rows: [{}, {}] },
-          singleResult: { rows: [{}] },
+          multiResults: {
+            rows: [{}, {}],
+            outBinds: {
+              outId: [1],
+            },
+          },
+          singleResult: {
+            rows: [{}],
+            outBinds: {
+              outId: [1],
+            },
+          },
         };
         return sql in sqlResults ? sqlResults[sql] : sqlResults.singleResult;
       },
@@ -82,6 +92,25 @@ describe('Test developers-dao', () => {
       .then(() => {
         sinon.assert.notCalled(developersSerializerStub);
       });
+  });
+
+  it('postDeveloper should return singleResult', () => {
+    const developersSerializerStub = sinon.stub(developersSerializer, 'serializeDeveloper');
+    developersSerializerStub.returnsArg(0);
+
+    const fakeBody = {
+      data: {
+        attributes: {
+          name: 'test',
+        },
+      },
+    };
+
+    const expectedResult = {};
+    const result = developersDao.postDeveloper(fakeBody);
+    return result.should
+      .eventually.be.fulfilled
+      .and.deep.equal(expectedResult);
   });
 
   it('patchDeveloper should be rejected', () => {
