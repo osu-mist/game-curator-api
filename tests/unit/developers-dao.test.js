@@ -10,7 +10,6 @@ sinon.replace(config, 'get', () => ({ oracledb: {} }));
 const conn = appRoot.require('api/v1/db/oracledb/connection');
 const developersDao = appRoot.require('api/v1/db/oracledb/developers-dao');
 const developersSerializer = appRoot.require('api/v1/serializers/developers-serializer');
-const testData = require('./test-data');
 
 chai.should();
 chai.use(chaiExclude);
@@ -164,29 +163,5 @@ describe('Test developers-dao', () => {
     return result.should
       .eventually.be.fulfilled
       .and.has.property('rows').deep.equal(expectedResult);
-  });
-});
-
-describe('Test getDevelopers', () => {
-  beforeEach(() => {
-    sinon.stub(conn, 'getConnection').resolves({
-      execute: () => ({ rows: testData.rawDevelopers }),
-      close: () => null,
-    });
-  });
-  afterEach(() => sinon.restore());
-
-  // get expectedResult by wrapping each element in testData.rawDevelopers with 'attributes' object
-  const expectedResult = [];
-  _.forEach(testData.rawDevelopers, (item) => {
-    expectedResult.push({ attributes: _.omit(item, 'id') });
-  });
-
-  it('getDevelopers should return data', () => {
-    const result = developersDao.getDevelopers(testData.fakeDeveloperQuery);
-    return Promise.all([result.should
-      .eventually.be.fulfilled
-      .and.has.property('data')
-      .excluding(['links', 'type', 'id']).deep.equal(expectedResult)]);
   });
 });
