@@ -1,3 +1,5 @@
+/* eslint no-unused-vars: 0 */
+
 const appRoot = require('app-root-path');
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
@@ -18,7 +20,8 @@ chai.use(chaiAsPromised);
 describe('Test developers-dao', () => {
   const fakeId = 'fakeId';
 
-  beforeEach(() => {
+  // most tests can use the same 'getConnection' stub but some need specific ones
+  const standardConnStub = () => {
     sinon.stub(conn, 'getConnection').resolves({
       execute: (sql, sqlParams) => {
         const sqlResults = {
@@ -48,10 +51,12 @@ describe('Test developers-dao', () => {
       },
       close: () => null,
     });
-  });
+  };
+
   afterEach(() => sinon.restore());
 
   it('getDevelopers should return multiResult', () => {
+    standardConnStub();
     const developersSerializerStub = sinon.stub(developersSerializer, 'serializeDevelopers');
     developersSerializerStub.returnsArg(0);
 
@@ -65,7 +70,14 @@ describe('Test developers-dao', () => {
       });
   });
 
+  it('getDevelopers should be rejected', () => {
+    const rejectedCases = [
+      { testCase: 'singleResult', error: 'error test' },
+    ];
+  });
+
   it('getDeveloperById should return singleResult', () => {
+    standardConnStub();
     const developersSerializerStub = sinon.stub(developersSerializer, 'serializeDeveloper');
     developersSerializerStub.returnsArg(0);
 
@@ -89,6 +101,7 @@ describe('Test developers-dao', () => {
   });
 
   it('postDeveloper with improper body should be rejected', () => {
+    standardConnStub();
     const developersSerializerStub = sinon.stub(developersSerializer, 'serializeDeveloper');
     developersSerializerStub.returnsArg(0);
 
@@ -102,6 +115,7 @@ describe('Test developers-dao', () => {
   });
 
   it('postDeveloper should return singleResult', () => {
+    standardConnStub();
     const developersSerializerStub = sinon.stub(developersSerializer, 'serializeDeveloper');
     developersSerializerStub.returnsArg(0);
 
@@ -121,6 +135,7 @@ describe('Test developers-dao', () => {
   });
 
   it('deleteDeveloper should return empty result', () => {
+    standardConnStub();
     const developersSerializerStub = sinon.stub(developersSerializer, 'serializeDeveloper');
     developersSerializerStub.returnsArg(0);
 
@@ -132,6 +147,7 @@ describe('Test developers-dao', () => {
   });
 
   it('patchDeveloper with improper body should be rejected', () => {
+    standardConnStub();
     const developersSerializerStub = sinon.stub(developersSerializer, 'serializeDeveloper');
     developersSerializerStub.returnsArg(0);
 
@@ -145,6 +161,7 @@ describe('Test developers-dao', () => {
   });
 
   it('patchDeveloper should return singleResult', () => {
+    standardConnStub();
     const developersSerializerStub = sinon.stub(developersSerializer, 'serializeDeveloper');
     developersSerializerStub.returnsArg(0);
 
