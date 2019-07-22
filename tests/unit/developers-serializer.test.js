@@ -20,6 +20,7 @@ const { expect } = chai;
 
 describe('Test developers-serializer', () => {
   const { fakeId, fakeBaseUrl } = testData;
+
   const resourceSubsetSchema = (resourceType, resourceAttributes) => {
     const schema = {
       links: {
@@ -28,7 +29,7 @@ describe('Test developers-serializer', () => {
       data: {
         id: fakeId,
         type: resourceType,
-        links: { self: null },
+        links: { self: `${fakeBaseUrl}` },
       },
     };
     if (resourceAttributes) {
@@ -45,8 +46,9 @@ describe('Test developers-serializer', () => {
    * @param {string} nestedProps field name of the nested properties
    */
   const testSingleResource = (serializedResource, resourceType, nestedProps) => {
-    expect(serializedResource).to.containSubset(resourceSubsetSchema(resourceType));
+    expect(serializedResource).to.containSubset(resourceSubsetSchema(resourceType, nestedProps));
 
+    console.log(serializedResource);
     if (nestedProps) {
       expect(serializedResource).to.have.nested.property(`data.attributes.${nestedProps}`);
     }
@@ -80,7 +82,8 @@ describe('Test developers-serializer', () => {
     const resourceType = 'developer';
 
     const serializedDeveloper = serializeDeveloper(rawDevelopers[0]);
-    testSingleResource(serializedDeveloper, resourceType, ['name', 'website']);
+    console.log(_.omit(testData.rawDevelopers[0], ['id']));
+    testSingleResource(serializedDeveloper, resourceType, _.omit(testData.rawDevelopers[0], ['id']));
     // console.log(resourceSubsetSchema(resourceType))
     // console.log(_.keys(getDefinitionProps('DeveloperResource')));
   });
