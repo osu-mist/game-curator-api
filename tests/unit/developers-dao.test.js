@@ -44,7 +44,6 @@ describe('Test developers-dao', () => {
         } else {
           result = sqlResults.multiResults;
         }
-        // return 'developerId' in sqlParams ? sqlResults.singleResult : sqlResults.multiResults;
         return result;
       },
       close: () => null,
