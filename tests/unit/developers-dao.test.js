@@ -70,12 +70,6 @@ describe('Test developers-dao', () => {
       });
   });
 
-  it('getDevelopers should be rejected', () => {
-    const rejectedCases = [
-      { testCase: 'singleResult', error: 'error test' },
-    ];
-  });
-
   it('getDeveloperById should return singleResult', () => {
     standardConnStub();
     const developersSerializerStub = sinon.stub(developersSerializer, 'serializeDeveloper');
@@ -98,6 +92,28 @@ describe('Test developers-dao', () => {
         }));
     });
     return Promise.all(fulfilledPromises);
+  });
+
+  it('getDeveloperById should be rejected', () => {
+    const rejectedCases = [
+      { testCase: '[]', error: 'Cannot read property \'length\' of undefined' },
+      { testCase: { rows: [{}, {}] }, error: 'Expect a single object but got multiple results' },
+    ];
+
+    const rejectedPromises = [];
+    _.each(rejectedCases, ({ testCase, error }, index) => {
+      sinon.stub(conn, 'getConnection').resolves({
+        execute: () => testCase,
+        close: () => null,
+      });
+
+      const result = developersDao.getDeveloperById('fakeId');
+      rejectedPromises.push(result.should
+        .eventually.be.rejectedWith(Error, error));
+
+      sinon.restore();
+    });
+    return Promise.all(rejectedPromises);
   });
 
   it('postDeveloper with improper body should be rejected', () => {
