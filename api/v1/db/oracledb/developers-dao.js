@@ -93,8 +93,8 @@ const deleteDeveloper = async (developerId) => {
   const connection = await conn.getConnection();
 
   try {
-    const sqlQuery = 'DELETE FROM DEVELOPERS WHERE ID = :id';
-    const sqlParams = { id: developerId };
+    const sqlQuery = 'DELETE FROM DEVELOPERS WHERE ID = :developerId';
+    const sqlParams = { developerId };
     const response = await connection.execute(sqlQuery, sqlParams, { autoCommit: true });
 
     return response;
@@ -110,8 +110,8 @@ const patchDeveloper = async (id, body) => {
   const connection = await conn.getConnection();
   try {
     const { attributes } = body.data;
-    attributes.id = id;
-    const sqlQuery = 'UPDATE DEVELOPERS SET NAME = :name, WEBSITE = :website WHERE ID = :id';
+    attributes.developerId = id;
+    const sqlQuery = 'UPDATE DEVELOPERS SET NAME = :name, WEBSITE = :website WHERE ID = :developerId';
     const response = await connection.execute(sqlQuery, attributes, { autoCommit: true });
 
     return response;

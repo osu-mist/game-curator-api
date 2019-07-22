@@ -39,7 +39,7 @@ describe('Test developers-dao', () => {
         let result;
         if (sql.includes('DELETE')) {
           result = sqlResults.emptyResult;
-        } else if ('developerId' in sqlParams || 'id' in sqlParams) {
+        } else if ('developerId' in sqlParams) {
           result = sqlResults.singleResult;
         } else {
           result = sqlResults.multiResults;
@@ -125,7 +125,7 @@ describe('Test developers-dao', () => {
     developersSerializerStub.returnsArg(0);
 
     const expectedResult = [];
-    const result = developersDao.deleteDeveloper();
+    const result = developersDao.deleteDeveloper('fakeId');
     return result.should
       .eventually.be.fulfilled
       .and.has.property('rows').deep.equal(expectedResult);
