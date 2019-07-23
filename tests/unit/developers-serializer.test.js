@@ -83,9 +83,7 @@ describe('Test developers-serializer', () => {
     const resourceType = 'developer';
 
     const serializedDeveloper = serializeDeveloper(rawDevelopers[0]);
-    console.log(_.omit(testData.rawDevelopers[0], ['id']));
-    testSingleResource(serializedDeveloper, resourceType, _.omit(testData.rawDevelopers[0], ['id']));
-    // console.log(resourceSubsetSchema(resourceType))
-    // console.log(_.keys(getDefinitionProps('DeveloperResource')));
+    testSingleResource(serializedDeveloper, resourceType, _.omit(rawDevelopers[0], ['id']));
+  });
   });
 });
