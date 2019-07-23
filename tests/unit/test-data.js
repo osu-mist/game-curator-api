@@ -19,10 +19,15 @@ const rawDevelopers = [
     website: 'www.notascam.com',
   },
 ];
+const paginationQueries = {
+  'page[number]': 1,
+  'page[size]': 25,
+};
 
 module.exports = {
   rawDevelopers,
   fakeDeveloperQuery,
   fakeId,
   fakeBaseUrl,
+  paginationQueries,
 };
