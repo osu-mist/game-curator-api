@@ -1,12 +1,8 @@
-/* eslint no-unused-vars: 0 */
-
 const appRoot = require('app-root-path');
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const chaiSubset = require('chai-subset');
-const config = require('config');
 const _ = require('lodash');
-const sinon = require('sinon');
 
 // sinon.replace(config, 'get', () => ({ oracledb: {} }));
 const developersSerializer = appRoot.require('api/v1/serializers/developers-serializer');
