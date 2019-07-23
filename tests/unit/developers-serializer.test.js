@@ -48,9 +48,10 @@ describe('Test developers-serializer', () => {
   const testSingleResource = (serializedResource, resourceType, nestedProps) => {
     expect(serializedResource).to.containSubset(resourceSubsetSchema(resourceType, nestedProps));
 
-    console.log(serializedResource);
     if (nestedProps) {
-      expect(serializedResource).to.have.nested.property(`data.attributes.${nestedProps}`);
+      _.forEach(Object.keys(nestedProps), (prop) => {
+        expect(serializedResource).to.have.nested.property(`data.attributes.${prop}`);
+      });
     }
   };
 
