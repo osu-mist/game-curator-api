@@ -43,7 +43,7 @@ describe('Test developers-serializer', () => {
    * @function
    * @param {object} serializedResource serialized resource
    * @param {string} resourceType resource type
-   * @param {string} nestedProps field name of the nested properties
+   * @param {object} nestedProps object containing properties nested under data.attributes
    */
   const testSingleResource = (serializedResource, resourceType, nestedProps) => {
     expect(serializedResource).to.containSubset(resourceSubsetSchema(resourceType, nestedProps));
