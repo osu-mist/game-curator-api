@@ -56,6 +56,20 @@ describe('Test developers-serializer', () => {
   };
 
   /**
+   * @summary Helper function for lite-testing multiple resources
+   * @function
+   * @param {Object} serializedResources serialized resources
+   * @returns {Object} data object from serialized resources for further use
+   */
+  const testMultipleResources = (serializedResources) => {
+    const serializedResourcesData = serializedResources.data;
+    expect(_.omit(serializedResources, 'meta')).to.have.keys('data', 'links');
+    expect(serializedResourcesData).to.be.an('array');
+
+    return serializedResourcesData;
+  };
+
+  /**
    * @summary Helper function to get definition from openapi specification
    * @function
    * @param {string} definition the name of definition
@@ -85,5 +99,14 @@ describe('Test developers-serializer', () => {
     const serializedDeveloper = serializeDeveloper(rawDevelopers[0]);
     testSingleResource(serializedDeveloper, resourceType, _.omit(rawDevelopers[0], ['id']));
   });
+
+  it('test serializeDevelopers', () => {
+    const { serializeDevelopers } = developersSerializer;
+    const { rawDevelopers } = testData;
+
+    const serializedDevelopers = serializeDevelopers(rawDevelopers, testData.paginationQueries);
+    testMultipleResources(serializedDevelopers);
+
+    expect(serializedDevelopers).to.have.all.keys(_.keys(getDefinitionProps('DeveloperResults')));
   });
 });
