@@ -101,7 +101,7 @@ describe('Test developers-dao', () => {
     ];
 
     const rejectedPromises = [];
-    _.each(rejectedCases, ({ testCase, error }, index) => {
+    _.each(rejectedCases, ({ testCase, error }) => {
       sinon.stub(conn, 'getConnection').resolves({
         execute: () => testCase,
         close: () => null,
@@ -148,6 +148,29 @@ describe('Test developers-dao', () => {
     return result.should
       .eventually.be.fulfilled
       .and.deep.equal(expectedResult);
+  });
+
+  it('postDeveloper should be rejected', () => {
+    const rejectedCases = [
+      { testCase: [], error: 'Cannot read property \'outId\' of undefined' },
+      { testCase: { outBinds: { outId: 'fakeId' } }, error: 'Cannot read property \'data\' of undefined' },
+    ];
+
+    const rejectedPromises = [];
+    _.forEach(rejectedCases, ({ testCase, error }) => {
+      sinon.stub(conn, 'getConnection').resolves({
+        execute: () => testCase,
+        close: () => null,
+      });
+
+      const fakeBody = { data: { attributes: 'fakeAttributes' } };
+      const result = developersDao.postDeveloper(fakeBody);
+      rejectedPromises.push(result.should
+        .eventually.be.rejectedWith(Error, error));
+
+      sinon.restore();
+    });
+    return Promise.all(rejectedPromises);
   });
 
   it('deleteDeveloper should return empty result', () => {
