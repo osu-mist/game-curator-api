@@ -109,4 +109,22 @@ describe('Test developers-serializer', () => {
 
     expect(serializedDevelopers).to.have.all.keys(_.keys(getDefinitionProps('DeveloperResults')));
   });
+
+  it('serializeDevelopers should be rejected', () => {
+    const { serializeDevelopers } = developersSerializer;
+    const { rawDevelopers } = testData;
+    const rejectedCases = [
+      { rawData: rawDevelopers, queries: null, error: 'Cannot read property \'page[size]\' of null' },
+      { rawData: null, queries: testData.paginationQueries, error: 'Cannot read property \'length\' of null' },
+    ];
+
+    const rejectedPromises = [];
+    _.forEach(rejectedCases, ({ rawData, queries, error }) => {
+      rejectedPromises.push(
+        expect(() => serializeDevelopers(rawData, queries))
+          .to.throw(error),
+      );
+    });
+    return Promise.all(rejectedPromises);
+  });
 });
