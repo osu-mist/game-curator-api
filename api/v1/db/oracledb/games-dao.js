@@ -2,7 +2,7 @@ const appRoot = require('app-root-path');
 const _ = require('lodash');
 const oracledb = require('oracledb');
 
-const { serializeGame, serializeGames } = require('../../serializers/games-serializer');
+const gamesSerializer = require('../../serializers/games-serializer');
 
 const { openapi } = appRoot.require('utils/load-openapi');
 const getParameters = openapi.paths['/games'].get.parameters;
@@ -41,7 +41,7 @@ const getGames = async (queries) => {
   try {
     // execute query and return results
     const { rows } = await connection.execute(sqlQuery, sqlParams);
-    const serializedGames = serializeGames(rows, queries);
+    const serializedGames = gamesSerializer.serializeGames(rows, queries);
     return serializedGames;
   } finally {
     connection.close();
@@ -77,7 +77,7 @@ const getGameById = async (id) => {
     } else if (_.isEmpty(rows)) {
       return undefined;
     } else {
-      const serializedGame = serializeGame(rows[0]);
+      const serializedGame = gamesSerializer.serializeGame(rows[0]);
       return serializedGame;
     }
   } finally {
