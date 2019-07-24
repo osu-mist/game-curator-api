@@ -25,14 +25,14 @@ const rawGames = [
     name: 'testGame',
     developerId: fakeId,
     score: '2',
-    releaseDate: '1994-12-5',
+    releaseDate: '5/12/1994',
   },
   {
     id: '12314315',
     name: 'Half Life 3',
     developerId: '1212325',
     score: '5',
-    releaseDate: '2099-10-20',
+    releaseDate: '10-20-2099',
   },
 ];
 const rawReviews = [
@@ -42,7 +42,7 @@ const rawReviews = [
     reviewer: 'fakeReviewer',
     score: '4',
     reviewText: 'this is a fake game review',
-    reviewDate: '1995-10-26',
+    reviewDate: '10/26/2011',
   },
   {
     id: '123123123',
@@ -50,7 +50,7 @@ const rawReviews = [
     reviewer: 'fakeNews',
     score: '1',
     reviewText: 'this review is fake news',
-    reviewDate: '2011-5-15',
+    reviewDate: '5-30-2005',
   },
 ];
 const paginationQueries = {
