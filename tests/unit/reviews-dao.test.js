@@ -184,4 +184,30 @@ describe('Test reviews-dao', () => {
     });
     return Promise.all(rejectedPromises);
   });
+
+  it('isValidGame should be fulfilled', () => {
+    const testCases = [
+      { testCase: { rows: [{ id: 1 }] }, expectedResult: true },
+      { testCase: { rows: [{ id: 0 }] }, expectedResult: false },
+    ];
+
+    const fulfilledPromises = [];
+    _.forEach(testCases, ({ testCase, expectedResult }) => {
+      const connStub = createConnStub(testCase);
+
+      const result = reviewsDao.isValidGame();
+      fulfilledPromises.push(result.should
+        .eventually.be.fulfilled
+        .and.deep.equal(expectedResult));
+
+      connStub.restore();
+    });
+    return Promise.all(fulfilledPromises);
+  });
+
+  it('isValidGame should be rejected', () => {
+    createConnStub({});
+    const result = reviewsDao.isValidGame('fakeId');
+    return result.should.be.rejectedWith(Error, 'Cannot read property \'0\' of undefined');
+  });
 });
