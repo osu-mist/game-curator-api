@@ -51,4 +51,25 @@ describe('Test games-serializer', () => {
     });
     return Promise.all(rejectedPromises);
   });
+
+  it('test gameConverter', () => {
+    const { gameConverter } = gamesSerializer;
+
+    // for some reason when the rawGame data is imported in
+    // the string values for score are implicitly converted to numbers
+    // a main purpose for gameConvert is to do that conversion
+    // we must convert back to string to properly test
+    _.forEach(rawGames, (game) => {
+      game.score = String(game.score);
+    });
+    gameConverter(rawGames);
+
+    const testResults = [];
+    _.forEach(rawGames, (game) => {
+      testResults.push(game.score.should
+        .be.a('number', 'rawGames score should be a number'));
+    });
+
+    return Promise.all(testResults);
+  });
 });
