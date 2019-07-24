@@ -16,5 +16,12 @@ chai.use(chaiSubset);
 const { expect } = chai;
 
 describe('Test games-serializer', () => {
+  it('test serializeGame', () => {
+    const { serializeGame } = gamesSerializer;
+    const { rawGames } = testData;
+    const resourceType = 'game';
 
+    const serializedGame = serializeGame(rawGames[0]);
+    testSingleResource(serializedGame, resourceType, _.omit(rawGames[0], ['id']));
+  });
 });
