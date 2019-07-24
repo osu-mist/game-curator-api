@@ -164,4 +164,50 @@ describe('Test games-dao', () => {
     });
     return Promise.all(fulfilledPromises);
   });
+
+  it('patchGame should be fulfilled', () => {
+    const testCases = [
+      { testCase: [{}] },
+    ];
+
+    const fakeId = 'fakeId';
+    const fakeBody = {
+      data: {
+        attributes: [{}],
+      },
+    };
+
+    const fulfilledPromises = [];
+    _.forEach(testCases, ({ testCase }) => {
+      const connStub = createConnStub(testCase);
+
+      const result = gamesDao.patchGame(fakeId, fakeBody);
+      fulfilledPromises.push(result.should
+        .eventually.be.fulfilled
+        .and.deep.equal(testCase));
+
+      connStub.restore();
+    });
+    return Promise.all(fulfilledPromises);
+  });
+
+  it('patchGame should be rejected', () => {
+    const testCases = [
+      { fakeBody: undefined, error: 'Cannot read property \'data\' of undefined' },
+      { fakeBody: { attributes: {} }, error: 'Cannot destructure property `attributes` of \'undefined\' or \'null\'.' },
+    ];
+    const fakeId = 'fakeId';
+
+    const rejectedPromises = [];
+    _.forEach(testCases, ({ fakeBody, error }) => {
+      const connStub = createConnStub();
+
+      const result = gamesDao.patchGame(fakeId, fakeBody);
+      rejectedPromises.push(result.should
+        .eventually.be.rejectedWith(Error, error));
+
+      connStub.restore();
+    });
+    return Promise.all(rejectedPromises);
+  });
 });
