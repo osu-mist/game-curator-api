@@ -16,12 +16,22 @@ chai.use(chaiSubset);
 const { expect } = chai;
 
 describe('Test games-serializer', () => {
+  const { rawGames } = testData;
+  const resourceType = 'game';
+
   it('test serializeGame', () => {
     const { serializeGame } = gamesSerializer;
-    const { rawGames } = testData;
-    const resourceType = 'game';
 
     const serializedGame = serializeGame(rawGames[0]);
     testSingleResource(serializedGame, resourceType, _.omit(rawGames[0], ['id']));
+  });
+
+  it('test serializeGames', () => {
+    const { serializeGames } = gamesSerializer;
+
+    const serializedGames = serializeGames(rawGames, testData.paginationQueries);
+    testMultipleResources(serializedGames);
+
+    expect(serializedGames).to.have.all.keys(_.keys(getDefinitionProps('GameResults')));
   });
 });
