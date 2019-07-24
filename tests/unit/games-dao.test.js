@@ -45,3 +45,7 @@ describe('Test games-dao', () => {
     return Promise.all(fulfilledPromises);
   });
 
+  it('getDevelopers should be rejected', () => {
+    // No queries passed in
+  });
+});
