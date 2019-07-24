@@ -43,4 +43,15 @@ describe('Test reviews-dao', () => {
     });
     return Promise.all(fulfilledPromises);
   });
+
+  it('getReviews should be rejected', () => {
+    sinon.stub(reviewsSerializer, 'serializeReviews').returnsArg(0);
+    createConnStub();
+
+    const expectedError = 'Cannot read property \'gameIds\' of undefined';
+    // explicitly pass in undefined
+    const result = reviewsDao.getReviews(undefined);
+    return result.should.eventually.be.rejectedWith(Error, expectedError);
+  });
+
 });
