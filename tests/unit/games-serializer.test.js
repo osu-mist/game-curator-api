@@ -7,8 +7,8 @@ const chaiSubset = require('chai-subset');
 const _ = require('lodash');
 
 const gamesSerializer = appRoot.require('api/v1/serializers/games-serializer');
+const { getDefinitionProps, testSingleResource, testMultipleResources } = appRoot.require('tests/unit/serializer-test-helpers.js');
 const testData = appRoot.require('tests/unit/test-data');
-const { openapi } = appRoot.require('utils/load-openapi');
 
 chai.should();
 chai.use(chaiAsPromised);
