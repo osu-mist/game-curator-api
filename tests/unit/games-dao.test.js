@@ -83,14 +83,15 @@ describe('Test games-dao', () => {
     sinon.stub(gamesSerializer, 'serializeGame').returnsArg(0);
 
     const testCases = [
-      { testCase: [{}, {}], error: 'Expect a single object but got multiple results.' },
+      { testCase: { rows: [{}, {}] }, error: 'Expect a single object but got multiple results.' },
+      { testCase: [], error: 'Cannot read property \'length\' of undefined' },
     ];
 
     const rejectedPromises = [];
     _.forEach(testCases, ({ testCase, error }) => {
-      const connStub = createConnStub({ rows: testCase });
+      const connStub = createConnStub(testCase);
 
-      const result = gamesDao.getGameById('fakeId');
+      const result = gamesDao.getGameById();
       rejectedPromises.push(result.should.eventually.be.rejectedWith(Error, error));
 
       connStub.restore();
