@@ -155,7 +155,7 @@ describe('Test games-dao', () => {
     _.forEach(testCases, ({ testCase }) => {
       const connStub = createConnStub(testCase);
 
-      const result = gamesDao.deleteGame('fakeId');
+      const result = gamesDao.deleteGame();
       fulfilledPromises.push(result.should
         .eventually.be.fulfilled
         .and.deep.equal(testCase));
