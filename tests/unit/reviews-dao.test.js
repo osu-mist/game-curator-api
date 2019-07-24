@@ -95,4 +95,28 @@ describe('Test reviews-dao', () => {
     return Promise.all(rejectedPromises);
   });
 
+  it('postReview should be fulfilled', () => {
+    // TODO
+  });
+
+  it('postReview should be rejected', () => {
+    sinon.stub(reviewsSerializer, 'serializeReview').returnsArg(0);
+
+    const testCases = [
+      { fakeBody: undefined, error: 'Cannot read property \'data\' of undefined' },
+      { fakeBody: { attributes: {} }, error: 'Cannot destructure property `attributes` of \'undefined\' or \'null\'.' },
+    ];
+
+    const rejectedPromises = [];
+    _.forEach(testCases, ({ fakeBody, error }) => {
+      const connStub = createConnStub({});
+
+      const result = reviewsDao.postReview(fakeBody);
+      rejectedPromises.push(result.should
+        .eventually.be.rejectedWith(Error, error));
+
+      connStub.restore();
+    });
+    return Promise.all(rejectedPromises);
+  });
 });
