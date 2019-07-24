@@ -24,7 +24,7 @@ describe('Test games-dao', () => {
   });
 
 
-  it('getDevelopers should be fulfilled', () => {
+  it('getGames should be fulfilled', () => {
     const testCases = [
       { testCase: [{}, {}] },
       { testCase: [] },
@@ -46,7 +46,13 @@ describe('Test games-dao', () => {
     return Promise.all(fulfilledPromises);
   });
 
-  it('getDevelopers should be rejected', () => {
-    // No queries passed in
+  it('getGames should be rejected', () => {
+    sinon.stub(gamesSerializer, 'serializeGames').returnsArg(0);
+    createConnStub();
+
+    const expectedError = 'Cannot read property \'page[number]\' of undefined';
+    // explicitly pass in undefined
+    const result = gamesDao.getGames(undefined);
+    return result.should.eventually.be.rejectedWith(Error, expectedError);
   });
 });
