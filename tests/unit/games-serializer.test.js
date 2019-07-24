@@ -1,6 +1,7 @@
 const appRoot = require('app-root-path');
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
+const chaiMatch = require('chai-match');
 const chaiSubset = require('chai-subset');
 const _ = require('lodash');
 
@@ -10,6 +11,7 @@ const testData = appRoot.require('tests/unit/test-data');
 
 chai.should();
 chai.use(chaiAsPromised);
+chai.use(chaiMatch);
 chai.use(chaiSubset);
 const { expect } = chai;
 
@@ -66,6 +68,8 @@ describe('Test games-serializer', () => {
     _.forEach(rawGames, (game) => {
       testResults.push(game.score.should
         .be.a('number', 'rawGames score should be a number'));
+      testResults.push(expect(game.releaseDate)
+        .to.match(/^(\d{4}-([1-9]|1[0-2])-([1-9]|[12]\d|3[01]))$/));
     });
 
     return Promise.all(testResults);
