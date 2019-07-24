@@ -14,7 +14,6 @@ const gamesSerializer = appRoot.require('api/v1/serializers/games-serializer');
 
 chai.should();
 chai.use(chaiAsPromised);
-const { expect } = chai;
 
 describe('Test games-dao', () => {
   afterEach(() => sinon.restore());
@@ -93,6 +92,54 @@ describe('Test games-dao', () => {
 
       const result = gamesDao.getGameById();
       rejectedPromises.push(result.should.eventually.be.rejectedWith(Error, error));
+
+      connStub.restore();
+    });
+    return Promise.all(rejectedPromises);
+  });
+
+  it('postGame should be fulfilled', () => {
+    sinon.stub(gamesSerializer, 'serializeGame').returnsArg(0);
+
+    const testCases = [
+      { testCase: [{}] },
+    ];
+
+    const fakeBody = {
+      data: {
+        attributes: {},
+      },
+    };
+
+    const fulfilledPromises = [];
+    _.forEach(testCases, ({ testCase }) => {
+      const connStub = createConnStub({ rows: testCase, outBinds: { outId: ['1'] } });
+
+      const result = gamesDao.postGame(fakeBody);
+      fulfilledPromises.push(result.should
+        .eventually.be.fulfilled
+        .and.deep.equal(testCase));
+
+      connStub.restore();
+    });
+    // return Promise.all(fulfilledPromises);
+  });
+
+  it('postGame should be rejected', () => {
+    sinon.stub(gamesSerializer, 'serializeGame').returnsArg(0);
+
+    const testCases = [
+      { fakeBody: undefined, error: 'Cannot read property \'data\' of undefined' },
+      { fakeBody: { attributes: {} }, error: 'Cannot destructure property `attributes` of \'undefined\' or \'null\'.' },
+    ];
+
+    const rejectedPromises = [];
+    _.forEach(testCases, ({ fakeBody, error }) => {
+      const connStub = createConnStub({});
+
+      const result = gamesDao.postGame(fakeBody);
+      rejectedPromises.push(result.should
+        .eventually.be.rejectedWith(Error, error));
 
       connStub.restore();
     });
