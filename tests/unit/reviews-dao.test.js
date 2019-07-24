@@ -119,4 +119,23 @@ describe('Test reviews-dao', () => {
     });
     return Promise.all(rejectedPromises);
   });
+
+  it('deleteReview should be fulfilled', () => {
+    const testCases = [
+      { testCase: [] },
+    ];
+
+    const fulfilledPromises = [];
+    _.forEach(testCases, ({ testCase }) => {
+      const connStub = createConnStub(testCase);
+
+      const result = reviewsDao.deleteReview();
+      fulfilledPromises.push(result.should
+        .eventually.be.fulfilled
+        .and.deep.equal(testCase));
+
+      connStub.restore();
+    });
+    return Promise.all(fulfilledPromises);
+  });
 });
