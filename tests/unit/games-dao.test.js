@@ -10,7 +10,7 @@ const sinon = require('sinon');
 sinon.replace(config, 'get', () => ({ oracledb: {} }));
 const conn = appRoot.require('api/v1/db/oracledb/connection');
 const gamesDao = appRoot.require('api/v1/db/oracledb/games-dao');
-const developersSerializer = appRoot.require('api/v1/serializer/games-serializer');
+const gamesSerializer = appRoot.require('api/v1/serializers/games-serializer');
 
 chai.should();
 chai.use(chaiAsPromised);
