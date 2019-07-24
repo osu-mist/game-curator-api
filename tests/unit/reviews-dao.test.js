@@ -164,4 +164,24 @@ describe('Test reviews-dao', () => {
     });
     return Promise.all(fulfilledPromises);
   });
+
+  it('patchReview should be rejected', () => {
+    const testCases = [
+      { fakeBody: undefined, error: 'Cannot read property \'data\' of undefined' },
+      { fakeBody: { attributes: {} }, error: 'Cannot destructure property `attributes` of \'undefined\' or \'null\'.' },
+    ];
+    const fakeId = 'fakeId';
+
+    const rejectedPromises = [];
+    _.forEach(testCases, ({ fakeBody, error }) => {
+      const connStub = createConnStub();
+
+      const result = reviewsDao.patchReview(fakeId, fakeBody);
+      rejectedPromises.push(result.should
+        .eventually.be.rejectedWith(Error, error));
+
+      connStub.restore();
+    });
+    return Promise.all(rejectedPromises);
+  });
 });
