@@ -15,4 +15,32 @@ chai.use(chaiAsPromised);
 
 describe('Test reviews-dao', () => {
   afterEach(() => sinon.restore());
+
+  const createConnStub = executeReturn => sinon.stub(conn, 'getConnection').resolves({
+    execute: () => executeReturn,
+    close: () => null,
+  });
+
+  it('getReviews should be fulfilled', () => {
+    sinon.stub(reviewsSerializer, 'serializeReviews').returnsArg(0);
+
+    const testCases = [
+      { testCase: [{}, {}] },
+      { testCase: [] },
+      { testCase: [{}] },
+    ];
+
+    const fulfilledPromises = [];
+    _.forEach(testCases, ({ testCase }) => {
+      const connStub = createConnStub({ rows: testCase });
+
+      const result = reviewsDao.getReviews('fakeQueries');
+      fulfilledPromises.push(result.should
+        .eventually.be.fulfilled
+        .and.deep.equals(testCase));
+
+      connStub.restore();
+    });
+    return Promise.all(fulfilledPromises);
+  });
 });
