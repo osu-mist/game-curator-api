@@ -74,4 +74,25 @@ describe('Test reviews-dao', () => {
     });
     return Promise.all(fulfilledPromises);
   });
+
+  it('getReviewById should be rejected', () => {
+    sinon.stub(reviewsSerializer, 'serializeReview').returnsArg(0);
+
+    const testCases = [
+      { testCase: { rows: [{}, {}] }, error: 'Expect a single object but got multiple results.' },
+      { testCase: [], error: 'Cannot read property \'length\' of undefined' },
+    ];
+
+    const rejectedPromises = [];
+    _.forEach(testCases, ({ testCase, error }) => {
+      const connStub = createConnStub(testCase);
+
+      const result = reviewsDao.getReviewById();
+      rejectedPromises.push(result.should.eventually.be.rejectedWith(Error, error));
+
+      connStub.restore();
+    });
+    return Promise.all(rejectedPromises);
+  });
+
 });
