@@ -89,4 +89,4 @@ const serializeGame = (rawGame) => {
     serializerOptions(serializerArgs),
   ).serialize(rawGame);
 };
-module.exports = { serializeGames, serializeGame };
+module.exports = { serializeGames, serializeGame, gameConverter };
