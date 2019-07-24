@@ -1,5 +1,3 @@
-/* eslint no-unused-vars: 0 */
-
 const appRoot = require('app-root-path');
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
