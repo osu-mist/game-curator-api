@@ -206,4 +206,24 @@ describe('Test games-dao', () => {
     });
     return Promise.all(rejectedPromises);
   });
+
+  it('isValidDeveloper should be fulfilled', () => {
+    const testCases = [
+      { testCase: { rows: [{ id: 1 }] }, expectedResult: true },
+      { testCase: { rows: [{ id: 0 }] }, expectedResult: false },
+    ];
+
+    const fulfilledPromises = [];
+    _.forEach(testCases, ({ testCase, expectedResult }) => {
+      const connStub = createConnStub(testCase);
+
+      const result = gamesDao.isValidDeveloper();
+      fulfilledPromises.push(result.should
+        .eventually.be.fulfilled
+        .and.deep.equal(expectedResult));
+
+      connStub.restore();
+    });
+    return Promise.all(fulfilledPromises);
+  });
 });
