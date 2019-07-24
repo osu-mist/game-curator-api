@@ -14,6 +14,7 @@ const gamesSerializer = appRoot.require('api/v1/serializers/games-serializer');
 
 chai.should();
 chai.use(chaiAsPromised);
+const { expect } = chai;
 
 describe('Test games-dao', () => {
   afterEach(() => sinon.restore());
@@ -79,6 +80,21 @@ describe('Test games-dao', () => {
   });
 
   it('getGameById should be rejected', () => {
+    sinon.stub(gamesSerializer, 'serializeGame').returnsArg(0);
 
+    const testCases = [
+      { testCase: [{}, {}], error: 'Expect a single object but got multiple results.' },
+    ];
+
+    const rejectedPromises = [];
+    _.forEach(testCases, ({ testCase, error }) => {
+      const connStub = createConnStub({ rows: testCase });
+
+      const result = gamesDao.getGameById('fakeId');
+      rejectedPromises.push(result.should.eventually.be.rejectedWith(Error, error));
+
+      connStub.restore();
+    });
+    return Promise.all(rejectedPromises);
   });
 });
