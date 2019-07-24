@@ -35,6 +35,24 @@ const rawGames = [
     releaseDate: '2099-10-20',
   },
 ];
+const rawReviews = [
+  {
+    id: fakeId,
+    gameId: fakeId,
+    reviewer: 'fakeReviewer',
+    score: '4',
+    reviewText: 'this is a fake game review',
+    reviewDate: '1995-10-26',
+  },
+  {
+    id: '123123123',
+    gameId: '232412',
+    reviewer: 'fakeNews',
+    score: '1',
+    reviewText: 'this review is fake news',
+    reviewDate: '2011-5-15',
+  },
+];
 const paginationQueries = {
   'page[number]': 1,
   'page[size]': 25,
@@ -47,4 +65,5 @@ module.exports = {
   fakeBaseUrl,
   paginationQueries,
   rawGames,
+  rawReviews,
 };
