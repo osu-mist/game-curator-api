@@ -3,6 +3,7 @@
 const appRoot = require('app-root-path');
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
+const chaiMatch = require('chai-match');
 const chaiSubset = require('chai-subset');
 const _ = require('lodash');
 
@@ -12,6 +13,7 @@ const testData = appRoot.require('tests/unit/test-data');
 
 chai.should();
 chai.use(chaiAsPromised);
+chai.use(chaiMatch);
 chai.use(chaiSubset);
 const { expect } = chai;
 
@@ -50,5 +52,27 @@ describe('Test reviews-serializer', () => {
       );
     });
     return Promise.all(rejectedPromises);
+  });
+
+  it('test reviewConverter', () => {
+    const { reviewConverter } = reviewsSerializer;
+
+    // for some reason when the rawReview data is imported in
+    // the string values for score are implicitly converted to numbers
+    // a main purpose for reviewConvert is to do that conversion
+    // we must convert back to string to properly test
+    _.forEach(rawReviews, (review) => {
+      review.score = String(review.score);
+    });
+    reviewConverter(rawReviews);
+
+    const testResults = [];
+    _.forEach(rawReviews, (review) => {
+      testResults.push(review.score.should
+        .be.a('number', 'rawReviews score should be a number'));
+      testResults.push(expect(review.reviewDate)
+        .to.match(/^(\d{4}-([1-9]|1[0-2])-([1-9]|[12]\d|3[01]))$/));
+    });
+    return Promise.all(testResults);
   });
 });
