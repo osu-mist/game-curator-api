@@ -61,7 +61,6 @@ describe('Test games-dao', () => {
 
     const testCases = [
       { testCase: [{}], expectedResult: {} },
-      { testCase: [{}, {}] },
     ];
 
     const fulfilledPromises = [];
