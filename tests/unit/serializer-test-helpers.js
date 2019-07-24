@@ -7,14 +7,15 @@ const { openapi } = appRoot.require('utils/load-openapi');
 const { fakeId, fakeBaseUrl } = appRoot.require('tests/unit/test-data');
 
 const resourceSubsetSchema = (resourceType, resourceAttributes) => {
+  const fakeUrl = `${fakeBaseUrl}/${resourceType}s/fakeId`;
   const schema = {
     links: {
-      self: `${fakeBaseUrl}`,
+      self: fakeUrl,
     },
     data: {
       id: fakeId,
       type: resourceType,
-      links: { self: `${fakeBaseUrl}` },
+      links: { self: fakeUrl },
     },
   };
   if (resourceAttributes) {
