@@ -86,4 +86,4 @@ const serializeReview = (rawReview) => {
     serializerOptions(serializerArgs),
   ).serialize(rawReview);
 };
-module.exports = { serializeReviews, serializeReview };
+module.exports = { serializeReviews, serializeReview, reviewConverter };
