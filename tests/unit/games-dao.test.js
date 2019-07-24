@@ -27,6 +27,7 @@ describe('Test games-dao', () => {
   it('getDevelopers should be fulfilled', () => {
     const testCases = [
       { testCase: [{}, {}] },
+      { testCase: [] },
       { testCase: [{}] },
     ];
     sinon.stub(gamesSerializer, 'serializeGames').returnsArg(0);
