@@ -19,7 +19,6 @@ describe('Test games-dao', () => {
     close: () => null,
   });
 
-
   it('getGames should be fulfilled', () => {
     const testCases = [
       { testCase: [{}, {}] },
