@@ -34,4 +34,21 @@ describe('Test games-serializer', () => {
 
     expect(serializedGames).to.have.all.keys(_.keys(getDefinitionProps('GameResults')));
   });
+
+  it('serializeGames should be rejected', () => {
+    const { serializeGames } = gamesSerializer;
+    const rejectedCases = [
+      { rawData: rawGames, queries: null, error: 'Cannot read property \'page[size]\' of null' },
+      { rawData: null, queries: testData.paginationQueries, error: 'Cannot read property \'length\' of null' },
+    ];
+
+    const rejectedPromises = [];
+    _.forEach(rejectedCases, ({ rawData, queries, error }) => {
+      rejectedPromises.push(
+        expect(() => serializeGames(rawData, queries))
+          .to.throw(error),
+      );
+    });
+    return Promise.all(rejectedPromises);
+  });
 });
