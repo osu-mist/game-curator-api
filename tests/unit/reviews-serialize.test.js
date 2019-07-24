@@ -25,4 +25,13 @@ describe('Test reviews-serializer', () => {
     const serializedReview = serializeReview(rawReviews[0]);
     testSingleResource(serializedReview, resourceType, _.omit(rawReviews[0], ['id']));
   });
+
+  it('test serializeReviews', () => {
+    const { serializeReviews } = reviewsSerializer;
+
+    const serializedReviews = serializeReviews(rawReviews, testData.paginationQueries);
+    testMultipleResources(serializedReviews);
+
+    expect(serializedReviews).to.have.all.keys(_.keys(getDefinitionProps('ReviewResults')));
+  });
 });
