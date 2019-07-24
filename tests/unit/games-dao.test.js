@@ -79,4 +79,7 @@ describe('Test games-dao', () => {
     return Promise.all(fulfilledPromises);
   });
 
+  it('getGameById should be rejected', () => {
+
+  });
 });
