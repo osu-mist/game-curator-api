@@ -226,4 +226,10 @@ describe('Test games-dao', () => {
     });
     return Promise.all(fulfilledPromises);
   });
+
+  it('isValidDeveloper should be rejected', () => {
+    createConnStub({});
+    const result = gamesDao.isValidDeveloper('fakeId');
+    return result.should.be.rejectedWith(Error, 'Cannot read property \'0\' of undefined');
+  });
 });
