@@ -138,4 +138,30 @@ describe('Test reviews-dao', () => {
     });
     return Promise.all(fulfilledPromises);
   });
+
+  it('patchReview should be fulfilled', () => {
+    const testCases = [
+      { testCase: [{}] },
+    ];
+
+    const fakeId = 'fakeId';
+    const fakeBody = {
+      data: {
+        attributes: [{}],
+      },
+    };
+
+    const fulfilledPromises = [];
+    _.forEach(testCases, ({ testCase }) => {
+      const connStub = createConnStub(testCase);
+
+      const result = reviewsDao.patchReview(fakeId, fakeBody);
+      fulfilledPromises.push(result.should
+        .eventually.be.fulfilled
+        .and.deep.equal(testCase));
+
+      connStub.restore();
+    });
+    return Promise.all(fulfilledPromises);
+  });
 });
