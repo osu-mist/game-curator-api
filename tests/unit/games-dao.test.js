@@ -55,4 +55,28 @@ describe('Test games-dao', () => {
     const result = gamesDao.getGames(undefined);
     return result.should.eventually.be.rejectedWith(Error, expectedError);
   });
+
+  it('getGameById should be fulfilled', () => {
+    sinon.stub(gamesSerializer, 'serializeGame').returnsArg(0);
+
+    const testCases = [
+      { testCase: [{}], expectedResult: {} },
+      { testCase: [{}, {}] },
+    ];
+
+    const fulfilledPromises = [];
+    _.forEach(testCases, ({ testCase, expectedResult }) => {
+      const connStub = createConnStub({ rows: testCase });
+
+      const result = gamesDao.getGameById('fakeId');
+      fulfilledPromises.push(result.should
+        .eventually.be.fulfilled
+        .and.deep.equals(expectedResult));
+
+      connStub.restore();
+    });
+
+    return Promise.all(fulfilledPromises);
+  });
+
 });
