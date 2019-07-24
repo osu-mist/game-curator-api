@@ -9,7 +9,7 @@ const fakeDeveloperQuery = {
 };
 const rawDevelopers = [
   {
-    id: 'fakeId',
+    id: fakeId,
     name: 'testDeveloper',
     website: 'http://www.example.com',
   },
@@ -17,6 +17,22 @@ const rawDevelopers = [
     id: '123123',
     name: 'fakeDeveloper',
     website: 'www.notascam.com',
+  },
+];
+const rawGames = [
+  {
+    id: fakeId,
+    name: 'testGame',
+    developerId: fakeId,
+    score: 2,
+    releaseDate: '1994-12-5',
+  },
+  {
+    id: '12314315',
+    name: 'Half Life 3',
+    developerId: '1212325',
+    score: 5,
+    releaseDate: '2099-10-20',
   },
 ];
 const paginationQueries = {
@@ -30,4 +46,5 @@ module.exports = {
   fakeId,
   fakeBaseUrl,
   paginationQueries,
+  rawGames,
 };
