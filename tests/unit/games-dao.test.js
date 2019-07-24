@@ -145,4 +145,23 @@ describe('Test games-dao', () => {
     });
     return Promise.all(rejectedPromises);
   });
+
+  it('deleteGame should be fulfilled', () => {
+    const testCases = [
+      { testCase: [] },
+    ];
+
+    const fulfilledPromises = [];
+    _.forEach(testCases, ({ testCase }) => {
+      const connStub = createConnStub(testCase);
+
+      const result = gamesDao.deleteGame('fakeId');
+      fulfilledPromises.push(result.should
+        .eventually.be.fulfilled
+        .and.deep.equal(testCase));
+
+      connStub.restore();
+    });
+    return Promise.all(fulfilledPromises);
+  });
 });
