@@ -34,4 +34,21 @@ describe('Test reviews-serializer', () => {
 
     expect(serializedReviews).to.have.all.keys(_.keys(getDefinitionProps('ReviewResults')));
   });
+
+  it('serializeReviews should be rejected', () => {
+    const { serializeReviews } = reviewsSerializer;
+    const rejectedCases = [
+      { rawData: rawReviews, queries: null, error: 'Cannot read property \'page[size]\' of null' },
+      { rawData: null, queries: testData.paginationQueries, error: 'Cannot read property \'length\' of null' },
+    ];
+
+    const rejectedPromises = [];
+    _.forEach(rejectedCases, ({ rawData, queries, error }) => {
+      rejectedPromises.push(
+        expect(() => serializeReviews(rawData, queries))
+          .to.throw(error),
+      );
+    });
+    return Promise.all(rejectedPromises);
+  });
 });
