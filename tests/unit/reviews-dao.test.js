@@ -54,4 +54,24 @@ describe('Test reviews-dao', () => {
     return result.should.eventually.be.rejectedWith(Error, expectedError);
   });
 
+  it('getReviewById should be fulfilled', () => {
+    sinon.stub(reviewsSerializer, 'serializeReview').returnsArg(0);
+
+    const testCases = [
+      { testCase: [{}], expectedResult: {} },
+    ];
+
+    const fulfilledPromises = [];
+    _.forEach(testCases, ({ testCase, expectedResult }) => {
+      const connStub = createConnStub({ rows: testCase });
+
+      const result = reviewsDao.getReviewById('fakeId');
+      fulfilledPromises.push(result.should
+        .eventually.be.fulfilled
+        .and.deep.equals(expectedResult));
+
+      connStub.restore();
+    });
+    return Promise.all(fulfilledPromises);
+  });
 });
