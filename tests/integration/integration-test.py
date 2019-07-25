@@ -34,73 +34,32 @@ class integration_tests(unittest.TestCase):
     def cleanup(cls):
         cls.session.close()
 
-    # Test case: GET /pets
-    def test_get_all_pets(self, endpoint='/pets'):
-        nullable_fields = ['owner']
-        utils.test_endpoint(self, endpoint, 'PetResource', 200,
-                            nullable_fields=nullable_fields)
+    def get_response(
+        self,
+        resource,
+        params={},
+        status=200,
+        endpoint=''
+    ):
+        return utils.test_endpoint(
+            self,
+            endpoint,
+            resource,
+            status,
+            params,
+            ['context']
+        )
 
-    # Test case: GET /pets with species filter
-    def test_get_pets_with_filter(self, endpoint='/pets'):
-        testing_species = ['dog', 'CAT', 'tUrTlE']
-
-        for species in testing_species:
-            params = {'species': species}
-            response = utils.test_endpoint(self, endpoint, 'PetResource', 200,
-                                           query_params=params)
-
-            response_data = response.json()['data']
-            for resource in response_data:
-                actual_species = resource['attributes']['species']
-                self.assertEqual(actual_species.lower(), species.lower())
-
-    # Test case: GET /pets with pagination parameters
-    def test_get_pets_pagination(self, endpoint='/pets'):
-        testing_paginations = [
-            {'number': 1, 'size': 25, 'expected_status_code': 200},
-            {'number': 1, 'size': None, 'expected_status_code': 200},
-            {'number': None, 'size': 25, 'expected_status_code': 200},
-            {'number': 999, 'size': 1, 'expected_status_code': 200},
-            {'number': -1, 'size': 25, 'expected_status_code': 400},
-            {'number': 1, 'size': -1, 'expected_status_code': 400},
-            {'number': 1, 'size': 501, 'expected_status_code': 400}
-        ]
-        nullable_fields = ['owner']
-        for pagination in testing_paginations:
-            params = {f'page[{k}]': pagination[k] for k in ['number', 'size']}
-            expected_status_code = pagination['expected_status_code']
-            resource = (
-                'PetResource' if expected_status_code == 200
-                else 'ErrorObject'
-            )
-            response = utils.test_endpoint(self, endpoint, resource,
-                                           expected_status_code,
-                                           query_params=params,
-                                           nullable_fields=nullable_fields)
-            content = utils.get_json_content(self, response)
-            if expected_status_code == 200:
-                try:
-                    meta = content['meta']
-                    num = pagination['number'] if pagination['number'] else 1
-                    size = pagination['size'] if pagination['size'] else 25
-
-                    self.assertEqual(num, meta['currentPageNumber'])
-                    self.assertEqual(size, meta['currentPageSize'])
-                except KeyError as error:
-                    self.fail(error)
-
-    # Test case: GET /pets/{id}
-    def test_get_pet_by_id(self, endpoint='/pets'):
-        valid_pet_ids = self.test_cases['valid_pet_ids']
-        invalid_pet_ids = self.test_cases['invalid_pet_ids']
-
-        for pet_id in valid_pet_ids:
-            resource = 'PetResource'
-            utils.test_endpoint(self, f'{endpoint}/{pet_id}', resource, 200)
-
-        for pet_id in invalid_pet_ids:
-            resource = 'ErrorObject'
-            utils.test_endpoint(self, f'{endpoint}/{pet_id}', resource, 404)
+    # Test case: GET /developers/{developerId}
+    def test_get_developer_by_id(self):
+        for developer_id in self.test_cases['valid_developer_ids']:
+            with self.subTest('Test valid developer Ids',
+                              developer_id=developer_id):
+                response = utils.test_endpoint(self,
+                                               f'/developers',
+                                               'DeveloperResource',
+                                               200)
+                print(response)
 
 
 if __name__ == '__main__':
