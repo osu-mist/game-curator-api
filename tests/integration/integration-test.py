@@ -56,10 +56,12 @@ class integration_tests(unittest.TestCase):
             with self.subTest('Test valid developer Ids',
                               developer_id=developer_id):
                 response = utils.test_endpoint(self,
-                                               f'/developers',
+                                               f'/developers/{developer_id}',
                                                'DeveloperResource',
                                                200)
-                print(response)
+                response_data = response.json()['data']
+                actual_developer_id = response_data['id']
+                self.assertEqual(actual_developer_id, developer_id)
 
 
 if __name__ == '__main__':
