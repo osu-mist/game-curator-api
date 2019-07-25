@@ -91,6 +91,7 @@ paths:
       description: Id of game to return
       required: true
       type: string
+      pattern: '^\d+$'
     get:
       summary: Find game by ID
       description: Returns a single game
@@ -214,6 +215,7 @@ paths:
         type: string
         required: true
         description: Unique id of a developer record
+        pattern: '^\d+$'
     get:
       summary: Get developer by its Id
       operationId: getDeveloperById
@@ -348,6 +350,7 @@ paths:
       description: Id of review to return
       required: true
       type: string
+      pattern: '^\d+$'
     get:
       summary: Find review by Id
       description: Returns all reviews that belong to a particular game
