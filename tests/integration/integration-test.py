@@ -64,13 +64,21 @@ class integration_tests(unittest.TestCase):
                 actual_developer_id = response_data['id']
                 self.assertEqual(actual_developer_id, developer_id)
 
+        for developer_id in self.test_cases['non_existant_developer_ids']:
+            with self.subTest('Test invalid developer Ids',
+                              developer_id=developer_id):
+                utils.test_endpoint(self,
+                                    f'/developers/{developer_id}',
+                                    'Error',
+                                    404)
+
         for developer_id in self.test_cases['invalid_developer_ids']:
             with self.subTest('Test invalid developer Ids',
                               developer_id=developer_id):
-                response = utils.test_endpoint(self,
-                                               f'/developers/{developer_id}',
-                                               resource,
-                                               400)
+                utils.test_endpoint(self,
+                                    f'/developers/{developer_id}',
+                                    'Error',
+                                    400)
 
 
 if __name__ == '__main__':
