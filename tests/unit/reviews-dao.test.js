@@ -96,7 +96,24 @@ describe('Test reviews-dao', () => {
   });
 
   it('postReview should be fulfilled', () => {
-    // TODO
+    sinon.stub(reviewsSerializer, 'serializeReview').returnsArg(0);
+
+    const testCase = [{}];
+
+    const fakeBody = {
+      data: {
+        attributes: {
+          name: 'test',
+        },
+      },
+    };
+
+    createConnStub({ rows: testCase, outBinds: { outId: [1] } });
+
+    const result = reviewsDao.postReview(fakeBody);
+    return result.should
+      .eventually.be.fulfilled
+      .and.deep.equal(testCase[0]);
   });
 
   it('postReview should be rejected', () => {
