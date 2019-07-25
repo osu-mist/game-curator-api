@@ -96,28 +96,22 @@ describe('Test games-dao', () => {
   it('postGame should be fulfilled', () => {
     sinon.stub(gamesSerializer, 'serializeGame').returnsArg(0);
 
-    const testCases = [
-      { testCase: [{}] },
-    ];
+    const testCase = [{}];
 
     const fakeBody = {
       data: {
-        attributes: {},
+        attributes: {
+          name: 'test',
+        },
       },
     };
 
-    const fulfilledPromises = [];
-    _.forEach(testCases, ({ testCase }) => {
-      const connStub = createConnStub({ rows: testCase, outBinds: { outId: ['1'] } });
+    createConnStub({ rows: testCase, outBinds: { outId: [1] } });
 
-      const result = gamesDao.postGame(fakeBody);
-      fulfilledPromises.push(result.should
-        .eventually.be.fulfilled
-        .and.deep.equal(testCase));
-
-      connStub.restore();
-    });
-    // return Promise.all(fulfilledPromises);
+    const result = gamesDao.postGame(fakeBody);
+    return result.should
+      .eventually.be.fulfilled
+      .and.deep.equal(testCase[0]);
   });
 
   it('postGame should be rejected', () => {

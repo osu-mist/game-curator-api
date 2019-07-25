@@ -148,28 +148,38 @@ describe('Test developers-dao', () => {
       .and.deep.equal(expectedResult);
   });
 
-  it('postDeveloper should be rejected', async () => {
-    const rejectedCases = [
-      { testCase: [], error: 'Cannot read property \'outId\' of undefined' },
-      // TODO figure out why this error is being thrown
-      { testCase: { outBinds: { outId: 'fakeId' } }, error: 'ORA-24415: Missing or null username.' },
-    ];
+  // had to make both postDeveloper rejection tests seperate due to async issues
+  // originally I was stubbing and restoring conn.getConnection in a loop
+  // the restore would happen before the promise resolved and caused issues
+  // if I wait to restore then the second loop starts and you can't stub an already stubbed function
+  it('postDeveloper should be rejected', () => {
+    const testCase = [];
+    const expectedError = 'Cannot read property \'outId\' of undefined';
 
-    const rejectedPromises = [];
-    _.forEach(rejectedCases, ({ testCase, error }) => {
-      const connStub = sinon.stub(conn, 'getConnection').resolves({
-        execute: () => testCase,
-        close: () => null,
-      });
-
-      const fakeBody = { data: { attributes: 'fakeAttributes' } };
-      const result = await developersDao.postDeveloper(fakeBody);
-      rejectedPromises.push(result.should
-        .eventually.be.rejectedWith(Error, error));
-
-      connStub.restore();
+    sinon.stub(conn, 'getConnection').resolves({
+      execute: () => testCase,
+      close: () => null,
     });
-    return Promise.all(rejectedPromises);
+
+    const fakeBody = { data: { attributes: 'fakeAttributes' } };
+    const result = developersDao.postDeveloper(fakeBody);
+    return result.should
+      .eventually.be.rejectedWith(Error, expectedError);
+  });
+
+  it('postDeveloper should be rejected', () => {
+    const testCase = { outBinds: { outId: 'fakeId' } };
+    const expectedError = 'Cannot read property \'length\' of undefined';
+
+    sinon.stub(conn, 'getConnection').resolves({
+      execute: () => testCase,
+      close: () => null,
+    });
+
+    const fakeBody = { data: { attributes: 'fakeAttributes' } };
+    const result = developersDao.postDeveloper(fakeBody);
+    return result.should
+      .eventually.be.rejectedWith(Error, expectedError);
   });
 
   it('deleteDeveloper should return empty result', () => {
