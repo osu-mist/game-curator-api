@@ -52,16 +52,25 @@ class integration_tests(unittest.TestCase):
 
     # Test case: GET /developers/{developerId}
     def test_get_developer_by_id(self):
+        resource = 'DeveloperResource'
         for developer_id in self.test_cases['valid_developer_ids']:
             with self.subTest('Test valid developer Ids',
                               developer_id=developer_id):
                 response = utils.test_endpoint(self,
                                                f'/developers/{developer_id}',
-                                               'DeveloperResource',
+                                               resource,
                                                200)
                 response_data = response.json()['data']
                 actual_developer_id = response_data['id']
                 self.assertEqual(actual_developer_id, developer_id)
+
+        for developer_id in self.test_cases['invalid_developer_ids']:
+            with self.subTest('Test invalid developer Ids',
+                              developer_id=developer_id):
+                response = utils.test_endpoint(self,
+                                               f'/developers/{developer_id}',
+                                               resource,
+                                               400)
 
 
 if __name__ == '__main__':
