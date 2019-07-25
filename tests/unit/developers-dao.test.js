@@ -148,7 +148,7 @@ describe('Test developers-dao', () => {
       .and.deep.equal(expectedResult);
   });
 
-  it('postDeveloper should be rejected', () => {
+  it('postDeveloper should be rejected', async () => {
     const rejectedCases = [
       { testCase: [], error: 'Cannot read property \'outId\' of undefined' },
       // TODO figure out why this error is being thrown
@@ -163,7 +163,7 @@ describe('Test developers-dao', () => {
       });
 
       const fakeBody = { data: { attributes: 'fakeAttributes' } };
-      const result = developersDao.postDeveloper(fakeBody);
+      const result = await developersDao.postDeveloper(fakeBody);
       rejectedPromises.push(result.should
         .eventually.be.rejectedWith(Error, error));
 
