@@ -4,11 +4,12 @@ const chaiAsPromised = require('chai-as-promised');
 const chaiExclude = require('chai-exclude');
 const config = require('config');
 const _ = require('lodash');
+const proxyquire = require('proxyquire');
 const sinon = require('sinon');
 
 sinon.replace(config, 'get', () => ({ oracledb: {} }));
 const conn = appRoot.require('api/v1/db/oracledb/connection');
-const developersDao = appRoot.require('api/v1/db/oracledb/developers-dao');
+let developersDao; // proxyquire is later used to import developers-dao class
 const developersSerializer = appRoot.require('api/v1/serializers/developers-serializer');
 
 chai.should();
@@ -17,6 +18,20 @@ chai.use(chaiAsPromised);
 
 describe('Test developers-dao', () => {
   const fakeId = 'fakeId';
+
+  beforeEach(() => {
+    const serializeDeveloperStub = sinon.stub(developersSerializer, 'serializeDeveloper');
+    const serializeDevelopersStub = sinon.stub(developersSerializer, 'serializeDevelopers');
+    serializeDeveloperStub.returnsArg(0);
+    serializeDevelopersStub.returnsArg(0);
+
+    developersDao = proxyquire(`${appRoot}/api/v1/db/oracledb/developers-dao`, {
+      '../../serializers/developers-serializer': {
+        serializeDeveloper: serializeDeveloperStub,
+        serializeDevelopers: serializeDevelopersStub,
+      },
+    });
+  });
 
   // most tests can use the same 'getConnection' stub but some need specific ones
   const standardConnStub = () => {
@@ -55,23 +70,16 @@ describe('Test developers-dao', () => {
 
   it('getDevelopers should return multiResult', () => {
     standardConnStub();
-    const developersSerializerStub = sinon.stub(developersSerializer, 'serializeDevelopers');
-    developersSerializerStub.returnsArg(0);
 
     const expectedResult = [{}, {}];
     const result = developersDao.getDevelopers(fakeId);
     return result.should
       .eventually.be.fulfilled
-      .and.deep.equal(expectedResult)
-      .then(() => {
-        sinon.assert.callCount(developersSerializerStub, 1);
-      });
+      .and.deep.equal(expectedResult);
   });
 
   it('getDeveloperById should return singleResult', () => {
     standardConnStub();
-    const developersSerializerStub = sinon.stub(developersSerializer, 'serializeDeveloper');
-    developersSerializerStub.returnsArg(0);
 
     const fulfilledCases = [
       { expectedResult: {} },
@@ -82,10 +90,7 @@ describe('Test developers-dao', () => {
       const result = developersDao.getDeveloperById(fakeId);
       fulfilledPromises.push(result.should
         .eventually.be.fulfilled
-        .and.deep.equal(expectedResult)
-        .then(() => {
-          sinon.assert.callCount(developersSerializerStub, fulfilledCases.length);
-        }));
+        .and.deep.equal(expectedResult));
     });
     return Promise.all(fulfilledPromises);
   });
@@ -114,22 +119,15 @@ describe('Test developers-dao', () => {
 
   it('postDeveloper with improper body should be rejected', () => {
     standardConnStub();
-    const developersSerializerStub = sinon.stub(developersSerializer, 'serializeDeveloper');
-    developersSerializerStub.returnsArg(0);
 
     const result = developersDao.postDeveloper('fakeId', 'fakeBody');
     return result.should
       .eventually.be.rejected
-      .and.be.an.instanceOf(TypeError)
-      .then(() => {
-        sinon.assert.notCalled(developersSerializerStub);
-      });
+      .and.be.an.instanceOf(TypeError);
   });
 
   it('postDeveloper should return singleResult', () => {
     standardConnStub();
-    const developersSerializerStub = sinon.stub(developersSerializer, 'serializeDeveloper');
-    developersSerializerStub.returnsArg(0);
 
     const fakeBody = {
       data: {
@@ -182,8 +180,6 @@ describe('Test developers-dao', () => {
 
   it('deleteDeveloper should return empty result', () => {
     standardConnStub();
-    const developersSerializerStub = sinon.stub(developersSerializer, 'serializeDeveloper');
-    developersSerializerStub.returnsArg(0);
 
     const expectedResult = [];
     const result = developersDao.deleteDeveloper('fakeId');
@@ -194,22 +190,15 @@ describe('Test developers-dao', () => {
 
   it('patchDeveloper with improper body should be rejected', () => {
     standardConnStub();
-    const developersSerializerStub = sinon.stub(developersSerializer, 'serializeDeveloper');
-    developersSerializerStub.returnsArg(0);
 
     const result = developersDao.patchDeveloper('fakeId', 'fakeBody');
     return result.should
       .eventually.be.rejected
-      .and.be.an.instanceOf(Error)
-      .then(() => {
-        sinon.assert.notCalled(developersSerializerStub);
-      });
+      .and.be.an.instanceOf(Error);
   });
 
   it('patchDeveloper should return singleResult', () => {
     standardConnStub();
-    const developersSerializerStub = sinon.stub(developersSerializer, 'serializeDeveloper');
-    developersSerializerStub.returnsArg(0);
 
     const fakeBody = {
       data: {
