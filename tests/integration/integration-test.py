@@ -97,6 +97,37 @@ class integration_tests(unittest.TestCase):
                     returned_name = row['attributes']['name']
                     self.assertEqual(developer_name, returned_name)
 
+    # Test case: GET /games/{gameId}
+    def test_get_games_by_id(self):
+        resource = 'GameResource'
+        nullable_fields = ['score']
+        for game_id in self.test_cases['valid_game_ids']:
+            with self.subTest('Test valid game ids', game_id=game_id):
+                response = utils.test_endpoint(self,
+                                               f'/games/{game_id}',
+                                               resource,
+                                               200,
+                                               nullable_fields=nullable_fields)
+                response_data = response.json()['data']
+                returned_game_id = response_data['id']
+                self.assertEqual(returned_game_id, game_id)
+
+        for game_id in self.test_cases['non_existant_game_ids']:
+            with self.subTest('Test non existant game ids', game_id=game_id):
+                response = utils.test_endpoint(self,
+                                               f'/games/{game_id}',
+                                               'Error',
+                                               404,
+                                               nullable_fields=nullable_fields)
+
+        for game_id in self.test_cases['invalid_game_ids']:
+            with self.subTest('Test invalid game ids', game_id=game_id):
+                response = utils.test_endpoint(self,
+                                               f'/games/{game_id}',
+                                               'Error',
+                                               400,
+                                               nullable_fields=nullable_fields)
+
 
 if __name__ == '__main__':
     arguments, argv = utils.parse_arguments()
