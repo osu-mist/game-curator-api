@@ -2,16 +2,30 @@ const appRoot = require('app-root-path');
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const _ = require('lodash');
+const proxyquire = require('proxyquire');
 const sinon = require('sinon');
 
 const conn = appRoot.require('api/v1/db/oracledb/connection');
-const gamesDao = appRoot.require('api/v1/db/oracledb/games-dao');
+let gamesDao;
 const gamesSerializer = appRoot.require('api/v1/serializers/games-serializer');
 
 chai.should();
 chai.use(chaiAsPromised);
 
 describe('Test games-dao', () => {
+  beforeEach(() => {
+    const serializeGameStub = sinon.stub(gamesSerializer, 'serializeGame');
+    const serializeGamesStub = sinon.stub(gamesSerializer, 'serializeGames');
+    serializeGameStub.returnsArg(0);
+    serializeGamesStub.returnsArg(0);
+
+    gamesDao = proxyquire(`${appRoot}/api/v1/db/oracledb/games-dao`, {
+      '../../serializers/developers-serializer': {
+        serializeGame: serializeGameStub,
+        serializeGames: serializeGamesStub,
+      },
+    });
+  });
   afterEach(() => sinon.restore());
 
   const createConnStub = executeReturn => sinon.stub(conn, 'getConnection').resolves({
@@ -25,7 +39,6 @@ describe('Test games-dao', () => {
       { testCase: [] },
       { testCase: [{}] },
     ];
-    sinon.stub(gamesSerializer, 'serializeGames').returnsArg(0);
 
     const fulfilledPromises = [];
     _.forEach(testCases, ({ testCase }) => {
@@ -42,7 +55,6 @@ describe('Test games-dao', () => {
   });
 
   it('getGames should be rejected', () => {
-    sinon.stub(gamesSerializer, 'serializeGames').returnsArg(0);
     createConnStub();
 
     const expectedError = 'Cannot read property \'page[number]\' of undefined';
@@ -52,8 +64,6 @@ describe('Test games-dao', () => {
   });
 
   it('getGameById should be fulfilled', () => {
-    sinon.stub(gamesSerializer, 'serializeGame').returnsArg(0);
-
     const testCases = [
       { testCase: [{}], expectedResult: {} },
     ];
@@ -74,8 +84,6 @@ describe('Test games-dao', () => {
   });
 
   it('getGameById should be rejected', () => {
-    sinon.stub(gamesSerializer, 'serializeGame').returnsArg(0);
-
     const testCases = [
       { testCase: { rows: [{}, {}] }, error: 'Expect a single object but got multiple results.' },
       { testCase: [], error: 'Cannot read property \'length\' of undefined' },
@@ -94,8 +102,6 @@ describe('Test games-dao', () => {
   });
 
   it('postGame should be fulfilled', () => {
-    sinon.stub(gamesSerializer, 'serializeGame').returnsArg(0);
-
     const testCase = [{}];
 
     const fakeBody = {
@@ -115,8 +121,6 @@ describe('Test games-dao', () => {
   });
 
   it('postGame should be rejected', () => {
-    sinon.stub(gamesSerializer, 'serializeGame').returnsArg(0);
-
     const testCases = [
       { fakeBody: undefined, error: 'Cannot read property \'data\' of undefined' },
       { fakeBody: { attributes: {} }, error: 'Cannot destructure property `attributes` of \'undefined\' or \'null\'.' },
