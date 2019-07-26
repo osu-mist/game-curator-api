@@ -80,6 +80,18 @@ class integration_tests(unittest.TestCase):
                                     'Error',
                                     400)
 
+    # Test case: GET /developers
+    def test_get_developers(self):
+        resource = 'DeveloperResource'
+        for name in self.test_cases['developer_names']:
+            with self.subTest('Test name query parameter', name=name):
+                params = {'name': name}
+                utils.test_endpoint(self,
+                                    f'/developers',
+                                    resource,
+                                    200,
+                                    query_params=params)
+
 
 if __name__ == '__main__':
     arguments, argv = utils.parse_arguments()
