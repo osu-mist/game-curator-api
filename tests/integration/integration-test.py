@@ -83,14 +83,19 @@ class integration_tests(unittest.TestCase):
     # Test case: GET /developers
     def test_get_developers(self):
         resource = 'DeveloperResource'
-        for name in self.test_cases['developer_names']:
-            with self.subTest('Test name query parameter', name=name):
-                params = {'name': name}
-                utils.test_endpoint(self,
-                                    f'/developers',
-                                    resource,
-                                    200,
-                                    query_params=params)
+        for developer_name in self.test_cases['developer_names']:
+            with self.subTest('Test name query parameter',
+                              developer_name=developer_name):
+                params = {'name': developer_name}
+                response = utils.test_endpoint(self,
+                                               f'/developers',
+                                               resource,
+                                               200,
+                                               query_params=params)
+                response_data = response.json()['data']
+                for row in response_data:
+                    returned_name = row['attributes']['name']
+                    self.assertEqual(developer_name, returned_name)
 
 
 if __name__ == '__main__':
