@@ -1,12 +1,5 @@
 const fakeId = 'fakeId';
 const fakeBaseUrl = '/v1';
-/* const fakeType = 'fakeType';
-const fakePath = 'fakePath';
-const fakePathUrl = `${fakeBaseUrl}/${fakePath}`; */
-const fakeDeveloperQuery = {
-  'page[size]': 25,
-  'page[number]': 1,
-};
 const rawDevelopers = [
   {
     id: fakeId,
@@ -60,7 +53,6 @@ const paginationQueries = {
 
 module.exports = {
   rawDevelopers,
-  fakeDeveloperQuery,
   fakeId,
   fakeBaseUrl,
   paginationQueries,
