@@ -55,19 +55,24 @@ describe('Test games-serializer', () => {
   it('test gameConverter', () => {
     const { gameConverter } = gamesSerializer;
 
-    // for some reason when the rawGame data is imported in
-    // the string values for score are implicitly converted to numbers
-    // a main purpose for gameConvert is to do that conversion
-    // we must convert back to string to properly test
+    // all the functions tested in this class call gameConverter
+    // since objects are mutable rawGames is changed after the first test
+    // to test gameCurator we first convert rawGames score values back to the original string type
     _.forEach(rawGames, (game) => {
       game.score = String(game.score);
     });
-    gameConverter(rawGames);
 
     const testResults = [];
     _.forEach(rawGames, (game) => {
       testResults.push(game.score.should
-        .be.a('number', 'rawGames score should be a number'));
+        .be.a('string', 'rawGames score should initially be a string'));
+    });
+
+    gameConverter(rawGames);
+
+    _.forEach(rawGames, (game) => {
+      testResults.push(game.score.should
+        .be.a('number', 'rawGames score should be converted to a number'));
       testResults.push(expect(game.releaseDate)
         .to.match(/^(\d{4}-([1-9]|1[0-2])-([1-9]|[12]\d|3[01]))$/));
     });
