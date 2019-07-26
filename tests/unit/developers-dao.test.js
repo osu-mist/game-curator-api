@@ -79,9 +79,7 @@ describe('Test developers-dao', () => {
 
     const fulfilledPromises = [];
     _.each(fulfilledCases, ({ expectedResult }) => {
-      const result = developersDao.getDeveloperById(
-        fakeId,
-      );
+      const result = developersDao.getDeveloperById(fakeId);
       fulfilledPromises.push(result.should
         .eventually.be.fulfilled
         .and.deep.equal(expectedResult)
