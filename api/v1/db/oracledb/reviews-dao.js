@@ -2,7 +2,7 @@ const appRoot = require('app-root-path');
 const _ = require('lodash');
 const oracledb = require('oracledb');
 
-const reviewsSerializer = require('../../serializers/reviews-serializer');
+const { serializeReview, serializeReviews } = require('../../serializers/reviews-serializer');
 
 const conn = appRoot.require('api/v1/db/oracledb/connection');
 const { openapi } = appRoot.require('utils/load-openapi');
@@ -43,7 +43,7 @@ const getReviews = async (queries) => {
   try {
     // execute query and return results
     const { rows } = await connection.execute(sqlQuery, sqlParams);
-    const serializedReviews = reviewsSerializer.serializeReviews(rows, queries);
+    const serializedReviews = serializeReviews(rows, queries);
     return serializedReviews;
   } finally {
     connection.close();
@@ -81,7 +81,7 @@ const getReviewById = async (id) => {
     } else if (_.isEmpty(rows)) {
       return undefined;
     } else {
-      const serializedReview = reviewsSerializer.serializeReview(rows[0]);
+      const serializedReview = serializeReview(rows[0]);
       return serializedReview;
     }
   } finally {

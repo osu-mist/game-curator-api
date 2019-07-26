@@ -2,16 +2,30 @@ const appRoot = require('app-root-path');
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const _ = require('lodash');
+const proxyquire = require('proxyquire');
 const sinon = require('sinon');
 
 const conn = appRoot.require('api/v1/db/oracledb/connection');
-const reviewsDao = appRoot.require('api/v1/db/oracledb/reviews-dao');
+let reviewsDao;
 const reviewsSerializer = appRoot.require('api/v1/serializers/reviews-serializer');
 
 chai.should();
 chai.use(chaiAsPromised);
 
 describe('Test reviews-dao', () => {
+  beforeEach(() => {
+    const serializeReviewStub = sinon.stub(reviewsSerializer, 'serializeReview');
+    const serializeReviewsStub = sinon.stub(reviewsSerializer, 'serializeReviews');
+    serializeReviewStub.returnsArg(0);
+    serializeReviewsStub.returnsArg(0);
+
+    reviewsDao = proxyquire(`${appRoot}/api/v1/db/oracledb/reviews-dao`, {
+      '../../serializers/reviews-serializer': {
+        serializeReview: serializeReviewStub,
+        serializeReviews: serializeReviewsStub,
+      },
+    });
+  });
   afterEach(() => sinon.restore());
 
   const createConnStub = executeReturn => sinon.stub(conn, 'getConnection').resolves({
@@ -20,8 +34,6 @@ describe('Test reviews-dao', () => {
   });
 
   it('getReviews should be fulfilled', () => {
-    sinon.stub(reviewsSerializer, 'serializeReviews').returnsArg(0);
-
     const testCases = [
       { testCase: [{}, {}] },
       { testCase: [] },
@@ -43,7 +55,6 @@ describe('Test reviews-dao', () => {
   });
 
   it('getReviews should be rejected', () => {
-    sinon.stub(reviewsSerializer, 'serializeReviews').returnsArg(0);
     createConnStub();
 
     const expectedError = 'Cannot read property \'gameIds\' of undefined';
@@ -53,8 +64,6 @@ describe('Test reviews-dao', () => {
   });
 
   it('getReviewById should be fulfilled', () => {
-    sinon.stub(reviewsSerializer, 'serializeReview').returnsArg(0);
-
     const testCases = [
       { testCase: [{}], expectedResult: {} },
     ];
@@ -74,8 +83,6 @@ describe('Test reviews-dao', () => {
   });
 
   it('getReviewById should be rejected', () => {
-    sinon.stub(reviewsSerializer, 'serializeReview').returnsArg(0);
-
     const testCases = [
       { testCase: { rows: [{}, {}] }, error: 'Expect a single object but got multiple results.' },
       { testCase: [], error: 'Cannot read property \'length\' of undefined' },
@@ -94,8 +101,6 @@ describe('Test reviews-dao', () => {
   });
 
   it('postReview should be fulfilled', () => {
-    sinon.stub(reviewsSerializer, 'serializeReview').returnsArg(0);
-
     const testCase = [{}];
 
     const fakeBody = {
@@ -115,8 +120,6 @@ describe('Test reviews-dao', () => {
   });
 
   it('postReview should be rejected', () => {
-    sinon.stub(reviewsSerializer, 'serializeReview').returnsArg(0);
-
     const testCases = [
       { fakeBody: undefined, error: 'Cannot read property \'data\' of undefined' },
       { fakeBody: { attributes: {} }, error: 'Cannot destructure property `attributes` of \'undefined\' or \'null\'.' },
