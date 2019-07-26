@@ -32,6 +32,7 @@ describe('Test developers-dao', () => {
       },
     });
   });
+  afterEach(() => sinon.restore());
 
   // most tests can use the same 'getConnection' stub but some need specific ones
   const standardConnStub = () => {
@@ -65,8 +66,6 @@ describe('Test developers-dao', () => {
       close: () => null,
     });
   };
-
-  afterEach(() => sinon.restore());
 
   it('getDevelopers should return multiResult', () => {
     standardConnStub();
