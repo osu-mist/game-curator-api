@@ -140,38 +140,30 @@ describe('Test developers-dao', () => {
       .and.deep.equal(expectedResult);
   });
 
-  // had to make both postDeveloper rejection tests seperate due to async issues
-  // originally I was stubbing and restoring conn.getConnection in a loop
-  // the restore would happen before the promise resolved and caused issues
-  // if I wait to restore then the second loop starts and you can't stub an already stubbed function
-  it('postDeveloper should be rejected', () => {
-    const testCase = [];
-    const expectedError = 'Cannot read property \'outId\' of undefined';
+  const testCases = [
+    {
+      testCase: [],
+      expectedError: 'Cannot read property \'outId\' of undefined',
+      testDescription: 'outId is not returned',
+    },
+    {
+      testCase: { outBinds: { outId: 'fakeId' } },
+      expectedError: 'Cannot read property \'length\' of undefined',
+      testDescription: 'outId is returned without an additional response',
+    },
+  ];
+  _.forEach(testCases, ({ testCase, expectedError, testDescription }) => {
+    it(`postDeveloper should be rejected when ${testDescription}`, () => {
+      sinon.stub(conn, 'getConnection').resolves({
+        execute: () => testCase,
+        close: () => null,
+      });
 
-    sinon.stub(conn, 'getConnection').resolves({
-      execute: () => testCase,
-      close: () => null,
+      const fakeBody = { data: { attributes: 'fakeAttributes' } };
+      const result = developersDao.postDeveloper(fakeBody);
+      return result.should
+        .eventually.be.rejectedWith(Error, expectedError);
     });
-
-    const fakeBody = { data: { attributes: 'fakeAttributes' } };
-    const result = developersDao.postDeveloper(fakeBody);
-    return result.should
-      .eventually.be.rejectedWith(Error, expectedError);
-  });
-
-  it('postDeveloper should be rejected', () => {
-    const testCase = { outBinds: { outId: 'fakeId' } };
-    const expectedError = 'Cannot read property \'length\' of undefined';
-
-    sinon.stub(conn, 'getConnection').resolves({
-      execute: () => testCase,
-      close: () => null,
-    });
-
-    const fakeBody = { data: { attributes: 'fakeAttributes' } };
-    const result = developersDao.postDeveloper(fakeBody);
-    return result.should
-      .eventually.be.rejectedWith(Error, expectedError);
   });
 
   it('deleteDeveloper should be fulfilled with single result', () => {
