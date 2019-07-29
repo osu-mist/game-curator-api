@@ -28,6 +28,16 @@ const rawGames = [
     releaseDate: '10-20-2099',
   },
 ];
+const gameConverterData = [
+  {
+    score: '2',
+    releaseDate: '5/12/1994',
+  },
+  {
+    score: '5',
+    releaseDate: '10-20-2099',
+  },
+];
 const rawReviews = [
   {
     id: fakeId,
@@ -46,6 +56,16 @@ const rawReviews = [
     reviewDate: '5-30-2005',
   },
 ];
+const reviewConverterData = [
+  {
+    score: '4',
+    reviewDate: '10/26/2011',
+  },
+  {
+    score: '1',
+    reviewDate: '5-30-2005',
+  },
+];
 const paginationQueries = {
   'page[number]': 1,
   'page[size]': 25,
@@ -58,4 +78,6 @@ module.exports = {
   paginationQueries,
   rawGames,
   rawReviews,
+  gameConverterData,
+  reviewConverterData,
 };

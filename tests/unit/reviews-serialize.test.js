@@ -57,18 +57,17 @@ describe('Test reviews-serializer', () => {
   it(`reviewConverter should convert score values from string to number
       and reviewDate values to yyyy-mm-dd date formats`, () => {
     const { reviewConverter } = reviewsSerializer;
-
-    // for some reason when the rawReview data is imported in
-    // the string values for score are implicitly converted to numbers
-    // a main purpose for reviewConvert is to do that conversion
-    // we must convert back to string to properly test
-    _.forEach(rawReviews, (review) => {
-      review.score = String(review.score);
-    });
-    reviewConverter(rawReviews);
+    const { reviewConverterData } = testData;
 
     const testResults = [];
-    _.forEach(rawReviews, (review) => {
+    _.forEach(reviewConverterData, (review) => {
+      testResults.push(review.score.should
+        .be.a('string', 'rawReview score should initially be a string'));
+    });
+
+    reviewConverter(reviewConverterData);
+
+    _.forEach(reviewConverterData, (review) => {
       testResults.push(review.score.should
         .be.a('number', 'rawReviews score should be a number'));
       testResults.push(expect(review.reviewDate)

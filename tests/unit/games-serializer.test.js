@@ -57,23 +57,17 @@ describe('Test games-serializer', () => {
   it(`gameConverter should convert score values from strings to numbers
       and releaseDate values to yyyy-mm-dd date format`, () => {
     const { gameConverter } = gamesSerializer;
-
-    // all the functions tested in this class call gameConverter
-    // since objects are mutable rawGames is changed after the first test
-    // to test gameCurator we first convert rawGames score values back to the original string type
-    _.forEach(rawGames, (game) => {
-      game.score = String(game.score);
-    });
+    const { gameConverterData } = testData;
 
     const testResults = [];
-    _.forEach(rawGames, (game) => {
+    _.forEach(gameConverterData, (game) => {
       testResults.push(game.score.should
         .be.a('string', 'rawGames score should initially be a string'));
     });
 
-    gameConverter(rawGames);
+    gameConverter(gameConverterData);
 
-    _.forEach(rawGames, (game) => {
+    _.forEach(gameConverterData, (game) => {
       testResults.push(game.score.should
         .be.a('number', 'rawGames score should be converted to a number'));
       testResults.push(expect(game.releaseDate)
