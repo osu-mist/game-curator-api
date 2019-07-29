@@ -54,9 +54,7 @@ describe('Test developers-dao', () => {
           emptyResult: { rows: [] },
         };
         let result;
-        if (sql.includes('DELETE')) {
-          result = sqlResults.emptyResult;
-        } else if ('developerId' in sqlParams) {
+        if ('developerId' in sqlParams) {
           result = sqlResults.singleResult;
         } else {
           result = sqlResults.multiResults;
@@ -67,7 +65,7 @@ describe('Test developers-dao', () => {
     });
   };
 
-  it('getDevelopers should return multiResult', () => {
+  it('getDevelopers should be fulfilled with multiple results', () => {
     standardConnStub();
 
     const expectedResult = [{}, {}];
@@ -77,7 +75,7 @@ describe('Test developers-dao', () => {
       .and.deep.equal(expectedResult);
   });
 
-  it('getDeveloperById should return singleResult', () => {
+  it('getDeveloperById should be fulfilled with a single result', () => {
     standardConnStub();
 
     const fulfilledCases = [
@@ -94,9 +92,8 @@ describe('Test developers-dao', () => {
     return Promise.all(fulfilledPromises);
   });
 
-  it('getDeveloperById should be rejected', () => {
+  it('getDeveloperById should be rejected when multiple values are returned', () => {
     const rejectedCases = [
-      { testCase: '[]', error: 'Cannot read property \'length\' of undefined' },
       { testCase: { rows: [{}, {}] }, error: 'Expect a single object but got multiple results' },
     ];
 
@@ -125,7 +122,7 @@ describe('Test developers-dao', () => {
       .and.be.an.instanceOf(TypeError);
   });
 
-  it('postDeveloper should return singleResult', () => {
+  it('postDeveloper should be fulfilled with singleResult', () => {
     standardConnStub();
 
     const fakeBody = {
@@ -177,10 +174,10 @@ describe('Test developers-dao', () => {
       .eventually.be.rejectedWith(Error, expectedError);
   });
 
-  it('deleteDeveloper should return empty result', () => {
+  it('deleteDeveloper should be fulfilled with single result', () => {
     standardConnStub();
 
-    const expectedResult = [];
+    const expectedResult = [{}];
     const result = developersDao.deleteDeveloper('fakeId');
     return result.should
       .eventually.be.fulfilled
@@ -196,7 +193,7 @@ describe('Test developers-dao', () => {
       .and.be.an.instanceOf(Error);
   });
 
-  it('patchDeveloper should return singleResult', () => {
+  it('patchDeveloper should be fulfilled with singleResult', () => {
     standardConnStub();
 
     const fakeBody = {
