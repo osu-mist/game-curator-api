@@ -65,142 +65,152 @@ describe('Test developers-dao', () => {
     });
   };
 
-  it('getDevelopers should be fulfilled with multiple results', () => {
-    standardConnStub();
+  describe('Test getDevelopers', () => {
+    it('getDevelopers should be fulfilled with multiple results', () => {
+      standardConnStub();
 
-    const expectedResult = [{}, {}];
-    const result = developersDao.getDevelopers(fakeId);
-    return result.should
-      .eventually.be.fulfilled
-      .and.deep.equal(expectedResult);
-  });
-
-  it('getDeveloperById should be fulfilled with a single result', () => {
-    standardConnStub();
-
-    const fulfilledCases = [
-      { expectedResult: {} },
-    ];
-
-    const fulfilledPromises = [];
-    _.each(fulfilledCases, ({ expectedResult }) => {
-      const result = developersDao.getDeveloperById(fakeId);
-      fulfilledPromises.push(result.should
+      const expectedResult = [{}, {}];
+      const result = developersDao.getDevelopers(fakeId);
+      return result.should
         .eventually.be.fulfilled
-        .and.deep.equal(expectedResult));
+        .and.deep.equal(expectedResult);
     });
-    return Promise.all(fulfilledPromises);
   });
 
-  it('getDeveloperById should be rejected when multiple values are returned', () => {
-    const rejectedCases = [
-      { testCase: { rows: [{}, {}] }, error: 'Expect a single object but got multiple results' },
-    ];
+  describe('Test getDeveloperById', () => {
+    it('getDeveloperById should be fulfilled with a single result', () => {
+      standardConnStub();
 
-    const rejectedPromises = [];
-    _.each(rejectedCases, ({ testCase, error }) => {
-      sinon.stub(conn, 'getConnection').resolves({
-        execute: () => testCase,
-        close: () => null,
+      const fulfilledCases = [
+        { expectedResult: {} },
+      ];
+
+      const fulfilledPromises = [];
+      _.each(fulfilledCases, ({ expectedResult }) => {
+        const result = developersDao.getDeveloperById(fakeId);
+        fulfilledPromises.push(result.should
+          .eventually.be.fulfilled
+          .and.deep.equal(expectedResult));
       });
-
-      const result = developersDao.getDeveloperById('fakeId');
-      rejectedPromises.push(result.should
-        .eventually.be.rejectedWith(Error, error));
-
-      sinon.restore();
+      return Promise.all(fulfilledPromises);
     });
-    return Promise.all(rejectedPromises);
+
+    it('getDeveloperById should be rejected when multiple values are returned', () => {
+      const rejectedCases = [
+        { testCase: { rows: [{}, {}] }, error: 'Expect a single object but got multiple results' },
+      ];
+
+      const rejectedPromises = [];
+      _.each(rejectedCases, ({ testCase, error }) => {
+        sinon.stub(conn, 'getConnection').resolves({
+          execute: () => testCase,
+          close: () => null,
+        });
+
+        const result = developersDao.getDeveloperById('fakeId');
+        rejectedPromises.push(result.should
+          .eventually.be.rejectedWith(Error, error));
+
+        sinon.restore();
+      });
+      return Promise.all(rejectedPromises);
+    });
   });
 
-  it('postDeveloper with improper body should be rejected', () => {
-    standardConnStub();
+  describe('Test postDeveloper', () => {
+    it('postDeveloper with improper body should be rejected', () => {
+      standardConnStub();
 
-    const result = developersDao.postDeveloper('fakeId', 'fakeBody');
-    return result.should
-      .eventually.be.rejected
-      .and.be.an.instanceOf(TypeError);
-  });
+      const result = developersDao.postDeveloper('fakeId', 'fakeBody');
+      return result.should
+        .eventually.be.rejected
+        .and.be.an.instanceOf(TypeError);
+    });
 
-  it('postDeveloper should be fulfilled with singleResult', () => {
-    standardConnStub();
+    it('postDeveloper should be fulfilled with singleResult', () => {
+      standardConnStub();
 
-    const fakeBody = {
-      data: {
-        attributes: {
-          name: 'test',
+      const fakeBody = {
+        data: {
+          attributes: {
+            name: 'test',
+          },
         },
-      },
-    };
+      };
 
-    const expectedResult = {};
-    const result = developersDao.postDeveloper(fakeBody);
-    return result.should
-      .eventually.be.fulfilled
-      .and.deep.equal(expectedResult);
-  });
-
-  const testCases = [
-    {
-      testCase: [],
-      expectedError: 'Cannot read property \'outId\' of undefined',
-      testDescription: 'outId is not returned',
-    },
-    {
-      testCase: { outBinds: { outId: 'fakeId' } },
-      expectedError: 'Cannot read property \'length\' of undefined',
-      testDescription: 'outId is returned without an additional response',
-    },
-  ];
-  _.forEach(testCases, ({ testCase, expectedError, testDescription }) => {
-    it(`postDeveloper should be rejected when ${testDescription}`, () => {
-      sinon.stub(conn, 'getConnection').resolves({
-        execute: () => testCase,
-        close: () => null,
-      });
-
-      const fakeBody = { data: { attributes: 'fakeAttributes' } };
+      const expectedResult = {};
       const result = developersDao.postDeveloper(fakeBody);
       return result.should
-        .eventually.be.rejectedWith(Error, expectedError);
+        .eventually.be.fulfilled
+        .and.deep.equal(expectedResult);
+    });
+
+    const testCases = [
+      {
+        testCase: [],
+        expectedError: 'Cannot read property \'outId\' of undefined',
+        testDescription: 'outId is not returned',
+      },
+      {
+        testCase: { outBinds: { outId: 'fakeId' } },
+        expectedError: 'Cannot read property \'length\' of undefined',
+        testDescription: 'outId is returned without an additional response',
+      },
+    ];
+    _.forEach(testCases, ({ testCase, expectedError, testDescription }) => {
+      it(`postDeveloper should be rejected when ${testDescription}`, () => {
+        sinon.stub(conn, 'getConnection').resolves({
+          execute: () => testCase,
+          close: () => null,
+        });
+
+        const fakeBody = { data: { attributes: 'fakeAttributes' } };
+        const result = developersDao.postDeveloper(fakeBody);
+        return result.should
+          .eventually.be.rejectedWith(Error, expectedError);
+      });
     });
   });
 
-  it('deleteDeveloper should be fulfilled with single result', () => {
-    standardConnStub();
+  describe('Test deleteDeveloper', () => {
+    it('deleteDeveloper should be fulfilled with single result', () => {
+      standardConnStub();
 
-    const expectedResult = [{}];
-    const result = developersDao.deleteDeveloper('fakeId');
-    return result.should
-      .eventually.be.fulfilled
-      .and.has.property('rows').deep.equal(expectedResult);
+      const expectedResult = [{}];
+      const result = developersDao.deleteDeveloper('fakeId');
+      return result.should
+        .eventually.be.fulfilled
+        .and.has.property('rows').deep.equal(expectedResult);
+    });
   });
 
-  it('patchDeveloper with improper body should be rejected', () => {
-    standardConnStub();
+  describe('Test patchDeveloper', () => {
+    it('patchDeveloper with improper body should be rejected', () => {
+      standardConnStub();
 
-    const result = developersDao.patchDeveloper('fakeId', 'fakeBody');
-    return result.should
-      .eventually.be.rejected
-      .and.be.an.instanceOf(Error);
-  });
+      const result = developersDao.patchDeveloper('fakeId', 'fakeBody');
+      return result.should
+        .eventually.be.rejected
+        .and.be.an.instanceOf(Error);
+    });
 
-  it('patchDeveloper should be fulfilled with singleResult', () => {
-    standardConnStub();
+    it('patchDeveloper should be fulfilled with singleResult', () => {
+      standardConnStub();
 
-    const fakeBody = {
-      data: {
-        id: fakeId,
-        attributes: {
-          name: 'test',
+      const fakeBody = {
+        data: {
+          id: fakeId,
+          attributes: {
+            name: 'test',
+          },
         },
-      },
-    };
+      };
 
-    const expectedResult = [{}];
-    const result = developersDao.patchDeveloper(fakeId, fakeBody);
-    return result.should
-      .eventually.be.fulfilled
-      .and.has.property('rows').deep.equal(expectedResult);
+      const expectedResult = [{}];
+      const result = developersDao.patchDeveloper(fakeId, fakeBody);
+      return result.should
+        .eventually.be.fulfilled
+        .and.has.property('rows').deep.equal(expectedResult);
+    });
   });
 });
