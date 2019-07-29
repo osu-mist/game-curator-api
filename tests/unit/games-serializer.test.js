@@ -19,14 +19,14 @@ describe('Test games-serializer', () => {
   const { rawGames } = testData;
   const resourceType = 'game';
 
-  it('test serializeGame', () => {
+  it('serializeGame should form a single JSON result as defined in openapi', () => {
     const { serializeGame } = gamesSerializer;
 
     const serializedGame = serializeGame(rawGames[0]);
     testSingleResource(serializedGame, resourceType, _.omit(rawGames[0], ['id']));
   });
 
-  it('test serializeGames', () => {
+  it('serializeGames should form a multiple JSON result as defined in openapi', () => {
     const { serializeGames } = gamesSerializer;
 
     const serializedGames = serializeGames(rawGames, testData.paginationQueries);
@@ -35,7 +35,9 @@ describe('Test games-serializer', () => {
     expect(serializedGames).to.have.all.keys(_.keys(getDefinitionProps('GameResults')));
   });
 
-  it('serializeGames should be rejected', () => {
+  it(`serializeGames should be rejected when
+      1. data is passed without queries
+      2. queries are passed without data`, () => {
     const { serializeGames } = gamesSerializer;
     const rejectedCases = [
       { rawData: rawGames, queries: null, error: 'Cannot read property \'page[size]\' of null' },
@@ -52,7 +54,8 @@ describe('Test games-serializer', () => {
     return Promise.all(rejectedPromises);
   });
 
-  it('test gameConverter', () => {
+  it(`gameConverter should convert score values from strings to numbers
+      and releaseDate values to yyyy-mm-dd date format`, () => {
     const { gameConverter } = gamesSerializer;
 
     // all the functions tested in this class call gameConverter
