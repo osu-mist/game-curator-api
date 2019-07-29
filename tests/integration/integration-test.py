@@ -193,6 +193,19 @@ class integration_tests(unittest.TestCase):
                     returned_score = row['attributes']['score']
                     self.assertGreaterEqual(int(score_max), returned_score)
 
+    # Test case: GET /reviews/{reviewId}
+    def test_get_reviews_by_id(self):
+        resource = 'ReviewResource'
+        for review_id in self.test_cases['valid_review_ids']:
+            with self.subTest('Test valid review ids', review_id=review_id):
+                response = utils.test_endpoint(self,
+                                               f'/reviews/{review_id}',
+                                               resource,
+                                               200)
+                response_data = response.json()['data']
+                returned_id = response_data['id']
+                self.assertEqual(returned_id, review_id)
+
 
 if __name__ == '__main__':
     arguments, argv = utils.parse_arguments()
