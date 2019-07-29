@@ -1,4 +1,3 @@
-
 const appRoot = require('app-root-path');
 const { expect } = require('chai');
 const _ = require('lodash');
