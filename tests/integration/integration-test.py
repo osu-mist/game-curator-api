@@ -128,6 +128,71 @@ class integration_tests(unittest.TestCase):
                                                400,
                                                nullable_fields=nullable_fields)
 
+    # Test case: GET /games
+    def test_get_games(self):
+        path = '/games'
+        resource = 'GameResource'
+        nullable_fields = ['score']
+        for game_name in self.test_cases['game_names']:
+            with self.subTest('Test name query parameter',
+                              game_name=game_name):
+                params = {'name': game_name}
+                response = utils.test_endpoint(self,
+                                               path,
+                                               resource,
+                                               200,
+                                               query_params=params,
+                                               nullable_fields=nullable_fields)
+                response_data = response.json()['data']
+                for row in response_data:
+                    returned_name = row['attributes']['name']
+                    self.assertEqual(game_name, returned_name)
+
+        for developer_id in self.test_cases['valid_developer_ids']:
+            with self.subTest('Test developerId query parameter',
+                              developer_id=developer_id):
+                params = {'developerId': developer_id}
+                response = utils.test_endpoint(self,
+                                               path,
+                                               resource,
+                                               200,
+                                               query_params=params,
+                                               nullable_fields=nullable_fields)
+                response_data = response.json()['data']
+                for row in response_data:
+                    returned_id = row['attributes']['developerId']
+                    self.assertEqual(developer_id, returned_id)
+
+        for score_min in self.test_cases['game_scores']:
+            with self.subTest('Test scoreMin query parameter',
+                              score_min=score_min):
+                params = {'scoreMin': score_min}
+                response = utils.test_endpoint(self,
+                                               path,
+                                               resource,
+                                               200,
+                                               query_params=params,
+                                               nullable_fields=nullable_fields)
+                response_data = response.json()['data']
+                for row in response_data:
+                    returned_score = row['attributes']['score']
+                    self.assertLessEqual(int(score_min), returned_score)
+
+        for score_max in self.test_cases['game_scores']:
+            with self.subTest('Test scoreMax query parameter',
+                              score_max=score_max):
+                params = {'scoreMax': score_max}
+                response = utils.test_endpoint(self,
+                                               path,
+                                               resource,
+                                               200,
+                                               query_params=params,
+                                               nullable_fields=nullable_fields)
+                response_data = response.json()['data']
+                for row in response_data:
+                    returned_score = row['attributes']['score']
+                    self.assertGreaterEqual(int(score_max), returned_score)
+
 
 if __name__ == '__main__':
     arguments, argv = utils.parse_arguments()
