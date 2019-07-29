@@ -19,14 +19,14 @@ describe('Test reviews-serializer', () => {
   const { rawReviews } = testData;
   const resourceType = 'review';
 
-  it('test serializeGame', () => {
+  it('serializeReview should form a single JSON result as defined in openapi', () => {
     const { serializeReview } = reviewsSerializer;
 
     const serializedReview = serializeReview(rawReviews[0]);
     testSingleResource(serializedReview, resourceType, _.omit(rawReviews[0], ['id']));
   });
 
-  it('test serializeReviews', () => {
+  it('serializeReviews should form a multiple JSON result as defined in openapi', () => {
     const { serializeReviews } = reviewsSerializer;
 
     const serializedReviews = serializeReviews(rawReviews, testData.paginationQueries);
@@ -35,7 +35,9 @@ describe('Test reviews-serializer', () => {
     expect(serializedReviews).to.have.all.keys(_.keys(getDefinitionProps('ReviewResults')));
   });
 
-  it('serializeReviews should be rejected', () => {
+  it(`serializeReviews should be rejected when
+      1. data is passed without queries
+      2. queries are passed without data`, () => {
     const { serializeReviews } = reviewsSerializer;
     const rejectedCases = [
       { rawData: rawReviews, queries: null, error: 'Cannot read property \'page[size]\' of null' },
@@ -52,7 +54,8 @@ describe('Test reviews-serializer', () => {
     return Promise.all(rejectedPromises);
   });
 
-  it('test reviewConverter', () => {
+  it(`reviewConverter should convert score values from string to number
+      and reviewDate values to yyyy-mm-dd date formats`, () => {
     const { reviewConverter } = reviewsSerializer;
 
     // for some reason when the rawReview data is imported in
