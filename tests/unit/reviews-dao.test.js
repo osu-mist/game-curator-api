@@ -33,10 +33,11 @@ describe('Test reviews-dao', () => {
     close: () => null,
   });
 
-  it('getReviews should be fulfilled', () => {
+  it(`getReviews should be fulfilled with
+        1. multiple results
+        2. a single result`, () => {
     const testCases = [
       { testCase: [{}, {}] },
-      { testCase: [] },
       { testCase: [{}] },
     ];
 
@@ -54,7 +55,7 @@ describe('Test reviews-dao', () => {
     return Promise.all(fulfilledPromises);
   });
 
-  it('getReviews should be rejected', () => {
+  it('getReviews should be rejected when an undefined or improper queries are passed in', () => {
     createConnStub();
 
     const expectedError = 'Cannot read property \'gameIds\' of undefined';
@@ -63,7 +64,7 @@ describe('Test reviews-dao', () => {
     return result.should.eventually.be.rejectedWith(Error, expectedError);
   });
 
-  it('getReviewById should be fulfilled', () => {
+  it('getReviewById should be fulfilled with a single result', () => {
     const testCases = [
       { testCase: [{}], expectedResult: {} },
     ];
@@ -82,10 +83,9 @@ describe('Test reviews-dao', () => {
     return Promise.all(fulfilledPromises);
   });
 
-  it('getReviewById should be rejected', () => {
+  it('getReviewById should be rejected when multiple results are returned', () => {
     const testCases = [
       { testCase: { rows: [{}, {}] }, error: 'Expect a single object but got multiple results.' },
-      { testCase: [], error: 'Cannot read property \'length\' of undefined' },
     ];
 
     const rejectedPromises = [];
@@ -100,7 +100,7 @@ describe('Test reviews-dao', () => {
     return Promise.all(rejectedPromises);
   });
 
-  it('postReview should be fulfilled', () => {
+  it('postReview should be fulfilled with a single result', () => {
     const testCase = [{}];
 
     const fakeBody = {
@@ -119,7 +119,9 @@ describe('Test reviews-dao', () => {
       .and.deep.equal(testCase[0]);
   });
 
-  it('postReview should be rejected', () => {
+  it(`postReview should be rejected when
+        1. no data is passed in the body
+        2. attributes is passed in the body without the required fields`, () => {
     const testCases = [
       { fakeBody: undefined, error: 'Cannot read property \'data\' of undefined' },
       { fakeBody: { attributes: {} }, error: 'Cannot destructure property `attributes` of \'undefined\' or \'null\'.' },
@@ -138,9 +140,9 @@ describe('Test reviews-dao', () => {
     return Promise.all(rejectedPromises);
   });
 
-  it('deleteReview should be fulfilled', () => {
+  it('deleteReview should be fulfilled with a single result', () => {
     const testCases = [
-      { testCase: [] },
+      { testCase: [{}] },
     ];
 
     const fulfilledPromises = [];
@@ -157,7 +159,7 @@ describe('Test reviews-dao', () => {
     return Promise.all(fulfilledPromises);
   });
 
-  it('patchReview should be fulfilled', () => {
+  it('patchReview should be fulfilled with a single result', () => {
     const testCases = [
       { testCase: [{}] },
     ];
@@ -183,7 +185,9 @@ describe('Test reviews-dao', () => {
     return Promise.all(fulfilledPromises);
   });
 
-  it('patchReview should be rejected', () => {
+  it(`patchReview should be rejected
+      1. an undefined body is passed in
+      2. a body with attributes that are missing required fields is passed in`, () => {
     const testCases = [
       { fakeBody: undefined, error: 'Cannot read property \'data\' of undefined' },
       { fakeBody: { attributes: {} }, error: 'Cannot destructure property `attributes` of \'undefined\' or \'null\'.' },
@@ -203,7 +207,9 @@ describe('Test reviews-dao', () => {
     return Promise.all(rejectedPromises);
   });
 
-  it('isValidGame should be fulfilled', () => {
+  it(`isValidGame should be fulfilled
+      1. true when the id field returned is 1
+      2. false when the id field returned is 0`, () => {
     const testCases = [
       { testCase: { rows: [{ id: 1 }] }, expectedResult: true },
       { testCase: { rows: [{ id: 0 }] }, expectedResult: false },
@@ -223,7 +229,7 @@ describe('Test reviews-dao', () => {
     return Promise.all(fulfilledPromises);
   });
 
-  it('isValidGame should be rejected', () => {
+  it('isValidGame should be rejected when a single response is returned', () => {
     createConnStub({});
     const result = reviewsDao.isValidGame('fakeId');
     return result.should.be.rejectedWith(Error, 'Cannot read property \'0\' of undefined');
