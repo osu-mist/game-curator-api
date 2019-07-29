@@ -10,7 +10,7 @@ const conn = appRoot.require('api/v1/db/oracledb/connection');
 /**
  * @summary Return a list of developers
  * @function
- * @returns {Promise<Object[]>} Promise object represents a list of developers
+ * @returns {Promise<object[]>} Promise object represents a list of developers
  */
 const getDevelopers = async (queries) => {
   const connection = await conn.getConnection();
@@ -36,7 +36,7 @@ const getDevelopers = async (queries) => {
  * @summary Return a specific developer by unique ID
  * @function
  * @param {string} id Unique developer ID
- * @returns {Promise<Object>} Promise object represents a specific developer or return undefined if
+ * @returns {Promise<object>} Promise object represents a specific developer or return undefined if
  *                            term is not found
  */
 const getDeveloperById = async (id) => {
