@@ -33,10 +33,11 @@ describe('Test games-dao', () => {
     close: () => null,
   });
 
-  it('getGames should be fulfilled', () => {
+  it(`getGames should be fulfilled when
+        1. a single result is returned
+        2. multiple results are returned`, () => {
     const testCases = [
       { testCase: [{}, {}] },
-      { testCase: [] },
       { testCase: [{}] },
     ];
 
@@ -54,7 +55,7 @@ describe('Test games-dao', () => {
     return Promise.all(fulfilledPromises);
   });
 
-  it('getGames should be rejected', () => {
+  it('getGames should be rejected when improper query params are passed in', () => {
     createConnStub();
 
     const expectedError = 'Cannot read property \'page[number]\' of undefined';
@@ -63,7 +64,7 @@ describe('Test games-dao', () => {
     return result.should.eventually.be.rejectedWith(Error, expectedError);
   });
 
-  it('getGameById should be fulfilled', () => {
+  it('getGameById should be fulfilled with a single result', () => {
     const testCases = [
       { testCase: [{}], expectedResult: {} },
     ];
@@ -83,10 +84,9 @@ describe('Test games-dao', () => {
     return Promise.all(fulfilledPromises);
   });
 
-  it('getGameById should be rejected', () => {
+  it('getGameById should be rejected when multiple results are returned', () => {
     const testCases = [
       { testCase: { rows: [{}, {}] }, error: 'Expect a single object but got multiple results.' },
-      { testCase: [], error: 'Cannot read property \'length\' of undefined' },
     ];
 
     const rejectedPromises = [];
@@ -101,7 +101,7 @@ describe('Test games-dao', () => {
     return Promise.all(rejectedPromises);
   });
 
-  it('postGame should be fulfilled', () => {
+  it('postGame should be fulfilled with a single result', () => {
     const testCase = [{}];
 
     const fakeBody = {
@@ -120,7 +120,9 @@ describe('Test games-dao', () => {
       .and.deep.equal(testCase[0]);
   });
 
-  it('postGame should be rejected', () => {
+  it(`postGame should be rejected when
+        1. no data is passed in the body
+        2. attributes is passed in the body without the required fields`, () => {
     const testCases = [
       { fakeBody: undefined, error: 'Cannot read property \'data\' of undefined' },
       { fakeBody: { attributes: {} }, error: 'Cannot destructure property `attributes` of \'undefined\' or \'null\'.' },
@@ -139,9 +141,9 @@ describe('Test games-dao', () => {
     return Promise.all(rejectedPromises);
   });
 
-  it('deleteGame should be fulfilled', () => {
+  it('deleteGame should be fulfilled with single result', () => {
     const testCases = [
-      { testCase: [] },
+      { testCase: [{}] },
     ];
 
     const fulfilledPromises = [];
@@ -158,7 +160,7 @@ describe('Test games-dao', () => {
     return Promise.all(fulfilledPromises);
   });
 
-  it('patchGame should be fulfilled', () => {
+  it('patchGame should be fulfilled with a single result', () => {
     const testCases = [
       { testCase: [{}] },
     ];
@@ -184,7 +186,9 @@ describe('Test games-dao', () => {
     return Promise.all(fulfilledPromises);
   });
 
-  it('patchGame should be rejected', () => {
+  it(`patchGame should be rejected when
+      1. an undefined body is passed in
+      2. a body with attributes that are missing required fields is passed in`, () => {
     const testCases = [
       { fakeBody: undefined, error: 'Cannot read property \'data\' of undefined' },
       { fakeBody: { attributes: {} }, error: 'Cannot destructure property `attributes` of \'undefined\' or \'null\'.' },
@@ -204,7 +208,9 @@ describe('Test games-dao', () => {
     return Promise.all(rejectedPromises);
   });
 
-  it('isValidDeveloper should be fulfilled', () => {
+  it(`isValidDeveloper should be fulfilled return
+      1. true when the id field returned is 1
+      2. false when the id field returned is 0`, () => {
     const testCases = [
       { testCase: { rows: [{ id: 1 }] }, expectedResult: true },
       { testCase: { rows: [{ id: 0 }] }, expectedResult: false },
@@ -224,7 +230,7 @@ describe('Test games-dao', () => {
     return Promise.all(fulfilledPromises);
   });
 
-  it('isValidDeveloper should be rejected', () => {
+  it('isValidDeveloper should be rejected when a single response is returned', () => {
     createConnStub({});
     const result = gamesDao.isValidDeveloper('fakeId');
     return result.should.be.rejectedWith(Error, 'Cannot read property \'0\' of undefined');
