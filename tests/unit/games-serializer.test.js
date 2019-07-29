@@ -57,6 +57,8 @@ describe('Test games-serializer', () => {
   it(`gameConverter should convert score values from strings to numbers
       and releaseDate values to yyyy-mm-dd date format`, () => {
     const { gameConverter } = gamesSerializer;
+    // rawGames from testData is modified by the other tests
+    // this test needs its own data so it can be tested in isolation from the others
     const { gameConverterData } = testData;
 
     const testResults = [];

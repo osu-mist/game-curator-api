@@ -57,6 +57,8 @@ describe('Test reviews-serializer', () => {
   it(`reviewConverter should convert score values from string to number
       and reviewDate values to yyyy-mm-dd date formats`, () => {
     const { reviewConverter } = reviewsSerializer;
+    // rawReviews from testData is modified by the other tests
+    // this test needs its own data so it can be tested in isolation from the others
     const { reviewConverterData } = testData;
 
     const testResults = [];
