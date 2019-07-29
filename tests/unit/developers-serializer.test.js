@@ -17,14 +17,14 @@ describe('Test developers-serializer', () => {
   const { rawDevelopers } = testData;
   const resourceType = 'developer';
 
-  it('test serializeDeveloper', () => {
+  it('serializeDeveloper should form a single JSON result as defined in openapi', () => {
     const { serializeDeveloper } = developersSerializer;
 
     const serializedDeveloper = serializeDeveloper(rawDevelopers[0]);
     testSingleResource(serializedDeveloper, resourceType, _.omit(rawDevelopers[0], ['id']));
   });
 
-  it('test serializeDevelopers', () => {
+  it('serializeDevelopers should form a multiple JSON result as defined in openapi', () => {
     const { serializeDevelopers } = developersSerializer;
 
     const serializedDevelopers = serializeDevelopers(rawDevelopers, testData.paginationQueries);
@@ -33,7 +33,9 @@ describe('Test developers-serializer', () => {
     expect(serializedDevelopers).to.have.all.keys(_.keys(getDefinitionProps('DeveloperResults')));
   });
 
-  it('serializeDevelopers should be rejected', () => {
+  it(`serializeDevelopers should be rejected when
+        1. data is passed without queries
+        2. queries are passed without data`, () => {
     const { serializeDevelopers } = developersSerializer;
     const rejectedCases = [
       { rawData: rawDevelopers, queries: null, error: 'Cannot read property \'page[size]\' of null' },
