@@ -35,23 +35,30 @@ describe('Test reviews-serializer', () => {
     expect(serializedReviews).to.have.all.keys(_.keys(getDefinitionProps('ReviewResults')));
   });
 
-  it(`serializeReviews should be rejected when
-      1. data is passed without queries
-      2. queries are passed without data`, () => {
-    const { serializeReviews } = reviewsSerializer;
-    const rejectedCases = [
-      { rawData: rawReviews, queries: null, error: 'Cannot read property \'page[size]\' of null' },
-      { rawData: null, queries: testData.paginationQueries, error: 'Cannot read property \'length\' of null' },
-    ];
-
-    const rejectedPromises = [];
-    _.forEach(rejectedCases, ({ rawData, queries, error }) => {
-      rejectedPromises.push(
-        expect(() => serializeReviews(rawData, queries))
-          .to.throw(error),
-      );
+  const rejectedCases = [
+    {
+      rawData: rawReviews,
+      queries: null,
+      error: 'Cannot read property \'page[size]\' of null',
+      description: 'data is passed without queries',
+    },
+    {
+      rawData: null,
+      queries: testData.paginationQueries,
+      error: 'Cannot read property \'length\' of null',
+      description: 'queries are passed without data',
+    },
+  ];
+  _.forEach(rejectedCases, ({
+    rawData,
+    queries,
+    error,
+    description,
+  }) => {
+    it(`serializeReviews should be rejected when ${description}`, () => {
+      const { serializeReviews } = reviewsSerializer;
+      return expect(() => serializeReviews(rawData, queries)).to.throw(error);
     });
-    return Promise.all(rejectedPromises);
   });
 
   it(`reviewConverter should convert score values from string to number
