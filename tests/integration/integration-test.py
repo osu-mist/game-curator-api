@@ -233,6 +233,22 @@ class integration_tests(unittest.TestCase):
                     returned_reviewer = row['attributes']['reviewer']
                     self.assertEqual(reviewer_name, returned_reviewer)
 
+        current_test_case = 'review_game_ids'
+        for game_ids in self.test_cases[current_test_case]:
+            with self.subTest('Test gameIds query parameter',
+                              game_ids=game_ids):
+                params = {'gameIds': game_ids}
+                response = utils.test_endpoint(self,
+                                               path,
+                                               resource,
+                                               200,
+                                               query_params=params)
+                response_data = response.json()['data']
+                self.assert_data_returned(current_test_case, response_data)
+                for row in response_data:
+                    returned_game_id = row['attributes']['gameId']
+                    self.assertIn(returned_game_id, game_ids)
+
 
 if __name__ == '__main__':
     arguments, argv = utils.parse_arguments()
