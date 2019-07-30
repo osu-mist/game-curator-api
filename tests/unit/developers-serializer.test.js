@@ -5,7 +5,7 @@ const chaiSubset = require('chai-subset');
 const _ = require('lodash');
 
 const developersSerializer = appRoot.require('api/v1/serializers/developers-serializer');
-const { getDefinitionProps, testSingleResource, testMultipleResources } = appRoot.require('tests/unit/serializer-test-helpers.js');
+const { getDefinitionProps, testSingleResource, testMultipleResources } = require('./serializer-test-helpers.js');
 const testData = require('./test-data');
 
 chai.should();
