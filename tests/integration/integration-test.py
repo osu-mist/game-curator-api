@@ -210,9 +210,17 @@ class integration_tests(unittest.TestCase):
             with self.subTest('Test non existant review ids',
                               review_id=review_id):
                 response = utils.test_endpoint(self,
-                                               f'/reviews{review_id}',
+                                               f'/reviews/{review_id}',
                                                'Error',
                                                404)
+
+        for review_id in self.test_cases['invalid_review_ids']:
+            with self.subTest('Test invalid review ids',
+                              review_id=review_id):
+                response = utils.test_endpoint(self,
+                                               f'/reviews/{review_id}',
+                                               'Error',
+                                               400)
 
 
 if __name__ == '__main__':
