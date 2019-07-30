@@ -1,3 +1,4 @@
+from datetime import datetime
 import json
 import logging
 import unittest
@@ -295,6 +296,25 @@ class integration_tests(unittest.TestCase):
                 for row in response_data:
                     returned_score = row['attributes']['score']
                     self.assertLessEqual(returned_score, int(score))
+
+        current_test_case = 'review_review_dates'
+        for review_date in self.test_cases[current_test_case]:
+            with self.subTest('Test reviewDate query parameter',
+                              review_date=review_date):
+                params = {'reviewDate': review_date}
+                response = utils.test_endpoint(self,
+                                               path,
+                                               resource,
+                                               200,
+                                               query_params=params)
+                response_data = response.json()['data']
+                self.assert_data_returned(current_test_case, response_data)
+                for row in response_data:
+                    returned_review_date = row['attributes']['reviewDate']
+                    date_format = '%Y-%m-%d'
+                    self.assertEqual(
+                        datetime.strptime(returned_review_date, date_format),
+                        datetime.strptime(review_date, date_format))
 
 
 if __name__ == '__main__':
