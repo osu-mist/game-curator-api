@@ -52,20 +52,18 @@ describe('Test developers-dao', () => {
   });
 
   describe('Test getDeveloperById', () => {
-    it('getDeveloperById should be fulfilled with a single result', () => {
-      const fulfilledCases = [
-        { expectedResult: {} },
-      ];
-
-      const fulfilledPromises = [];
-      _.each(fulfilledCases, ({ expectedResult }) => {
-        createConnStub({ rows: [expectedResult] });
+    const fulfilledCases = [
+      { expectedResult: [{}], description: 'a single result' },
+      { expectedResult: [], description: 'an empty result' },
+    ];
+    _.forEach(fulfilledCases, ({ expectedResult, description }) => {
+      it(`getDeveloperById should be fulfilled with ${description}`, () => {
+        createConnStub({ rows: expectedResult });
         const result = developersDao.getDeveloperById(fakeId);
-        fulfilledPromises.push(result.should
+        return result.should
           .eventually.be.fulfilled
-          .and.deep.equal(expectedResult));
+          .and.deep.equal(expectedResult[0]);
       });
-      return Promise.all(fulfilledPromises);
     });
 
     it('getDeveloperById should be rejected when multiple values are returned', () => {
