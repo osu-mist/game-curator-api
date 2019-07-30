@@ -2,7 +2,6 @@ const appRoot = require('app-root-path');
 const _ = require('lodash');
 const oracledb = require('oracledb');
 
-// removed destructuring of these methods so they can be stubbed with sinon
 const { serializeDeveloper, serializeDevelopers } = require('../../serializers/developers-serializer');
 
 const conn = appRoot.require('api/v1/db/oracledb/connection');
