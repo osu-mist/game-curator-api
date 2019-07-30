@@ -222,6 +222,24 @@ class integration_tests(unittest.TestCase):
                                                'Error',
                                                400)
 
+    # Test case: GET /reviews
+    def test_get_reviews(self):
+        path = '/reviews'
+        resource = 'ReviewResource'
+        for reviewer_name in self.test_cases['reviewer_names']:
+            with self.subTest('Test reviewer query parameter',
+                              reviewer_name=reviewer_name):
+                params = {'reviewer': reviewer_name}
+                response = utils.test_endpoint(self,
+                                               path,
+                                               resource,
+                                               200,
+                                               query_params=params)
+                response_data = response.json()['data']
+                for row in response_data:
+                    returned_reviewer = row['attributes']['reviewer']
+                    self.assertEqual(reviewer_name, returned_reviewer)
+
 
 if __name__ == '__main__':
     arguments, argv = utils.parse_arguments()
