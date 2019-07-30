@@ -1,9 +1,16 @@
 const appRoot = require('app-root-path');
 const { expect } = require('chai');
 const _ = require('lodash');
+const sinon = require('sinon');
 
+const conn = appRoot.require('api/v1/db/oracledb/connection');
 const { openapi } = appRoot.require('utils/load-openapi');
 const { fakeId, fakeBaseUrl } = appRoot.require('tests/unit/test-data');
+
+const createConnStub = executeReturn => sinon.stub(conn, 'getConnection').resolves({
+  execute: () => executeReturn,
+  close: () => null,
+});
 
 /**
  *
@@ -82,6 +89,7 @@ const getDefinitionProps = (definition, nestedOption) => {
 };
 
 module.exports = {
+  createConnStub,
   testSingleResource,
   testMultipleResources,
   getDefinitionProps,
