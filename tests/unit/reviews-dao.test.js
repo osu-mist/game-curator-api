@@ -29,26 +29,19 @@ describe('Test reviews-dao', () => {
   afterEach(() => sinon.restore());
 
   describe('Test getReviews', () => {
-    it(`getReviews should be fulfilled with
-          1. multiple results
-          2. a single result`, () => {
-      const testCases = [
-        { testCase: [{}, {}] },
-        { testCase: [{}] },
-      ];
-
-      const fulfilledPromises = [];
-      _.forEach(testCases, ({ testCase }) => {
-        const connStub = createConnStub({ rows: testCase });
+    const testCases = [
+      { testCase: [{}, {}], description: 'multiple results' },
+      { testCase: [{}], description: 'a single result' },
+    ];
+    _.forEach(testCases, ({ testCase, description }) => {
+      it(`getReviews should be fulfilled with ${description}`, () => {
+        createConnStub({ rows: testCase });
 
         const result = reviewsDao.getReviews('fakeQueries');
-        fulfilledPromises.push(result.should
+        return result.should
           .eventually.be.fulfilled
-          .and.deep.equals(testCase));
-
-        connStub.restore();
+          .and.deep.equals(testCase);
       });
-      return Promise.all(fulfilledPromises);
     });
 
     it('getReviews should be rejected when an undefined or improper queries are passed in', () => {
@@ -119,25 +112,26 @@ describe('Test reviews-dao', () => {
         .and.deep.equal(testCase[0]);
     });
 
-    it(`postReview should be rejected when
-          1. no data is passed in the body
-          2. attributes is passed in the body without the required fields`, () => {
-      const testCases = [
-        { fakeBody: undefined, error: 'Cannot read property \'data\' of undefined' },
-        { fakeBody: { attributes: {} }, error: 'Cannot destructure property `attributes` of \'undefined\' or \'null\'.' },
-      ];
-
-      const rejectedPromises = [];
-      _.forEach(testCases, ({ fakeBody, error }) => {
-        const connStub = createConnStub({});
+    const testCases = [
+      {
+        fakeBody: undefined,
+        error: 'Cannot read property \'data\' of undefined',
+        description: 'no data is passed in the body',
+      },
+      {
+        fakeBody: { attributes: {} },
+        error: 'Cannot destructure property `attributes` of \'undefined\' or \'null\'.',
+        description: 'attributes is passed in the body without the required fields',
+      },
+    ];
+    _.forEach(testCases, ({ fakeBody, error, description }) => {
+      it(`postReview should be rejected when ${description}`, () => {
+        createConnStub({});
 
         const result = reviewsDao.postReview(fakeBody);
-        rejectedPromises.push(result.should
-          .eventually.be.rejectedWith(Error, error));
-
-        connStub.restore();
+        return result.should
+          .eventually.be.rejectedWith(Error, error);
       });
-      return Promise.all(rejectedPromises);
     });
   });
 
@@ -189,50 +183,52 @@ describe('Test reviews-dao', () => {
       return Promise.all(fulfilledPromises);
     });
 
-    it(`patchReview should be rejected
-        1. an undefined body is passed in
-        2. a body with attributes that are missing required fields is passed in`, () => {
-      const testCases = [
-        { fakeBody: undefined, error: 'Cannot read property \'data\' of undefined' },
-        { fakeBody: { attributes: {} }, error: 'Cannot destructure property `attributes` of \'undefined\' or \'null\'.' },
-      ];
-      const fakeId = 'fakeId';
-
-      const rejectedPromises = [];
-      _.forEach(testCases, ({ fakeBody, error }) => {
-        const connStub = createConnStub();
+    const testCases = [
+      {
+        fakeBody: undefined,
+        error: 'Cannot read property \'data\' of undefined',
+        description: 'an undefined body is passed in',
+      },
+      {
+        fakeBody: { attributes: {} },
+        error: 'Cannot destructure property `attributes` of \'undefined\' or \'null\'.',
+        description: 'a body with attributes that are missing required fields is passed in',
+      },
+    ];
+    _.forEach(testCases, ({ fakeBody, error, description }) => {
+      it(`patchReview should be rejected when ${description}`, () => {
+        const fakeId = 'fakeId';
+        createConnStub();
 
         const result = reviewsDao.patchReview(fakeId, fakeBody);
-        rejectedPromises.push(result.should
-          .eventually.be.rejectedWith(Error, error));
-
-        connStub.restore();
+        return result.should
+          .eventually.be.rejectedWith(Error, error);
       });
-      return Promise.all(rejectedPromises);
     });
   });
 
   describe('Test isValidGame', () => {
-    it(`isValidGame should be fulfilled
-        1. true when the id field returned is 1
-        2. false when the id field returned is 0`, () => {
-      const testCases = [
-        { testCase: { rows: [{ id: 1 }] }, expectedResult: true },
-        { testCase: { rows: [{ id: 0 }] }, expectedResult: false },
-      ];
-
-      const fulfilledPromises = [];
-      _.forEach(testCases, ({ testCase, expectedResult }) => {
-        const connStub = createConnStub(testCase);
+    const testCases = [
+      {
+        testCase: { rows: [{ id: 1 }] },
+        expectedResult: true,
+        description: 'true when the id field returned is 1',
+      },
+      {
+        testCase: { rows: [{ id: 0 }] },
+        expectedResult: false,
+        description: 'false when id field returned is 0',
+      },
+    ];
+    _.forEach(testCases, ({ testCase, expectedResult, description }) => {
+      it(`isValidGame should be fulfilled ${description}`, () => {
+        createConnStub(testCase);
 
         const result = reviewsDao.isValidGame();
-        fulfilledPromises.push(result.should
+        return result.should
           .eventually.be.fulfilled
-          .and.deep.equal(expectedResult));
-
-        connStub.restore();
+          .and.deep.equal(expectedResult);
       });
-      return Promise.all(fulfilledPromises);
     });
 
     it('isValidGame should be rejected when a single response is returned', () => {
