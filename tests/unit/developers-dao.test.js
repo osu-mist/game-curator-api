@@ -67,21 +67,13 @@ describe('Test developers-dao', () => {
     });
 
     it('getDeveloperById should be rejected when multiple values are returned', () => {
-      const rejectedCases = [
-        { testCase: { rows: [{}, {}] }, error: 'Expect a single object but got multiple results' },
-      ];
+      const testCase = { rows: [{}, {}] };
+      const error = 'Expect a single object but got multiple results';
 
-      const rejectedPromises = [];
-      _.each(rejectedCases, ({ testCase, error }) => {
-        createConnStub(testCase);
+      createConnStub(testCase);
 
-        const result = developersDao.getDeveloperById('fakeId');
-        rejectedPromises.push(result.should
-          .eventually.be.rejectedWith(Error, error));
-
-        sinon.restore();
-      });
-      return Promise.all(rejectedPromises);
+      const result = developersDao.getDeveloperById('fakeId');
+      return result.should.eventually.be.rejectedWith(Error, error);
     });
   });
 
