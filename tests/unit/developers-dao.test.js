@@ -8,9 +8,9 @@ const proxyquire = require('proxyquire');
 const sinon = require('sinon');
 
 sinon.replace(config, 'get', () => ({ oracledb: {} }));
-const conn = appRoot.require('api/v1/db/oracledb/connection');
 let developersDao; // proxyquire is later used to import developers-dao class
 const developersSerializer = appRoot.require('api/v1/serializers/developers-serializer');
+const { createConnStub } = require('./test-helpers');
 
 chai.should();
 chai.use(chaiExclude);
@@ -34,42 +34,10 @@ describe('Test developers-dao', () => {
   });
   afterEach(() => sinon.restore());
 
-  // most tests can use the same 'getConnection' stub but some need specific ones
-  const standardConnStub = () => {
-    sinon.stub(conn, 'getConnection').resolves({
-      execute: (sql, sqlParams) => {
-        const sqlResults = {
-          multiResults: {
-            rows: [{}, {}],
-            outBinds: {
-              outId: [1],
-            },
-          },
-          singleResult: {
-            rows: [{}],
-            outBinds: {
-              outId: [1],
-            },
-          },
-          emptyResult: { rows: [] },
-        };
-        let result;
-        if ('developerId' in sqlParams) {
-          result = sqlResults.singleResult;
-        } else {
-          result = sqlResults.multiResults;
-        }
-        return result;
-      },
-      close: () => null,
-    });
-  };
-
   describe('Test getDevelopers', () => {
     it('getDevelopers should be fulfilled with multiple results', () => {
-      standardConnStub();
-
       const expectedResult = [{}, {}];
+      createConnStub({ rows: expectedResult });
       const result = developersDao.getDevelopers(fakeId);
       return result.should
         .eventually.be.fulfilled
@@ -79,14 +47,13 @@ describe('Test developers-dao', () => {
 
   describe('Test getDeveloperById', () => {
     it('getDeveloperById should be fulfilled with a single result', () => {
-      standardConnStub();
-
       const fulfilledCases = [
         { expectedResult: {} },
       ];
 
       const fulfilledPromises = [];
       _.each(fulfilledCases, ({ expectedResult }) => {
+        createConnStub({ rows: [expectedResult] });
         const result = developersDao.getDeveloperById(fakeId);
         fulfilledPromises.push(result.should
           .eventually.be.fulfilled
@@ -102,10 +69,7 @@ describe('Test developers-dao', () => {
 
       const rejectedPromises = [];
       _.each(rejectedCases, ({ testCase, error }) => {
-        sinon.stub(conn, 'getConnection').resolves({
-          execute: () => testCase,
-          close: () => null,
-        });
+        createConnStub(testCase);
 
         const result = developersDao.getDeveloperById('fakeId');
         rejectedPromises.push(result.should
@@ -119,7 +83,7 @@ describe('Test developers-dao', () => {
 
   describe('Test postDeveloper', () => {
     it('postDeveloper with improper body should be rejected', () => {
-      standardConnStub();
+      createConnStub();
 
       const result = developersDao.postDeveloper('fakeId', 'fakeBody');
       return result.should
@@ -128,8 +92,6 @@ describe('Test developers-dao', () => {
     });
 
     it('postDeveloper should be fulfilled with singleResult', () => {
-      standardConnStub();
-
       const fakeBody = {
         data: {
           attributes: {
@@ -139,6 +101,7 @@ describe('Test developers-dao', () => {
       };
 
       const expectedResult = {};
+      createConnStub({ rows: [{}], outBinds: { outId: 1 } });
       const result = developersDao.postDeveloper(fakeBody);
       return result.should
         .eventually.be.fulfilled
@@ -159,10 +122,7 @@ describe('Test developers-dao', () => {
     ];
     _.forEach(testCases, ({ testCase, expectedError, testDescription }) => {
       it(`postDeveloper should be rejected when ${testDescription}`, () => {
-        sinon.stub(conn, 'getConnection').resolves({
-          execute: () => testCase,
-          close: () => null,
-        });
+        createConnStub(testCase);
 
         const fakeBody = { data: { attributes: 'fakeAttributes' } };
         const result = developersDao.postDeveloper(fakeBody);
@@ -174,9 +134,8 @@ describe('Test developers-dao', () => {
 
   describe('Test deleteDeveloper', () => {
     it('deleteDeveloper should be fulfilled with single result', () => {
-      standardConnStub();
-
       const expectedResult = [{}];
+      createConnStub({ rows: expectedResult });
       const result = developersDao.deleteDeveloper('fakeId');
       return result.should
         .eventually.be.fulfilled
@@ -186,7 +145,7 @@ describe('Test developers-dao', () => {
 
   describe('Test patchDeveloper', () => {
     it('patchDeveloper with improper body should be rejected', () => {
-      standardConnStub();
+      createConnStub();
 
       const result = developersDao.patchDeveloper('fakeId', 'fakeBody');
       return result.should
@@ -195,8 +154,6 @@ describe('Test developers-dao', () => {
     });
 
     it('patchDeveloper should be fulfilled with singleResult', () => {
-      standardConnStub();
-
       const fakeBody = {
         data: {
           id: fakeId,
@@ -207,6 +164,7 @@ describe('Test developers-dao', () => {
       };
 
       const expectedResult = [{}];
+      createConnStub({ rows: expectedResult });
       const result = developersDao.patchDeveloper(fakeId, fakeBody);
       return result.should
         .eventually.be.fulfilled
