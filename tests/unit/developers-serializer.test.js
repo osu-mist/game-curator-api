@@ -33,22 +33,30 @@ describe('Test developers-serializer', () => {
     expect(serializedDevelopers).to.have.all.keys(_.keys(getDefinitionProps('DeveloperResults')));
   });
 
-  it(`serializeDevelopers should be rejected when
-        1. data is passed without queries
-        2. queries are passed without data`, () => {
-    const { serializeDevelopers } = developersSerializer;
-    const rejectedCases = [
-      { rawData: rawDevelopers, queries: null, error: 'Cannot read property \'page[size]\' of null' },
-      { rawData: null, queries: testData.paginationQueries, error: 'Cannot read property \'length\' of null' },
-    ];
-
-    const rejectedPromises = [];
-    _.forEach(rejectedCases, ({ rawData, queries, error }) => {
-      rejectedPromises.push(
-        expect(() => serializeDevelopers(rawData, queries))
-          .to.throw(error),
-      );
+  const rejectedCases = [
+    {
+      rawData: rawDevelopers,
+      queries: null,
+      error: 'Cannot read property \'page[size]\' of null',
+      description: 'data is passed without queries',
+    },
+    {
+      rawData: null,
+      queries: testData.paginationQueries,
+      error: 'Cannot read property \'length\' of null',
+      description: 'queries are passed without data',
+    },
+  ];
+  _.forEach(rejectedCases, ({
+    rawData,
+    queries,
+    error,
+    description,
+  }) => {
+    it(`serializeDevelopers should be rejected when ${description}`, () => {
+      const { serializeDevelopers } = developersSerializer;
+      return expect(() => serializeDevelopers(rawData, queries))
+        .to.throw(error);
     });
-    return Promise.all(rejectedPromises);
   });
 });
