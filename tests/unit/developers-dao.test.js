@@ -35,13 +35,19 @@ describe('Test developers-dao', () => {
   afterEach(() => sinon.restore());
 
   describe('Test getDevelopers', () => {
-    it('getDevelopers should be fulfilled with multiple results', () => {
-      const expectedResult = [{}, {}];
-      createConnStub({ rows: expectedResult });
-      const result = developersDao.getDevelopers(fakeId);
-      return result.should
-        .eventually.be.fulfilled
-        .and.deep.equal(expectedResult);
+    const testCases = [
+      { testCase: [{}], description: 'a single result' },
+      { testCase: [{}, {}], description: 'multiple results' },
+      { testCase: [], description: 'no results' },
+    ];
+    _.forEach(testCases, ({ testCase, description }) => {
+      it(`getDevelopers should be fulfilled with ${description}`, () => {
+        createConnStub({ rows: testCase });
+        const result = developersDao.getDevelopers(fakeId);
+        return result.should
+          .eventually.be.fulfilled
+          .and.deep.equal(testCase);
+      });
     });
   });
 
