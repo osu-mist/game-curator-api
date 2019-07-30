@@ -66,4 +66,4 @@ get.apiDoc = paths['/games/{gameId}'].get;
 del.apiDoc = paths['/games/{gameId}'].del;
 patch.apiDoc = paths['/games/{gameId}'].patch;
 
-module.exports = { get, del, patch };
+module.exports = { get, delete: del, patch };
