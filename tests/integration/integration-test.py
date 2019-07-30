@@ -327,6 +327,17 @@ class integration_tests(unittest.TestCase):
                         datetime.strptime(returned_review_date, date_format),
                         datetime.strptime(review_date, date_format))
 
+        current_test_case = 'review_invalid_date_formats'
+        for review_date in self.test_cases[current_test_case]:
+            with self.subTest('Test invalid reviewDate formats',
+                              review_date=review_date):
+                params = {'reviewDate': review_date}
+                response = utils.test_endpoint(self,
+                                               path,
+                                               'Error',
+                                               400,
+                                               query_params=params)
+
 
 if __name__ == '__main__':
     arguments, argv = utils.parse_arguments()
