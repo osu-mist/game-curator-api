@@ -35,23 +35,30 @@ describe('Test games-serializer', () => {
     expect(serializedGames).to.have.all.keys(_.keys(getDefinitionProps('GameResults')));
   });
 
-  it(`serializeGames should be rejected when
-      1. data is passed without queries
-      2. queries are passed without data`, () => {
-    const { serializeGames } = gamesSerializer;
-    const rejectedCases = [
-      { rawData: rawGames, queries: null, error: 'Cannot read property \'page[size]\' of null' },
-      { rawData: null, queries: testData.paginationQueries, error: 'Cannot read property \'length\' of null' },
-    ];
-
-    const rejectedPromises = [];
-    _.forEach(rejectedCases, ({ rawData, queries, error }) => {
-      rejectedPromises.push(
-        expect(() => serializeGames(rawData, queries))
-          .to.throw(error),
-      );
+  const rejectedCases = [
+    {
+      rawData: rawGames,
+      queries: null,
+      error: 'Cannot read property \'page[size]\' of null',
+      description: 'data is passed without queries',
+    },
+    {
+      rawData: null,
+      queries: testData.paginationQueries,
+      error: 'Cannot read property \'length\' of null',
+      description: 'queries are passed without data',
+    },
+  ];
+  _.forEach(rejectedCases, ({
+    rawData,
+    queries,
+    error,
+    description,
+  }) => {
+    it(`serializeGames should be rejected when ${description}`, () => {
+      const { serializeGames } = gamesSerializer;
+      return expect(() => serializeGames(rawData, queries)).to.throw(error);
     });
-    return Promise.all(rejectedPromises);
   });
 
   it(`gameConverter should convert score values from strings to numbers
