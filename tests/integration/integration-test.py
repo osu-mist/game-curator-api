@@ -267,6 +267,21 @@ class integration_tests(unittest.TestCase):
                     returned_game_id = row['attributes']['gameId']
                     self.assertIn(returned_game_id, game_ids)
 
+        current_test_case = 'scores'
+        for score in self.test_cases[current_test_case]:
+            with self.subTest('Test scoreMin query parameter', score=score):
+                params = {'scoreMin': score}
+                response = utils.test_endpoint(self,
+                                               path,
+                                               resource,
+                                               200,
+                                               query_params=params)
+                response_data = response.json()['data']
+                self.assert_data_returned(current_test_case, response_data)
+                for row in response_data:
+                    returned_score = row['attributes']['score']
+                    self.assertGreaterEqual(returned_score, int(score))
+
 
 if __name__ == '__main__':
     arguments, argv = utils.parse_arguments()
