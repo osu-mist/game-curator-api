@@ -5,9 +5,9 @@ const _ = require('lodash');
 const proxyquire = require('proxyquire');
 const sinon = require('sinon');
 
-const conn = appRoot.require('api/v1/db/oracledb/connection');
 let gamesDao;
 const gamesSerializer = appRoot.require('api/v1/serializers/games-serializer');
+const { createConnStub } = require('./test-helpers');
 
 chai.should();
 chai.use(chaiAsPromised);
@@ -27,11 +27,6 @@ describe('Test games-dao', () => {
     });
   });
   afterEach(() => sinon.restore());
-
-  const createConnStub = executeReturn => sinon.stub(conn, 'getConnection').resolves({
-    execute: () => executeReturn,
-    close: () => null,
-  });
 
   describe('Test getGames', () => {
     it(`getGames should be fulfilled when
