@@ -34,21 +34,12 @@ class integration_tests(unittest.TestCase):
     def cleanup(cls):
         cls.session.close()
 
-    def get_response(
-        self,
-        resource,
-        params={},
-        status=200,
-        endpoint=''
-    ):
-        return utils.test_endpoint(
-            self,
-            endpoint,
-            resource,
-            status,
-            params,
-            ['context']
-        )
+    # Assert that response_data contains data
+    def assert_data_returned(self, test_case, response_data):
+        error_message = (f'No data returned from server.'
+                         f' Check that \'{test_case}\' in configuration.json'
+                         f' contains valid data')
+        self.assertGreater(len(response_data), 0, error_message)
 
     # Test case: GET /developers/{developerId}
     def test_get_developer_by_id(self):
