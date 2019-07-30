@@ -268,6 +268,17 @@ class integration_tests(unittest.TestCase):
                     returned_game_id = row['attributes']['gameId']
                     self.assertIn(returned_game_id, game_ids)
 
+        current_test_case = 'review_invalid_game_id_formats'
+        for game_ids in self.test_cases[current_test_case]:
+            with self.subTest('Test invalid game id query parameter formats',
+                              game_ids=game_ids):
+                params = {'gameIds': game_ids}
+                response = utils.test_endpoint(self,
+                                               path,
+                                               'Error',
+                                               400,
+                                               query_params=params)
+
         current_test_case = 'scores'
         for score in self.test_cases[current_test_case]:
             with self.subTest('Test scoreMin query parameter', score=score):
