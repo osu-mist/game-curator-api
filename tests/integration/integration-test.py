@@ -217,6 +217,7 @@ class integration_tests(unittest.TestCase):
     def test_get_reviews(self):
         path = '/reviews'
         resource = 'ReviewResource'
+        current_test_case = 'reviewer_name'
         for reviewer_name in self.test_cases['reviewer_names']:
             with self.subTest('Test reviewer query parameter',
                               reviewer_name=reviewer_name):
@@ -227,6 +228,7 @@ class integration_tests(unittest.TestCase):
                                                200,
                                                query_params=params)
                 response_data = response.json()['data']
+                self.assert_data_returned(current_test_case, response_data)
                 for row in response_data:
                     returned_reviewer = row['attributes']['reviewer']
                     self.assertEqual(reviewer_name, returned_reviewer)
