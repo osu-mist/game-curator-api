@@ -163,7 +163,7 @@ class integration_tests(unittest.TestCase):
                     returned_id = row['attributes']['developerId']
                     self.assertEqual(developer_id, returned_id)
 
-        for score_min in self.test_cases['game_scores']:
+        for score_min in self.test_cases['scores']:
             with self.subTest('Test scoreMin query parameter',
                               score_min=score_min):
                 params = {'scoreMin': score_min}
@@ -178,7 +178,7 @@ class integration_tests(unittest.TestCase):
                     returned_score = row['attributes']['score']
                     self.assertLessEqual(int(score_min), returned_score)
 
-        for score_max in self.test_cases['game_scores']:
+        for score_max in self.test_cases['scores']:
             with self.subTest('Test scoreMax query parameter',
                               score_max=score_max):
                 params = {'scoreMax': score_max}
