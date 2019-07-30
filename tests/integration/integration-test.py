@@ -206,6 +206,14 @@ class integration_tests(unittest.TestCase):
                 returned_id = response_data['id']
                 self.assertEqual(returned_id, review_id)
 
+        for review_id in self.test_cases['non_existant_review_ids']:
+            with self.subTest('Test non existant review ids',
+                              review_id=review_id):
+                response = utils.test_endpoint(self,
+                                               f'/reviews{review_id}',
+                                               'Error',
+                                               404)
+
 
 if __name__ == '__main__':
     arguments, argv = utils.parse_arguments()
