@@ -10,6 +10,7 @@ const sinon = require('sinon');
 sinon.replace(config, 'get', () => ({ oracledb: {} }));
 let developersDao; // proxyquire is later used to import developers-dao class
 const developersSerializer = appRoot.require('api/v1/serializers/developers-serializer');
+const testData = require('./test-data');
 const { createConnStub } = require('./test-helpers');
 
 chai.should();
@@ -17,7 +18,7 @@ chai.use(chaiExclude);
 chai.use(chaiAsPromised);
 
 describe('Test developers-dao', () => {
-  const fakeId = 'fakeId';
+  const { fakeId, fakeBody } = testData;
 
   beforeEach(() => {
     const serializeDeveloperStub = sinon.stub(developersSerializer, 'serializeDeveloper');
@@ -88,14 +89,6 @@ describe('Test developers-dao', () => {
     });
 
     it('postDeveloper should be fulfilled with singleResult', () => {
-      const fakeBody = {
-        data: {
-          attributes: {
-            name: 'test',
-          },
-        },
-      };
-
       const expectedResult = {};
       createConnStub({ rows: [{}], outBinds: { outId: 1 } });
       const result = developersDao.postDeveloper(fakeBody);
@@ -120,7 +113,6 @@ describe('Test developers-dao', () => {
       it(`postDeveloper should be rejected when ${testDescription}`, () => {
         createConnStub(testCase);
 
-        const fakeBody = { data: { attributes: 'fakeAttributes' } };
         const result = developersDao.postDeveloper(fakeBody);
         return result.should
           .eventually.be.rejectedWith(Error, expectedError);
@@ -155,15 +147,6 @@ describe('Test developers-dao', () => {
     });
 
     it('patchDeveloper should be fulfilled with singleResult', () => {
-      const fakeBody = {
-        data: {
-          id: fakeId,
-          attributes: {
-            name: 'test',
-          },
-        },
-      };
-
       const expectedResult = [{}];
       createConnStub({ rows: expectedResult });
       const result = developersDao.patchDeveloper(fakeId, fakeBody);
