@@ -5,9 +5,10 @@ const _ = require('lodash');
 const proxyquire = require('proxyquire');
 const sinon = require('sinon');
 
-const reviewsSerializer = appRoot.require('api/v1/serializers/reviews-serializer');
 const testData = require('./test-data');
 const { createConnStub } = require('./test-helpers');
+
+const reviewsSerializer = appRoot.require('api/v1/serializers/reviews-serializer');
 
 chai.should();
 chai.use(chaiAsPromised);

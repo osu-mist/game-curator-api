@@ -5,9 +5,10 @@ const chaiMatch = require('chai-match');
 const chaiSubset = require('chai-subset');
 const _ = require('lodash');
 
-const reviewsSerializer = appRoot.require('api/v1/serializers/reviews-serializer');
 const { getDefinitionProps, testSingleResource, testMultipleResources } = require('./test-helpers.js');
 const testData = require('./test-data');
+
+const reviewsSerializer = appRoot.require('api/v1/serializers/reviews-serializer');
 
 chai.should();
 chai.use(chaiAsPromised);

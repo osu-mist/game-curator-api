@@ -4,9 +4,10 @@ const chaiAsPromised = require('chai-as-promised');
 const chaiSubset = require('chai-subset');
 const _ = require('lodash');
 
-const developersSerializer = appRoot.require('api/v1/serializers/developers-serializer');
 const { getDefinitionProps, testSingleResource, testMultipleResources } = require('./test-helpers.js');
 const testData = require('./test-data');
+
+const developersSerializer = appRoot.require('api/v1/serializers/developers-serializer');
 
 chai.should();
 chai.use(chaiAsPromised);

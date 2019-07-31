@@ -8,9 +8,10 @@ const proxyquire = require('proxyquire');
 const sinon = require('sinon');
 
 sinon.replace(config, 'get', () => ({ oracledb: {} }));
-const developersSerializer = appRoot.require('api/v1/serializers/developers-serializer');
 const testData = require('./test-data');
 const { createConnStub } = require('./test-helpers');
+
+const developersSerializer = appRoot.require('api/v1/serializers/developers-serializer');
 
 chai.should();
 chai.use(chaiExclude);
