@@ -16,9 +16,9 @@ const developerResourceUrl = resourcePathLink(apiBaseUrl, developerResourcePath)
 /**
  * @summary Serialize developerResources to JSON API
  * @function
- * @param {[Object]} rawdevelopers Raw data rows from data source
- * @param {Object} query Query parameters
- * @returns {Object} Serialized developerResources object
+ * @param {[object]} rawdevelopers Raw data rows from data source
+ * @param {object} query Query parameters
+ * @returns {object} Serialized developerResources object
  */
 const serializeDevelopers = (rawDevelopers, query) => {
   /**
@@ -53,8 +53,8 @@ const serializeDevelopers = (rawDevelopers, query) => {
 /**
  * @summary Serialize developerResource to JSON API
  * @function
- * @param {Object} rawDeveloper Raw data row from data source
- * @returns {Object} Serialized developerResource object
+ * @param {object} rawDeveloper Raw data row from data source
+ * @returns {object} Serialized developerResource object
  */
 const serializeDeveloper = (rawDeveloper) => {
   const topLevelSelfLink = resourcePathLink(developerResourceUrl, rawDeveloper.id);
