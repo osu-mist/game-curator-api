@@ -1,5 +1,13 @@
 const fakeId = 'fakeId';
 const fakeBaseUrl = '/v1';
+const fakeBody = {
+  data: {
+    id: fakeId,
+    attributes: {
+      name: 'test',
+    },
+  },
+};
 const rawDevelopers = [
   {
     id: fakeId,
@@ -75,6 +83,7 @@ module.exports = {
   rawDevelopers,
   fakeId,
   fakeBaseUrl,
+  fakeBody,
   paginationQueries,
   rawGames,
   rawReviews,
