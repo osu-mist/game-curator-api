@@ -129,13 +129,18 @@ describe('Test developers-dao', () => {
   });
 
   describe('Test deleteDeveloper', () => {
-    it('deleteDeveloper should be fulfilled with single result', () => {
-      const expectedResult = [{}];
-      createConnStub({ rows: expectedResult });
-      const result = developersDao.deleteDeveloper(fakeId);
-      return result.should
-        .eventually.be.fulfilled
-        .and.has.property('rows').deep.equal(expectedResult);
+    const testCases = [
+      { expectedResult: [{}], description: 'with a single result' },
+      { expectedResult: { rowsAffected: 0 }, description: 'with 0 rowsAffected' },
+    ];
+    _.forEach(testCases, ({ expectedResult, description }) => {
+      it(`deleteDeveloper should be fulfilled with ${description}`, () => {
+        createConnStub(expectedResult);
+        const result = developersDao.deleteDeveloper(fakeId);
+        return result.should
+          .eventually.be.fulfilled
+          .and.deep.equal(expectedResult);
+      });
     });
   });
 
