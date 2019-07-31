@@ -66,15 +66,6 @@ class integration_tests(unittest.TestCase):
                                     'Error',
                                     404)
 
-        current_test_case = 'invalid_developer_ids'
-        for developer_id in self.test_cases[current_test_case]:
-            with self.subTest('Test invalid developer Ids',
-                              developer_id=developer_id):
-                utils.test_endpoint(self,
-                                    f'/developers/{developer_id}',
-                                    'Error',
-                                    400)
-
     # Test case: GET /developers
     def test_get_developers(self):
         resource = 'DeveloperResource'
@@ -117,15 +108,6 @@ class integration_tests(unittest.TestCase):
                                                f'/games/{game_id}',
                                                'Error',
                                                404,
-                                               nullable_fields=nullable_fields)
-
-        current_test_case = 'invalid_game_ids'
-        for game_id in self.test_cases[current_test_case]:
-            with self.subTest('Test invalid game ids', game_id=game_id):
-                response = utils.test_endpoint(self,
-                                               f'/games/{game_id}',
-                                               'Error',
-                                               400,
                                                nullable_fields=nullable_fields)
 
     # Test case: GET /games
@@ -222,15 +204,6 @@ class integration_tests(unittest.TestCase):
                                                f'/reviews/{review_id}',
                                                'Error',
                                                404)
-
-        current_test_case = 'invalid_review_ids'
-        for review_id in self.test_cases[current_test_case]:
-            with self.subTest('Test invalid review ids',
-                              review_id=review_id):
-                response = utils.test_endpoint(self,
-                                               f'/reviews/{review_id}',
-                                               'Error',
-                                               400)
 
     # Test case: GET /reviews
     def test_get_reviews(self):
