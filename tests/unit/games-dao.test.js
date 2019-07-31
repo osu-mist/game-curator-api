@@ -130,54 +130,39 @@ describe('Test games-dao', () => {
   });
 
   describe('Test deleteGame', () => {
-    it('deleteGame should be fulfilled with single result', () => {
-      const testCases = [
-        { testCase: [{}] },
-      ];
-
-      const fulfilledPromises = [];
-      _.forEach(testCases, ({ testCase }) => {
-        const connStub = createConnStub(testCase);
+    const testCases = [
+      { testCase: [{}], description: 'a single result' },
+      { testCase: { rowsAffected: 0 }, description: '0 rowsAffected' },
+    ];
+    _.forEach(testCases, ({ testCase, description }) => {
+      it(`deleteGame should be fulfilled with ${description}`, () => {
+        createConnStub(testCase);
 
         const result = gamesDao.deleteGame();
-        fulfilledPromises.push(result.should
+        return result.should
           .eventually.be.fulfilled
-          .and.deep.equal(testCase));
-
-        connStub.restore();
+          .and.deep.equal(testCase);
       });
-      return Promise.all(fulfilledPromises);
     });
   });
 
   describe('Test patchGame', () => {
-    it('patchGame should be fulfilled with a single result', () => {
-      const testCases = [
-        { testCase: [{}] },
-      ];
-
-      const fakeId = 'fakeId';
-      const fakeBody = {
-        data: {
-          attributes: [{}],
-        },
-      };
-
-      const fulfilledPromises = [];
-      _.forEach(testCases, ({ testCase }) => {
-        const connStub = createConnStub(testCase);
+    let testCases = [
+      { testCase: [{}], description: 'a single result' },
+      { testCase: { rowsAffected: 0 }, description: '0 rowsAffected' },
+    ];
+    _.forEach(testCases, ({ testCase, description }) => {
+      it(`patchGame should be fulfilled with ${description}`, () => {
+        createConnStub(testCase);
 
         const result = gamesDao.patchGame(fakeId, fakeBody);
-        fulfilledPromises.push(result.should
+        return result.should
           .eventually.be.fulfilled
-          .and.deep.equal(testCase));
-
-        connStub.restore();
+          .and.deep.equal(testCase);
       });
-      return Promise.all(fulfilledPromises);
     });
 
-    const testCases = [
+    testCases = [
       {
         badBody: undefined,
         error: 'Cannot read property \'data\' of undefined',
