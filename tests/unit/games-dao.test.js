@@ -7,12 +7,15 @@ const sinon = require('sinon');
 
 let gamesDao;
 const gamesSerializer = appRoot.require('api/v1/serializers/games-serializer');
+const testData = require('./test-data');
 const { createConnStub } = require('./test-helpers');
 
 chai.should();
 chai.use(chaiAsPromised);
 
 describe('Test games-dao', () => {
+  const { fakeId, fakeBody } = testData;
+
   beforeEach(() => {
     const serializeGameStub = sinon.stub(gamesSerializer, 'serializeGame');
     const serializeGamesStub = sinon.stub(gamesSerializer, 'serializeGames');
@@ -37,7 +40,7 @@ describe('Test games-dao', () => {
       it(`getGames should be fulfilled when ${description}`, () => {
         createConnStub({ rows: testCase });
 
-        const result = gamesDao.getGames('fakeId');
+        const result = gamesDao.getGames(fakeId);
         return result.should
           .eventually.be.fulfilled
           .and.deep.equals(testCase);
@@ -64,7 +67,7 @@ describe('Test games-dao', () => {
       _.forEach(testCases, ({ testCase, expectedResult }) => {
         const connStub = createConnStub({ rows: testCase });
 
-        const result = gamesDao.getGameById('fakeId');
+        const result = gamesDao.getGameById(fakeId);
         fulfilledPromises.push(result.should
           .eventually.be.fulfilled
           .and.deep.equals(expectedResult));
@@ -96,17 +99,7 @@ describe('Test games-dao', () => {
   describe('Test postGame', () => {
     it('postGame should be fulfilled with a single result', () => {
       const testCase = [{}];
-
-      const fakeBody = {
-        data: {
-          attributes: {
-            name: 'test',
-          },
-        },
-      };
-
       createConnStub({ rows: testCase, outBinds: { outId: [1] } });
-
       const result = gamesDao.postGame(fakeBody);
       return result.should
         .eventually.be.fulfilled
@@ -115,21 +108,21 @@ describe('Test games-dao', () => {
 
     const testCases = [
       {
-        fakeBody: undefined,
+        badBody: undefined,
         error: 'Cannot read property \'data\' of undefined',
         description: 'no data is passed in the body',
       },
       {
-        fakeBody: { attributes: {} },
+        badBody: { attributes: {} },
         error: 'Cannot destructure property `attributes` of \'undefined\' or \'null\'.',
         description: 'attributes is passed in the body without the required fields',
       },
     ];
-    _.forEach(testCases, ({ fakeBody, error, description }) => {
+    _.forEach(testCases, ({ badBody, error, description }) => {
       it(`postGame should be rejected when ${description}`, () => {
         createConnStub({});
 
-        const result = gamesDao.postGame(fakeBody);
+        const result = gamesDao.postGame(badBody);
         return result.should
           .eventually.be.rejectedWith(Error, error);
       });
@@ -186,23 +179,20 @@ describe('Test games-dao', () => {
 
     const testCases = [
       {
-        fakeBody: undefined,
+        badBody: undefined,
         error: 'Cannot read property \'data\' of undefined',
         description: 'an undefined body is passed in',
       },
       {
-        fakeBody: { attributes: {} },
+        badBody: { attributes: {} },
         error: 'Cannot destructure property `attributes` of \'undefined\' or \'null\'.',
         description: 'a body with attributes that are missing required fields is passed in',
       },
     ];
-    _.forEach(testCases, ({ fakeBody, error, description }) => {
+    _.forEach(testCases, ({ badBody, error, description }) => {
       it(`patchGame should be rejected when ${description}`, () => {
-        const fakeId = 'fakeId';
-
         createConnStub();
-
-        const result = gamesDao.patchGame(fakeId, fakeBody);
+        const result = gamesDao.patchGame(fakeId, badBody);
         return result.should
           .eventually.be.rejectedWith(Error, error);
       });
@@ -225,7 +215,6 @@ describe('Test games-dao', () => {
     _.forEach(testCases, ({ testCase, expectedResult, description }) => {
       it(`isValidDeveloper should be fulfilled return ${description}`, () => {
         createConnStub(testCase);
-
         const result = gamesDao.isValidDeveloper();
         return result.should
           .eventually.be.fulfilled
@@ -235,7 +224,7 @@ describe('Test games-dao', () => {
 
     it('isValidDeveloper should be rejected when a single response is returned', () => {
       createConnStub({});
-      const result = gamesDao.isValidDeveloper('fakeId');
+      const result = gamesDao.isValidDeveloper(fakeId);
       return result.should.be.rejectedWith(Error, 'Cannot read property \'0\' of undefined');
     });
   });
