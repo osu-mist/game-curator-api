@@ -2,14 +2,14 @@ const appRoot = require('app-root-path');
 const _ = require('lodash');
 const oracledb = require('oracledb');
 
-const { serializeDevelopers, serializeDeveloper } = require('../../serializers/developers-serializer');
+const { serializeDeveloper, serializeDevelopers } = require('../../serializers/developers-serializer');
 
 const conn = appRoot.require('api/v1/db/oracledb/connection');
 
 /**
  * @summary Return a list of developers
  * @function
- * @returns {Promise<Object[]>} Promise object represents a list of developers
+ * @returns {Promise<object[]>} Promise object represents a list of developers
  */
 const getDevelopers = async (queries) => {
   const connection = await conn.getConnection();
@@ -35,7 +35,7 @@ const getDevelopers = async (queries) => {
  * @summary Return a specific developer by unique ID
  * @function
  * @param {string} id Unique developer ID
- * @returns {Promise<Object>} Promise object represents a specific developer or return undefined if
+ * @returns {Promise<object>} Promise object represents a specific developer or return undefined if
  *                            term is not found
  */
 const getDeveloperById = async (id) => {
@@ -92,8 +92,8 @@ const deleteDeveloper = async (developerId) => {
   const connection = await conn.getConnection();
 
   try {
-    const sqlQuery = 'DELETE FROM DEVELOPERS WHERE ID = :id';
-    const sqlParams = { id: developerId };
+    const sqlQuery = 'DELETE FROM DEVELOPERS WHERE ID = :developerId';
+    const sqlParams = { developerId };
     const response = await connection.execute(sqlQuery, sqlParams, { autoCommit: true });
 
     return response;
@@ -109,8 +109,8 @@ const patchDeveloper = async (id, body) => {
   const connection = await conn.getConnection();
   try {
     const { attributes } = body.data;
-    attributes.id = id;
-    const sqlQuery = 'UPDATE DEVELOPERS SET NAME = :name, WEBSITE = :website WHERE ID = :id';
+    attributes.developerId = id;
+    const sqlQuery = 'UPDATE DEVELOPERS SET NAME = :name, WEBSITE = :website WHERE ID = :developerId';
     const response = await connection.execute(sqlQuery, attributes, { autoCommit: true });
 
     return response;

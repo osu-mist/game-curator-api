@@ -12,7 +12,7 @@ const conn = appRoot.require('api/v1/db/oracledb/connection');
 /**
  * @summary Return a list of games
  * @function
- * @returns {Promise<Object[]>} Promise object represents a list of games
+ * @returns {Promise<object[]>} Promise object represents a list of games
  */
 const getGames = async (queries) => {
   // parse passed in parameters and construct query
@@ -52,7 +52,7 @@ const getGames = async (queries) => {
  * @summary Return a specific game by unique ID
  * @function
  * @param {string} id Unique game ID
- * @returns {Promise<Object>} Promise object represents a specific game or return undefined if
+ * @returns {Promise<object>} Promise object represents a specific game or return undefined if
  *                            term is not found
  */
 const getGameById = async (id) => {

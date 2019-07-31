@@ -27,9 +27,9 @@ const reviewConverter = (reviews) => {
 /**
  * @summary Serialize reviewResources to JSON API
  * @function
- * @param {Object[]} rawReviews Raw data rows from data source
- * @param {Object} query Query parameters
- * @returns {Object} Serialized reviewResources object
+ * @param {object[]} rawReviews Raw data rows from data source
+ * @param {object} query Query parameters
+ * @returns {object} Serialized reviewResources object
  */
 const serializeReviews = (rawReviews, query) => {
   reviewConverter(rawReviews);
@@ -66,8 +66,8 @@ const serializeReviews = (rawReviews, query) => {
 /**
  * @summary Serialize reviewResource to JSON API
  * @function
- * @param {Object} rawReview Raw data row from data source
- * @returns {Object} Serialized reviewResource object
+ * @param {object} rawReview Raw data row from data source
+ * @returns {object} Serialized reviewResource object
  */
 const serializeReview = (rawReview) => {
   reviewConverter([rawReview]);
@@ -86,4 +86,4 @@ const serializeReview = (rawReview) => {
     serializerOptions(serializerArgs),
   ).serialize(rawReview);
 };
-module.exports = { serializeReviews, serializeReview };
+module.exports = { serializeReviews, serializeReview, reviewConverter };
