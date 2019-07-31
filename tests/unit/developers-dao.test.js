@@ -140,7 +140,7 @@ describe('Test developers-dao', () => {
     it('patchDeveloper with improper body should be rejected', () => {
       createConnStub();
 
-      const result = developersDao.patchDeveloper(fakeId, 'fakeBody');
+      const result = developersDao.patchDeveloper(fakeId, 'badBody');
       return result.should
         .eventually.be.rejected
         .and.be.an.instanceOf(Error);
