@@ -5,13 +5,14 @@ const _ = require('lodash');
 const proxyquire = require('proxyquire');
 const sinon = require('sinon');
 
-let reviewsDao;
 const reviewsSerializer = appRoot.require('api/v1/serializers/reviews-serializer');
 const testData = require('./test-data');
 const { createConnStub } = require('./test-helpers');
 
 chai.should();
 chai.use(chaiAsPromised);
+
+let reviewsDao; // proxyquire is later used to import developers-dao class
 
 describe('Test reviews-dao', () => {
   const { fakeId, fakeBody } = testData;

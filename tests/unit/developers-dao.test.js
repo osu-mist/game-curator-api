@@ -8,7 +8,6 @@ const proxyquire = require('proxyquire');
 const sinon = require('sinon');
 
 sinon.replace(config, 'get', () => ({ oracledb: {} }));
-let developersDao; // proxyquire is later used to import developers-dao class
 const developersSerializer = appRoot.require('api/v1/serializers/developers-serializer');
 const testData = require('./test-data');
 const { createConnStub } = require('./test-helpers');
@@ -16,6 +15,8 @@ const { createConnStub } = require('./test-helpers');
 chai.should();
 chai.use(chaiExclude);
 chai.use(chaiAsPromised);
+
+let developersDao; // proxyquire is later used to import developers-dao class
 
 describe('Test developers-dao', () => {
   const { fakeId, fakeBody } = testData;

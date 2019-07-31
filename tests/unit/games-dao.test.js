@@ -5,13 +5,14 @@ const _ = require('lodash');
 const proxyquire = require('proxyquire');
 const sinon = require('sinon');
 
-let gamesDao;
 const gamesSerializer = appRoot.require('api/v1/serializers/games-serializer');
 const testData = require('./test-data');
 const { createConnStub } = require('./test-helpers');
 
 chai.should();
 chai.use(chaiAsPromised);
+
+let gamesDao; // proxyquire is later used to import developers-dao class
 
 describe('Test games-dao', () => {
   const { fakeId, fakeBody } = testData;
@@ -208,7 +209,7 @@ describe('Test games-dao', () => {
     });
 
     it('isValidDeveloper should be rejected when a single response is returned', () => {
-      createConnStub({});
+      createConnStub([{}]);
       const result = gamesDao.isValidDeveloper(fakeId);
       return result.should.be.rejectedWith(Error, 'Cannot read property \'0\' of undefined');
     });
