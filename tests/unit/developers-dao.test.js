@@ -72,7 +72,7 @@ describe('Test developers-dao', () => {
 
       createConnStub(testCase);
 
-      const result = developersDao.getDeveloperById('fakeId');
+      const result = developersDao.getDeveloperById(fakeId);
       return result.should.eventually.be.rejectedWith(Error, error);
     });
   });
@@ -81,7 +81,7 @@ describe('Test developers-dao', () => {
     it('postDeveloper with improper body should be rejected', () => {
       createConnStub();
 
-      const result = developersDao.postDeveloper('fakeId', 'fakeBody');
+      const result = developersDao.postDeveloper(fakeId, 'fakeBody');
       return result.should
         .eventually.be.rejected
         .and.be.an.instanceOf(TypeError);
@@ -111,7 +111,7 @@ describe('Test developers-dao', () => {
         testDescription: 'outId is not returned',
       },
       {
-        testCase: { outBinds: { outId: 'fakeId' } },
+        testCase: { outBinds: { outId: fakeId } },
         expectedError: 'Cannot read property \'length\' of undefined',
         testDescription: 'outId is returned without an additional response',
       },
@@ -132,7 +132,7 @@ describe('Test developers-dao', () => {
     it('deleteDeveloper should be fulfilled with single result', () => {
       const expectedResult = [{}];
       createConnStub({ rows: expectedResult });
-      const result = developersDao.deleteDeveloper('fakeId');
+      const result = developersDao.deleteDeveloper(fakeId);
       return result.should
         .eventually.be.fulfilled
         .and.has.property('rows').deep.equal(expectedResult);
@@ -143,7 +143,7 @@ describe('Test developers-dao', () => {
     it('patchDeveloper with improper body should be rejected', () => {
       createConnStub();
 
-      const result = developersDao.patchDeveloper('fakeId', 'fakeBody');
+      const result = developersDao.patchDeveloper(fakeId, 'fakeBody');
       return result.should
         .eventually.be.rejected
         .and.be.an.instanceOf(Error);
