@@ -164,7 +164,7 @@ class integration_tests(unittest.TestCase):
                 self.assert_data_returned(current_test_case, response_data)
                 for row in response_data:
                     returned_score = row['attributes']['score']
-                    self.assertLessEqual(int(score_min), returned_score)
+                    self.assertLessEqual(score_min, returned_score)
 
         for score_max in self.test_cases[current_test_case]:
             with self.subTest('Test scoreMax query parameter',
@@ -180,7 +180,7 @@ class integration_tests(unittest.TestCase):
                 self.assert_data_returned(current_test_case, response_data)
                 for row in response_data:
                     returned_score = row['attributes']['score']
-                    self.assertGreaterEqual(int(score_max), returned_score)
+                    self.assertGreaterEqual(score_max, returned_score)
 
     # Test case: GET /reviews/{reviewId}
     def test_get_reviews_by_id(self):
@@ -265,7 +265,7 @@ class integration_tests(unittest.TestCase):
                 self.assert_data_returned(current_test_case, response_data)
                 for row in response_data:
                     returned_score = row['attributes']['score']
-                    self.assertGreaterEqual(returned_score, int(score))
+                    self.assertGreaterEqual(returned_score, score)
 
         for score in self.test_cases[current_test_case]:
             with self.subTest('Test scoreMax query parameter', score=score):
@@ -279,7 +279,7 @@ class integration_tests(unittest.TestCase):
                 self.assert_data_returned(current_test_case, response_data)
                 for row in response_data:
                     returned_score = row['attributes']['score']
-                    self.assertLessEqual(returned_score, int(score))
+                    self.assertLessEqual(returned_score, score)
 
         current_test_case = 'review_review_dates'
         for review_date in self.test_cases[current_test_case]:
