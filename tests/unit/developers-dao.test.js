@@ -82,7 +82,7 @@ describe('Test developers-dao', () => {
     it('postDeveloper with improper body should be rejected', () => {
       createConnStub();
 
-      const result = developersDao.postDeveloper(fakeId, 'fakeBody');
+      const result = developersDao.postDeveloper(fakeId, 'badBody');
       return result.should
         .eventually.be.rejected
         .and.be.an.instanceOf(TypeError);
