@@ -146,13 +146,18 @@ describe('Test developers-dao', () => {
         .and.be.an.instanceOf(Error);
     });
 
-    it('patchDeveloper should be fulfilled with singleResult', () => {
-      const expectedResult = [{}];
-      createConnStub({ rows: expectedResult });
-      const result = developersDao.patchDeveloper(fakeId, fakeBody);
-      return result.should
-        .eventually.be.fulfilled
-        .and.has.property('rows').deep.equal(expectedResult);
+    const testCases = [
+      { testCase: [{}], description: 'a single result' },
+      { testCase: { rowsAffected: 0 }, description: '0 rowsAffected' },
+    ];
+    _.forEach(testCases, ({ testCase, description }) => {
+      it(`patchDeveloper should be fulfilled with ${description}`, () => {
+        createConnStub({ rows: testCase });
+        const result = developersDao.patchDeveloper(fakeId, fakeBody);
+        return result.should
+          .eventually.be.fulfilled
+          .and.has.property('rows').deep.equal(testCase);
+      });
     });
   });
 });
