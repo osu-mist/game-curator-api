@@ -131,50 +131,23 @@ describe('Test games-dao', () => {
 
   describe('Test deleteGame', () => {
     it('deleteGame should be fulfilled with single result', () => {
-      const testCases = [
-        { testCase: [{}] },
-      ];
-
-      const fulfilledPromises = [];
-      _.forEach(testCases, ({ testCase }) => {
-        const connStub = createConnStub(testCase);
-
-        const result = gamesDao.deleteGame();
-        fulfilledPromises.push(result.should
-          .eventually.be.fulfilled
-          .and.deep.equal(testCase));
-
-        connStub.restore();
-      });
-      return Promise.all(fulfilledPromises);
+      const testCase = [{}];
+      createConnStub(testCase);
+      const result = gamesDao.deleteGame();
+      return result.should
+        .eventually.be.fulfilled
+        .and.deep.equal(testCase);
     });
   });
 
   describe('Test patchGame', () => {
     it('patchGame should be fulfilled with a single result', () => {
-      const testCases = [
-        { testCase: [{}] },
-      ];
-
-      const fakeId = 'fakeId';
-      const fakeBody = {
-        data: {
-          attributes: [{}],
-        },
-      };
-
-      const fulfilledPromises = [];
-      _.forEach(testCases, ({ testCase }) => {
-        const connStub = createConnStub(testCase);
-
-        const result = gamesDao.patchGame(fakeId, fakeBody);
-        fulfilledPromises.push(result.should
-          .eventually.be.fulfilled
-          .and.deep.equal(testCase));
-
-        connStub.restore();
-      });
-      return Promise.all(fulfilledPromises);
+      const testCase = [{}];
+      createConnStub(testCase);
+      const result = gamesDao.patchGame(fakeId, fakeBody);
+      return result.should
+        .eventually.be.fulfilled
+        .and.deep.equal(testCase);
     });
 
     const testCases = [
