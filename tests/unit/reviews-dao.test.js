@@ -7,12 +7,15 @@ const sinon = require('sinon');
 
 let reviewsDao;
 const reviewsSerializer = appRoot.require('api/v1/serializers/reviews-serializer');
+const testData = require('./test-data');
 const { createConnStub } = require('./test-helpers');
 
 chai.should();
 chai.use(chaiAsPromised);
 
 describe('Test reviews-dao', () => {
+  const { fakeId, fakeBody } = testData;
+
   beforeEach(() => {
     const serializeReviewStub = sinon.stub(reviewsSerializer, 'serializeReview');
     const serializeReviewsStub = sinon.stub(reviewsSerializer, 'serializeReviews');
@@ -64,7 +67,7 @@ describe('Test reviews-dao', () => {
       _.forEach(testCases, ({ testCase, expectedResult }) => {
         const connStub = createConnStub({ rows: testCase });
 
-        const result = reviewsDao.getReviewById('fakeId');
+        const result = reviewsDao.getReviewById(fakeId);
         fulfilledPromises.push(result.should
           .eventually.be.fulfilled
           .and.deep.equals(expectedResult));
@@ -95,15 +98,6 @@ describe('Test reviews-dao', () => {
   describe('Test postReview', () => {
     it('postReview should be fulfilled with a single result', () => {
       const testCase = [{}];
-
-      const fakeBody = {
-        data: {
-          attributes: {
-            name: 'test',
-          },
-        },
-      };
-
       createConnStub({ rows: testCase, outBinds: { outId: [1] } });
 
       const result = reviewsDao.postReview(fakeBody);
@@ -114,21 +108,21 @@ describe('Test reviews-dao', () => {
 
     const testCases = [
       {
-        fakeBody: undefined,
+        badBody: undefined,
         error: 'Cannot read property \'data\' of undefined',
         description: 'no data is passed in the body',
       },
       {
-        fakeBody: { attributes: {} },
+        badBody: { attributes: {} },
         error: 'Cannot destructure property `attributes` of \'undefined\' or \'null\'.',
         description: 'attributes is passed in the body without the required fields',
       },
     ];
-    _.forEach(testCases, ({ fakeBody, error, description }) => {
+    _.forEach(testCases, ({ badBody, error, description }) => {
       it(`postReview should be rejected when ${description}`, () => {
         createConnStub({});
 
-        const result = reviewsDao.postReview(fakeBody);
+        const result = reviewsDao.postReview(badBody);
         return result.should
           .eventually.be.rejectedWith(Error, error);
       });
@@ -162,13 +156,6 @@ describe('Test reviews-dao', () => {
         { testCase: [{}] },
       ];
 
-      const fakeId = 'fakeId';
-      const fakeBody = {
-        data: {
-          attributes: [{}],
-        },
-      };
-
       const fulfilledPromises = [];
       _.forEach(testCases, ({ testCase }) => {
         const connStub = createConnStub(testCase);
@@ -185,22 +172,21 @@ describe('Test reviews-dao', () => {
 
     const testCases = [
       {
-        fakeBody: undefined,
+        badBody: undefined,
         error: 'Cannot read property \'data\' of undefined',
         description: 'an undefined body is passed in',
       },
       {
-        fakeBody: { attributes: {} },
+        badBody: { attributes: {} },
         error: 'Cannot destructure property `attributes` of \'undefined\' or \'null\'.',
         description: 'a body with attributes that are missing required fields is passed in',
       },
     ];
-    _.forEach(testCases, ({ fakeBody, error, description }) => {
+    _.forEach(testCases, ({ badBody, error, description }) => {
       it(`patchReview should be rejected when ${description}`, () => {
-        const fakeId = 'fakeId';
         createConnStub();
 
-        const result = reviewsDao.patchReview(fakeId, fakeBody);
+        const result = reviewsDao.patchReview(fakeId, badBody);
         return result.should
           .eventually.be.rejectedWith(Error, error);
       });
@@ -233,7 +219,7 @@ describe('Test reviews-dao', () => {
 
     it('isValidGame should be rejected when a single response is returned', () => {
       createConnStub({});
-      const result = reviewsDao.isValidGame('fakeId');
+      const result = reviewsDao.isValidGame(fakeId);
       return result.should.be.rejectedWith(Error, 'Cannot read property \'0\' of undefined');
     });
   });
