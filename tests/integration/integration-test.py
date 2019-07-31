@@ -38,7 +38,7 @@ class integration_tests(unittest.TestCase):
     # Assert that response_data contains data
     def assert_data_returned(self, test_case, response_data):
         error_message = (f'No data returned from server.'
-                         f' Check that \'{test_case}\' in configuration.json'
+                         f" Check that '{test_case}' in configuration.json"
                          f' contains valid data.')
         self.assertGreater(len(response_data), 0, error_message)
 
