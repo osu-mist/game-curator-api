@@ -16,7 +16,24 @@
     }
   },
   "test_cases": {
-    "valid_pet_ids": ["1", "2", "3"],
-    "invalid_pet_ids": ["999", "-1", "invalid_id"]
+    "valid_developer_ids": ["21", "22", "23"],
+    "non_existant_developer_ids": ["999", "4500", "1250"],
+    "developer_names": ["Bethesda", "Nintendo"],
+
+    "scores": [2, 4],
+    "bad_scores": [0, 6, -1],
+
+    "valid_game_ids": ["21", "22", "23"],
+    "non_existant_game_ids": ["999", "324121", "60"],
+    "game_names": ["Path of Exile", "Fallout 3"],
+    "game_developer_ids": ["1", "2", "3"],
+
+    "valid_review_ids": ["21", "25", "26"],
+    "non_existant_review_ids": ["22", "23", "24"],
+    "reviewer_names": ["BIG BRAIN", "Small brain", "Ian W"],
+    "review_game_ids": [["1", "2"], ["3", "4"], ["21", "22", "23"]],
+    "review_invalid_game_id_formats": ["1;2;3", "1-2-3", "1/2/3"],
+    "review_review_dates": ["2019-07-16", "2019-07-12", "2019-07-01"],
+    "review_invalid_date_formats": ["1/5/2019", "2-3-1950", "20-15-20"]
   }
 }

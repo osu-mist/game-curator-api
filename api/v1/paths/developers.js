@@ -20,7 +20,7 @@ const get = async (req, res) => {
 
 /**
  * @summary Post developers
- * @returns {Promise<object[]>} Promise object represents the newly created developer record
+ * @returns {Promise<Object[]>} Promise object represents the newly created developer record
  */
 const post = async (req, res) => {
   try {

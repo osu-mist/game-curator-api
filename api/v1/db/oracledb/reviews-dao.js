@@ -10,7 +10,7 @@ const { openapi } = appRoot.require('utils/load-openapi');
 /**
  * @summary Return a list of reviews
  * @function
- * @returns {Promise<object[]>} Promise object represents a list of reviews
+ * @returns {Promise<Object[]>} Promise object represents a list of reviews
  */
 const getReviews = async (queries) => {
   // get parameters accepted by this endpoint in openapi
@@ -54,7 +54,7 @@ const getReviews = async (queries) => {
  * @summary Return a specific review by unique ID
  * @function
  * @param {string} id Unique review ID
- * @returns {Promise<object>} Promise object represents a specific review or return undefined if
+ * @returns {Promise<Object>} Promise object represents a specific review or return undefined if
  *                            term is not found
  */
 const getReviewById = async (id) => {

@@ -91,7 +91,6 @@ paths:
       description: Id of game to return
       required: true
       type: string
-      pattern: '^\d+$'
     get:
       summary: Find game by ID
       description: Returns a single game

@@ -65,4 +65,4 @@ const patch = async (req, res) => {
 get.apiDoc = paths['/reviews/{reviewId}'].get;
 del.apiDoc = paths['/reviews/{reviewId}'].del;
 
-module.exports = { get, patch, del };
+module.exports = { get, patch, delete: del };

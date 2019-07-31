@@ -30,9 +30,9 @@ const gameConverter = (games) => {
 /**
  * @summary Serialize gameResources to JSON API
  * @function
- * @param {[object]} rawGames Raw data rows from data source
- * @param {object} query Query parameters
- * @returns {object} Serialized gameResources object
+ * @param {[Object]} rawGames Raw data rows from data source
+ * @param {Object} query Query parameters
+ * @returns {Object} Serialized gameResources object
  */
 const serializeGames = (rawGames, query) => {
   gameConverter(rawGames);
@@ -69,8 +69,8 @@ const serializeGames = (rawGames, query) => {
 /**
  * @summary Serialize gameResource to JSON API
  * @function
- * @param {object} rawGame Raw data row from data source
- * @returns {object} Serialized gameResource object
+ * @param {Object} rawGame Raw data row from data source
+ * @returns {Object} Serialized gameResource object
  */
 const serializeGame = (rawGame) => {
   gameConverter([rawGame]);
@@ -89,4 +89,4 @@ const serializeGame = (rawGame) => {
     serializerOptions(serializerArgs),
   ).serialize(rawGame);
 };
-module.exports = { serializeGames, serializeGame, gameConverter };
+module.exports = { serializeGames, serializeGame };

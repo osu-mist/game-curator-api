@@ -1,3 +1,4 @@
+from datetime import datetime
 import json
 import logging
 import unittest
@@ -34,73 +35,319 @@ class integration_tests(unittest.TestCase):
     def cleanup(cls):
         cls.session.close()
 
-    # Test case: GET /pets
-    def test_get_all_pets(self, endpoint='/pets'):
-        nullable_fields = ['owner']
-        utils.test_endpoint(self, endpoint, 'PetResource', 200,
-                            nullable_fields=nullable_fields)
+    # Assert that response_data contains data
+    def assert_data_returned(self, test_case, response_data):
+        error_message = (f'No data returned from server.'
+                         f" Check that '{test_case}' in configuration.json"
+                         f' contains valid data.')
+        self.assertGreater(len(response_data), 0, error_message)
 
-    # Test case: GET /pets with species filter
-    def test_get_pets_with_filter(self, endpoint='/pets'):
-        testing_species = ['dog', 'CAT', 'tUrTlE']
+    # Test case: GET /developers/{developerId}
+    def test_get_developer_by_id(self):
+        resource = 'DeveloperResource'
+        current_test_case = 'valid_developer_ids'
+        for developer_id in self.test_cases[current_test_case]:
+            with self.subTest('Test valid developer Ids',
+                              developer_id=developer_id):
+                response = utils.test_endpoint(self,
+                                               f'/developers/{developer_id}',
+                                               resource,
+                                               200)
+                response_data = response.json()['data']
+                actual_developer_id = response_data['id']
+                self.assertEqual(actual_developer_id, developer_id)
 
-        for species in testing_species:
-            params = {'species': species}
-            response = utils.test_endpoint(self, endpoint, 'PetResource', 200,
-                                           query_params=params)
+        current_test_case = 'non_existant_developer_ids'
+        for developer_id in self.test_cases[current_test_case]:
+            with self.subTest('Test invalid developer Ids',
+                              developer_id=developer_id):
+                utils.test_endpoint(self,
+                                    f'/developers/{developer_id}',
+                                    'Error',
+                                    404)
 
-            response_data = response.json()['data']
-            for resource in response_data:
-                actual_species = resource['attributes']['species']
-                self.assertEqual(actual_species.lower(), species.lower())
+    # Test case: GET /developers
+    def test_get_developers(self):
+        resource = 'DeveloperResource'
+        current_test_case = 'developer_names'
+        for developer_name in self.test_cases[current_test_case]:
+            with self.subTest('Test name query parameter',
+                              developer_name=developer_name):
+                params = {'name': developer_name}
+                response = utils.test_endpoint(self,
+                                               f'/developers',
+                                               resource,
+                                               200,
+                                               query_params=params)
+                response_data = response.json()['data']
+                self.assert_data_returned(current_test_case, response_data)
+                for row in response_data:
+                    returned_name = row['attributes']['name']
+                    self.assertEqual(developer_name, returned_name)
 
-    # Test case: GET /pets with pagination parameters
-    def test_get_pets_pagination(self, endpoint='/pets'):
-        testing_paginations = [
-            {'number': 1, 'size': 25, 'expected_status_code': 200},
-            {'number': 1, 'size': None, 'expected_status_code': 200},
-            {'number': None, 'size': 25, 'expected_status_code': 200},
-            {'number': 999, 'size': 1, 'expected_status_code': 200},
-            {'number': -1, 'size': 25, 'expected_status_code': 400},
-            {'number': 1, 'size': -1, 'expected_status_code': 400},
-            {'number': 1, 'size': 501, 'expected_status_code': 400}
-        ]
-        nullable_fields = ['owner']
-        for pagination in testing_paginations:
-            params = {f'page[{k}]': pagination[k] for k in ['number', 'size']}
-            expected_status_code = pagination['expected_status_code']
-            resource = (
-                'PetResource' if expected_status_code == 200
-                else 'ErrorObject'
-            )
-            response = utils.test_endpoint(self, endpoint, resource,
-                                           expected_status_code,
-                                           query_params=params,
-                                           nullable_fields=nullable_fields)
-            content = utils.get_json_content(self, response)
-            if expected_status_code == 200:
-                try:
-                    meta = content['meta']
-                    num = pagination['number'] if pagination['number'] else 1
-                    size = pagination['size'] if pagination['size'] else 25
+    # Test case: GET /games/{gameId}
+    def test_get_games_by_id(self):
+        resource = 'GameResource'
+        nullable_fields = ['score']
+        current_test_case = 'valid_game_ids'
+        for game_id in self.test_cases[current_test_case]:
+            with self.subTest('Test valid game ids', game_id=game_id):
+                response = utils.test_endpoint(self,
+                                               f'/games/{game_id}',
+                                               resource,
+                                               200,
+                                               nullable_fields=nullable_fields)
+                response_data = response.json()['data']
+                returned_game_id = response_data['id']
+                self.assertEqual(returned_game_id, game_id)
 
-                    self.assertEqual(num, meta['currentPageNumber'])
-                    self.assertEqual(size, meta['currentPageSize'])
-                except KeyError as error:
-                    self.fail(error)
+        current_test_case = 'non_existant_game_ids'
+        for game_id in self.test_cases[current_test_case]:
+            with self.subTest('Test non existant game ids', game_id=game_id):
+                response = utils.test_endpoint(self,
+                                               f'/games/{game_id}',
+                                               'Error',
+                                               404,
+                                               nullable_fields=nullable_fields)
 
-    # Test case: GET /pets/{id}
-    def test_get_pet_by_id(self, endpoint='/pets'):
-        valid_pet_ids = self.test_cases['valid_pet_ids']
-        invalid_pet_ids = self.test_cases['invalid_pet_ids']
+    # Test case: GET /games
+    def test_get_games(self):
+        path = '/games'
+        resource = 'GameResource'
+        nullable_fields = ['score']
+        current_test_case = 'game_names'
+        for game_name in self.test_cases[current_test_case]:
+            with self.subTest('Test name query parameter',
+                              game_name=game_name):
+                params = {'name': game_name}
+                response = utils.test_endpoint(self,
+                                               path,
+                                               resource,
+                                               200,
+                                               query_params=params,
+                                               nullable_fields=nullable_fields)
+                response_data = response.json()['data']
+                self.assert_data_returned(current_test_case, response_data)
+                for row in response_data:
+                    returned_name = row['attributes']['name']
+                    self.assertEqual(game_name, returned_name)
 
-        for pet_id in valid_pet_ids:
-            resource = 'PetResource'
-            utils.test_endpoint(self, f'{endpoint}/{pet_id}', resource, 200)
+        current_test_case = 'game_developer_ids'
+        for developer_id in self.test_cases[current_test_case]:
+            with self.subTest('Test developerId query parameter',
+                              developer_id=developer_id):
+                params = {'developerId': developer_id}
+                response = utils.test_endpoint(self,
+                                               path,
+                                               resource,
+                                               200,
+                                               query_params=params,
+                                               nullable_fields=nullable_fields)
+                response_data = response.json()['data']
+                self.assert_data_returned(current_test_case, response_data)
+                for row in response_data:
+                    returned_id = row['attributes']['developerId']
+                    self.assertEqual(developer_id, returned_id)
 
-        for pet_id in invalid_pet_ids:
-            resource = 'ErrorObject'
-            utils.test_endpoint(self, f'{endpoint}/{pet_id}', resource, 404)
+        current_test_case = 'scores'
+        for score_min in self.test_cases[current_test_case]:
+            with self.subTest('Test scoreMin query parameter',
+                              score_min=score_min):
+                params = {'scoreMin': score_min}
+                response = utils.test_endpoint(self,
+                                               path,
+                                               resource,
+                                               200,
+                                               query_params=params,
+                                               nullable_fields=nullable_fields)
+                response_data = response.json()['data']
+                self.assert_data_returned(current_test_case, response_data)
+                for row in response_data:
+                    returned_score = row['attributes']['score']
+                    self.assertLessEqual(score_min, returned_score)
+
+        for score_max in self.test_cases[current_test_case]:
+            with self.subTest('Test scoreMax query parameter',
+                              score_max=score_max):
+                params = {'scoreMax': score_max}
+                response = utils.test_endpoint(self,
+                                               path,
+                                               resource,
+                                               200,
+                                               query_params=params,
+                                               nullable_fields=nullable_fields)
+                response_data = response.json()['data']
+                self.assert_data_returned(current_test_case, response_data)
+                for row in response_data:
+                    returned_score = row['attributes']['score']
+                    self.assertGreaterEqual(score_max, returned_score)
+
+        current_test_case = 'bad_scores'
+        for bad_score in self.test_cases[current_test_case]:
+            with self.subTest('Test bad score values', bad_score=bad_score):
+                params = {'scoreMin': bad_score}
+                response = utils.test_endpoint(self,
+                                               path,
+                                               'Error',
+                                               400,
+                                               query_params=params)
+
+        for bad_score in self.test_cases[current_test_case]:
+            with self.subTest('Test bad score values', bad_score=bad_score):
+                params = {'scoreMax': bad_score}
+                response = utils.test_endpoint(self,
+                                               path,
+                                               'Error',
+                                               400,
+                                               query_params=params)
+
+    # Test case: GET /reviews/{reviewId}
+    def test_get_reviews_by_id(self):
+        resource = 'ReviewResource'
+        current_test_case = 'valid_review_ids'
+        for review_id in self.test_cases[current_test_case]:
+            with self.subTest('Test valid review ids', review_id=review_id):
+                response = utils.test_endpoint(self,
+                                               f'/reviews/{review_id}',
+                                               resource,
+                                               200)
+                response_data = response.json()['data']
+                returned_id = response_data['id']
+                self.assertEqual(returned_id, review_id)
+
+        current_test_case = 'non_existant_review_ids'
+        for review_id in self.test_cases[current_test_case]:
+            with self.subTest('Test non existant review ids',
+                              review_id=review_id):
+                response = utils.test_endpoint(self,
+                                               f'/reviews/{review_id}',
+                                               'Error',
+                                               404)
+
+    # Test case: GET /reviews
+    def test_get_reviews(self):
+        path = '/reviews'
+        resource = 'ReviewResource'
+        current_test_case = 'reviewer_names'
+        for reviewer_name in self.test_cases[current_test_case]:
+            with self.subTest('Test reviewer query parameter',
+                              reviewer_name=reviewer_name):
+                params = {'reviewer': reviewer_name}
+                response = utils.test_endpoint(self,
+                                               path,
+                                               resource,
+                                               200,
+                                               query_params=params)
+                response_data = response.json()['data']
+                self.assert_data_returned(current_test_case, response_data)
+                for row in response_data:
+                    returned_reviewer = row['attributes']['reviewer']
+                    self.assertEqual(reviewer_name, returned_reviewer)
+
+        current_test_case = 'review_game_ids'
+        for game_ids in self.test_cases[current_test_case]:
+            with self.subTest('Test gameIds query parameter',
+                              game_ids=game_ids):
+                params = {'gameIds': game_ids}
+                response = utils.test_endpoint(self,
+                                               path,
+                                               resource,
+                                               200,
+                                               query_params=params)
+                response_data = response.json()['data']
+                self.assert_data_returned(current_test_case, response_data)
+                for row in response_data:
+                    returned_game_id = row['attributes']['gameId']
+                    self.assertIn(returned_game_id, game_ids)
+
+        current_test_case = 'review_invalid_game_id_formats'
+        for game_ids in self.test_cases[current_test_case]:
+            with self.subTest('Test invalid game id query parameter formats',
+                              game_ids=game_ids):
+                params = {'gameIds': game_ids}
+                response = utils.test_endpoint(self,
+                                               path,
+                                               'Error',
+                                               400,
+                                               query_params=params)
+
+        current_test_case = 'scores'
+        for score in self.test_cases[current_test_case]:
+            with self.subTest('Test scoreMin query parameter', score=score):
+                params = {'scoreMin': score}
+                response = utils.test_endpoint(self,
+                                               path,
+                                               resource,
+                                               200,
+                                               query_params=params)
+                response_data = response.json()['data']
+                self.assert_data_returned(current_test_case, response_data)
+                for row in response_data:
+                    returned_score = row['attributes']['score']
+                    self.assertGreaterEqual(returned_score, score)
+
+        for score in self.test_cases[current_test_case]:
+            with self.subTest('Test scoreMax query parameter', score=score):
+                params = {'scoreMax': score}
+                response = utils.test_endpoint(self,
+                                               path,
+                                               resource,
+                                               200,
+                                               query_params=params)
+                response_data = response.json()['data']
+                self.assert_data_returned(current_test_case, response_data)
+                for row in response_data:
+                    returned_score = row['attributes']['score']
+                    self.assertLessEqual(returned_score, score)
+
+        current_test_case = 'bad_scores'
+        for bad_score in self.test_cases[current_test_case]:
+            with self.subTest('Test bad score values', bad_score=bad_score):
+                params = {'scoreMin': bad_score}
+                response = utils.test_endpoint(self,
+                                               path,
+                                               'Error',
+                                               400,
+                                               query_params=params)
+
+        for bad_score in self.test_cases[current_test_case]:
+            with self.subTest('Test bad score values', bad_score=bad_score):
+                params = {'scoreMax': bad_score}
+                response = utils.test_endpoint(self,
+                                               path,
+                                               'Error',
+                                               400,
+                                               query_params=params)
+
+        current_test_case = 'review_review_dates'
+        for review_date in self.test_cases[current_test_case]:
+            with self.subTest('Test reviewDate query parameter',
+                              review_date=review_date):
+                params = {'reviewDate': review_date}
+                response = utils.test_endpoint(self,
+                                               path,
+                                               resource,
+                                               200,
+                                               query_params=params)
+                response_data = response.json()['data']
+                self.assert_data_returned(current_test_case, response_data)
+                for row in response_data:
+                    returned_review_date = row['attributes']['reviewDate']
+                    date_format = '%Y-%m-%d'
+                    self.assertEqual(
+                        datetime.strptime(returned_review_date, date_format),
+                        datetime.strptime(review_date, date_format))
+
+        current_test_case = 'review_invalid_date_formats'
+        for review_date in self.test_cases[current_test_case]:
+            with self.subTest('Test invalid reviewDate formats',
+                              review_date=review_date):
+                params = {'reviewDate': review_date}
+                response = utils.test_endpoint(self,
+                                               path,
+                                               'Error',
+                                               400,
+                                               query_params=params)
 
 
 if __name__ == '__main__':
