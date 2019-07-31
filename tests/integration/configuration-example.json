@@ -21,6 +21,7 @@
     "developer_names": ["Bethesda", "Nintendo"],
 
     "scores": [2, 4],
+    "bad_scores": [0, 6, -1],
 
     "valid_game_ids": ["21", "22", "23"],
     "non_existant_game_ids": ["999", "324121", "60"],

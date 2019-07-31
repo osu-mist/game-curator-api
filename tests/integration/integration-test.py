@@ -182,6 +182,25 @@ class integration_tests(unittest.TestCase):
                     returned_score = row['attributes']['score']
                     self.assertGreaterEqual(score_max, returned_score)
 
+        current_test_case = 'bad_scores'
+        for bad_score in self.test_cases[current_test_case]:
+            with self.subTest('Test bad score values', bad_score=bad_score):
+                params = {'scoreMin': bad_score}
+                response = utils.test_endpoint(self,
+                                               path,
+                                               'Error',
+                                               400,
+                                               query_params=params)
+
+        for bad_score in self.test_cases[current_test_case]:
+            with self.subTest('Test bad score values', bad_score=bad_score):
+                params = {'scoreMax': bad_score}
+                response = utils.test_endpoint(self,
+                                               path,
+                                               'Error',
+                                               400,
+                                               query_params=params)
+
     # Test case: GET /reviews/{reviewId}
     def test_get_reviews_by_id(self):
         resource = 'ReviewResource'
@@ -280,6 +299,25 @@ class integration_tests(unittest.TestCase):
                 for row in response_data:
                     returned_score = row['attributes']['score']
                     self.assertLessEqual(returned_score, score)
+
+        current_test_case = 'bad_scores'
+        for bad_score in self.test_cases[current_test_case]:
+            with self.subTest('Test bad score values', bad_score=bad_score):
+                params = {'scoreMin': bad_score}
+                response = utils.test_endpoint(self,
+                                               path,
+                                               'Error',
+                                               400,
+                                               query_params=params)
+
+        for bad_score in self.test_cases[current_test_case]:
+            with self.subTest('Test bad score values', bad_score=bad_score):
+                params = {'scoreMax': bad_score}
+                response = utils.test_endpoint(self,
+                                               path,
+                                               'Error',
+                                               400,
+                                               query_params=params)
 
         current_test_case = 'review_review_dates'
         for review_date in self.test_cases[current_test_case]:
