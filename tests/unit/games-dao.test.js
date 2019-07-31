@@ -37,6 +37,7 @@ describe('Test games-dao', () => {
     const testCases = [
       { testCase: [{}, {}], description: 'multiple results are returned' },
       { testCase: [{}], description: 'a single result is returned' },
+      { testCase: [], description: 'no results' },
     ];
     _.forEach(testCases, ({ testCase, description }) => {
       it(`getGames should be fulfilled when ${description}`, () => {

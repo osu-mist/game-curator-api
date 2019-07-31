@@ -37,6 +37,7 @@ describe('Test reviews-dao', () => {
     const testCases = [
       { testCase: [{}, {}], description: 'multiple results' },
       { testCase: [{}], description: 'a single result' },
+      { testCase: [], description: 'no results' },
     ];
     _.forEach(testCases, ({ testCase, description }) => {
       it(`getReviews should be fulfilled with ${description}`, () => {
