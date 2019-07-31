@@ -130,47 +130,39 @@ describe('Test reviews-dao', () => {
   });
 
   describe('Test deleteReview', () => {
-    it('deleteReview should be fulfilled with a single result', () => {
-      const testCases = [
-        { testCase: [{}] },
-      ];
-
-      const fulfilledPromises = [];
-      _.forEach(testCases, ({ testCase }) => {
-        const connStub = createConnStub(testCase);
+    const testCases = [
+      { testCase: [{}], description: 'a single result' },
+      { testCase: { rowsAffected: 0 }, description: '0 rowsAffected' },
+    ];
+    _.forEach(testCases, ({ testCase, description }) => {
+      it(`deleteReview should be fulfilled with ${description}`, () => {
+        createConnStub(testCase);
 
         const result = reviewsDao.deleteReview();
-        fulfilledPromises.push(result.should
+        return result.should
           .eventually.be.fulfilled
-          .and.deep.equal(testCase));
-
-        connStub.restore();
+          .and.deep.equal(testCase);
       });
-      return Promise.all(fulfilledPromises);
     });
   });
 
   describe('Test patchReview', () => {
-    it('patchReview should be fulfilled with a single result', () => {
-      const testCases = [
-        { testCase: [{}] },
-      ];
-
-      const fulfilledPromises = [];
-      _.forEach(testCases, ({ testCase }) => {
-        const connStub = createConnStub(testCase);
+    let testCases = [
+      { testCase: [{}], description: 'a single result' },
+      { testCase: { rowsAffected: 0 }, description: '0 rowsAffected' },
+    ];
+    _.forEach(testCases, ({ testCase, description }) => {
+      it(`patchReview should be fulfilled with ${description}`, () => {
+        createConnStub(testCase);
 
         const result = reviewsDao.patchReview(fakeId, fakeBody);
-        fulfilledPromises.push(result.should
+        return result.should
           .eventually.be.fulfilled
-          .and.deep.equal(testCase));
-
-        connStub.restore();
+          .and.deep.equal(testCase);
       });
-      return Promise.all(fulfilledPromises);
     });
 
-    const testCases = [
+    testCases = [
       {
         badBody: undefined,
         error: 'Cannot read property \'data\' of undefined',
