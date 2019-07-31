@@ -78,6 +78,20 @@ const paginationQueries = {
   'page[number]': 1,
   'page[size]': 25,
 };
+const serializerRejectedCases = rawResource => [
+  {
+    rawData: rawResource,
+    queries: null,
+    error: 'Cannot read property \'page[size]\' of null',
+    description: 'data is passed without queries',
+  },
+  {
+    rawData: null,
+    queries: paginationQueries,
+    error: 'Cannot read property \'length\' of null',
+    description: 'queries are passed without data',
+  },
+];
 
 module.exports = {
   rawDevelopers,
@@ -89,4 +103,5 @@ module.exports = {
   rawReviews,
   gameConverterData,
   reviewConverterData,
+  serializerRejectedCases,
 };

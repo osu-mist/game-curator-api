@@ -35,20 +35,7 @@ describe('Test games-serializer', () => {
     expect(serializedGames).to.have.all.keys(_.keys(getDefinitionProps('GameResults')));
   });
 
-  const rejectedCases = [
-    {
-      rawData: rawGames,
-      queries: null,
-      error: 'Cannot read property \'page[size]\' of null',
-      description: 'data is passed without queries',
-    },
-    {
-      rawData: null,
-      queries: testData.paginationQueries,
-      error: 'Cannot read property \'length\' of null',
-      description: 'queries are passed without data',
-    },
-  ];
+  const rejectedCases = testData.serializerRejectedCases(rawGames);
   _.forEach(rejectedCases, ({
     rawData,
     queries,
